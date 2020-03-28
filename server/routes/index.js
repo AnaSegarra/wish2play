@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-/* GET home page */
+//routes middlewares
+const auth = require('./auth.router');
+router.use('/auth', auth);
+
+//main router
 router.get('/', (req, res, next) => {
   return res.json({ message: 'Welcome to wish2play' });
 });
