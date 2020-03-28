@@ -6,10 +6,12 @@ const gameSchema = new mongoose.Schema(
     description: String,
     image: String,
     releaseYear: Number,
-    platform: String,
-    buyLink: [String],
+    platforms: [String],
+    linkToBuy: [String],
     genres: [String],
     PEGI: { type: Number, enum: [3, 7, 12, 16, 18] },
+    company: String,
+    rating: { type: Number, default: 0 },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'review' }]
   },
   {
