@@ -12,7 +12,8 @@ const path = require('path');
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   })
   .then(x => {
     console.log(
