@@ -8,14 +8,12 @@ const schema = new mongoose.Schema(
     password: { type: String, required: true },
     image: String,
     email: String,
+    name: String,
     isAdmin: { type: Boolean, default: false },
-    gameLists: [
-      {
-        listType: { enum: ['wishlist', 'gamesPlayed'] },
-        list: { type: ObjectId, ref: 'list' }
-      }
-    ],
-    friends: [{ type: ObjectId, ref: 'user' }]
+    gameLists: [{ type: ObjectId, ref: 'list' }],
+    friends: [{ type: ObjectId, ref: 'user' }],
+    notifications: [String],
+    requests: [{ type: ObjectId, ref: 'request' }]
   },
   {
     timestamps: true
