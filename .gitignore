@@ -1,0 +1,14 @@
+# Dependencies
+node_modules
+
+# Debug log from npm
+npm-debug.log
+
+# Environment variables 
+.env
+
+# macOS
+.DS_Store
+
+# Visual Studio Code settings
+.vscode
