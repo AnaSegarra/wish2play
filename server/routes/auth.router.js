@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const User = require('../models/User');
 const { hashPassword } = require('../lib/hashing');
 
+// POST route - signup
 router.post('/signup', async (req, res, next) => {
   const { username, password, email } = req.body;
 
@@ -42,6 +44,28 @@ router.post('/signup', async (req, res, next) => {
       .status(500)
       .json({ message: 'Internal server error during signup' });
   }
+});
+
+// POST route - login
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, failureDetails) => {
+    if (err) {
+      console.log(err);
+      return res.json({ status: 500, message: 'Authentication error' });
+    }
+
+    if (!user) {
+      return res.json({ status: 401, message: failureDetails.message });
+    }
+
+    req.login(user, err => {
+      if (err) {
+        return res.status(500).json({ message: 'Session save failed' });
+      }
+
+      return res.json({ status: 200, message: 'Logged in successfully', user });
+    });
+  })(req, res, next);
 });
 
 module.exports = router;
