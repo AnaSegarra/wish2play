@@ -53,6 +53,6 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // routes
 const index = require('./routes/index');
-app.use('/', index);
+app.use('/api/v1', index);
 
 module.exports = app;
