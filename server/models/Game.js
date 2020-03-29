@@ -9,7 +9,7 @@ const gameSchema = new mongoose.Schema(
     platforms: [String],
     linkToBuy: [String],
     genres: [String],
-    PEGI: { type: Number, enum: [3, 7, 12, 16, 18] },
+    ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'] },
     company: String,
     rating: { type: Number, default: 0 },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'review' }]
