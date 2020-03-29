@@ -15,34 +15,42 @@ router.post('/signup', async (req, res, next) => {
   }
 
   try {
-    // check if username already exists in ddbb
+    // check if username already exists in db
     const registeredUser = await User.findOne({ username });
-    if (!registeredUser) {
-      const newUser = await User.create({
-        username,
-        password: hashPassword(password),
-        email
-      });
-
-      console.log('User created:', newUser);
-
-      // status 201 for new resource created successfully
-      return res
-        .status(201)
-        .json({ message: 'User registered successfully', user: newUser });
-    } else {
+    if (registeredUser) {
       // status 400 if username is taken
       console.log(`Username '${username}' is already taken`);
-      return res
-        .status(400)
-        .json({ message: `Username '${username}' is already taken` });
+      return res.status(400).json({ message: `Username '${username}' is already taken` });
     }
+
+    // create new user
+    const newUser = await User.create({
+      username,
+      password: hashPassword(password),
+      email
+    });
+
+    // login after signup
+    req.login(newUser, error => {
+      if (!error) {
+        console.log('Created user and logged', newUser);
+
+        // status 201 for new user created and logged successfully
+        return res.status(201).json({
+          message: 'User registered successfully',
+          user: newUser
+        });
+      } else {
+        console.log(`Something went wrong on loging after signup: ${error}`);
+        return res.status(500).json({
+          message: 'Login after signup failed'
+        });
+      }
+    });
   } catch (error) {
     // status 500 for internal server error
     console.log('Signup failed', error);
-    return res
-      .status(500)
-      .json({ message: 'Internal server error during signup' });
+    return res.status(500).json({ message: 'Internal server error during signup' });
   }
 });
 
@@ -51,12 +59,17 @@ router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, failureDetails) => {
     if (err) {
       console.log(err);
-      return res.json({ status: 500, message: 'Authentication error' });
+      return res.status(500).json({ message: 'Authentication error' });
     }
 
     if (!user) {
       // response for wrong credentials
-      return res.json({ status: 401, message: failureDetails.message });
+      return res.status(401).json({ message: failureDetails.message });
+    }
+
+    if (req.isAuthenticated()) {
+      console.log('User tried to login while being logged already');
+      return res.status(400).json({ message: 'User is already logged' });
     }
 
     req.login(user, err => {
@@ -76,9 +89,7 @@ router.post('/logout', (req, res, next) => {
     req.logout();
     return res.status(200).json({ message: 'User logged out successfully' });
   }
-  return res
-    .status(200)
-    .json({ message: 'Cannot logout if not authenticated' });
+  return res.status(200).json({ message: 'Cannot logout if not authenticated' });
 });
 
 // GET route - retrieve logged user
