@@ -55,6 +55,7 @@ router.post('/login', (req, res, next) => {
     }
 
     if (!user) {
+      // response for wrong credentials
       return res.json({ status: 401, message: failureDetails.message });
     }
 
@@ -66,6 +67,28 @@ router.post('/login', (req, res, next) => {
       return res.json({ status: 200, message: 'Logged in successfully', user });
     });
   })(req, res, next);
+});
+
+// POST route - logout
+router.post('/logout', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    console.log(`${req.user.username} just logged out`);
+    req.logout();
+    return res.status(200).json({ message: 'User logged out successfully' });
+  }
+  return res
+    .status(200)
+    .json({ message: 'Cannot logout if not authenticated' });
+});
+
+// GET route - retrieve logged user
+router.get('/current-user', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    console.log(`${req.user.username} is logged`);
+    return res.status(200).json({ user: req.user });
+  }
+
+  return res.status(403).json({ message: 'Unauthorized to do that' });
 });
 
 module.exports = router;
