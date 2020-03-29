@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     platform: String,
     buyLink: [String],
     genres: [String],
-    PEGI: { type: Number, enum: [3, 7, 12, 16, 18] }
+    ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'] }
   },
   status: { type: String, enum: ['Pending', 'Approved', 'Rejected'] }
 });
