@@ -7,6 +7,10 @@ npm-debug.log
 # Environment variables 
 .env
 
+# Parcel related folders
+.cache
+dist
+
 # macOS
 .DS_Store
 
