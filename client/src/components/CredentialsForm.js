@@ -1,9 +1,7 @@
-import React, { useState, useContext } from 'react';
-import { signup } from '../services/authService';
-import { AuthContext } from '../contexts/authContext';
+// dependencies
+import React, { useState } from 'react';
 
-export const Form = () => {
-  const { setUser } = useContext(AuthContext);
+export const Form = ({ handleAction }) => {
   const [newUser, setNewUser] = useState({
     username: '',
     password: ''
@@ -16,9 +14,8 @@ export const Form = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('registering');
-    const user = await signup(newUser);
-    setUser(user);
+    console.log('submiting');
+    handleAction(newUser);
   };
 
   return (
