@@ -6,7 +6,7 @@ const { hashPassword } = require('../lib/hashing');
 
 // POST route - signup
 router.post('/signup', async (req, res, next) => {
-  const { username, password, email } = req.body;
+  const { username, password } = req.body;
 
   // status 400 if no username or password were entered
   if (!username || !password) {
@@ -26,8 +26,7 @@ router.post('/signup', async (req, res, next) => {
     // create new user
     const newUser = await User.create({
       username,
-      password: hashPassword(password),
-      email
+      password: hashPassword(password)
     });
 
     // login after signup
