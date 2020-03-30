@@ -13,7 +13,7 @@ export const AuthContextProvider = ({ children }) => {
 
         const response = await getCurrentUser();
         console.log('desde el useEffect', response);
-        setUser({ username: response.username });
+        setUser({ username });
       } catch (error) {
         setUser(null);
       }
