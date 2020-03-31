@@ -17,6 +17,31 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+// GET route - search by game title
+router.get('/search', async (req, res, next) => {
+  const { name } = req.query;
+  console.log('searching', name);
+
+  try {
+    const foundGames = await Game.find({ name: { $regex: name, $options: 'i' } });
+
+    if (foundGames.length === 0) {
+      return res.status(200).json({
+        message: 'Sorry, there are no games in our database that match your search',
+        results: foundGames.length
+      });
+    }
+
+    console.log('Games found', foundGames);
+    return res
+      .status(200)
+      .json({ message: 'Successful query', results: foundGames.length, game: foundGames });
+  } catch (error) {
+    console.log('Search failed', error);
+    return res.status(500).json({ message: 'Internal server error fetching games from database' });
+  }
+});
+
 // GET route - retrieve a single game
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
