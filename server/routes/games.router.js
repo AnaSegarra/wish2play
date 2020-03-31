@@ -146,4 +146,21 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
+// DELETE route - delete game from database
+router.delete('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedGame = await Game.findByIdAndDelete(id);
+    if (!deletedGame) {
+      console.log(`Couldn't find a game with an id of ${id}`);
+      return res.status(404).json({ message: 'Game not found' });
+    }
+    console.log(`Game removed ${deletedGame}`);
+    return res.status(202).json({ message: 'Game successfully deleted from database' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error removing a game from database' });
+  }
+});
+
 module.exports = router;
