@@ -43,29 +43,64 @@ router.get('/search', async (req, res, next) => {
 });
 
 // GET route - retrieve a single game
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   const { id } = req.params;
 
+  Game.findById(id)
+    .populate('reviews')
+    .exec((err, game) => {
+      if (err) {
+        console.log('Error populating game', err);
+        return res
+          .status(500)
+          .json({ message: 'Internal server error fetching a game from database' });
+      } else if (!game) {
+        console.log(`Game with id ${id} is not in the database`);
+        return res.status(404).json({ message: 'Game not found' });
+      } else {
+        console.log('game found', game);
+        return res.status(200).json({ message: 'Game found in the database', game });
+      }
+    });
+});
+
+// POST route - add a new game
+router.post('/', async (req, res, next) => {
+  const {
+    name,
+    description,
+    image,
+    releaseYear,
+    platforms,
+    linkToBuy,
+    genres,
+    ESRB,
+    company
+  } = req.body;
+
   try {
-    await Game.findById(id)
-      .populate('reviews')
-      .exec((err, game) => {
-        if (err) {
-          console.log('Error populating game', err);
-          return res
-            .status(500)
-            .json({ message: 'Internal server error fetching a game from database' });
-        } else if (!game) {
-          console.log(`Game with id ${id} is not in the database`);
-          return res.status(404).json({ message: 'Game not found' });
-        } else {
-          console.log('game found', game);
-          return res.status(200).json({ message: 'Game found in the database', game });
-        }
-      });
+    const gameInDB = await Game.findOne({ name });
+    if (gameInDB) {
+      console.log(`${name} is already in db`);
+      return res.status(400).json({ message: `${name} is already included in the database` });
+    }
+
+    const newGame = await Game.create({
+      name,
+      description,
+      image,
+      releaseYear,
+      platforms,
+      linkToBuy,
+      genres,
+      ESRB,
+      company
+    });
+    console.log('New game added to database', newGame);
+    return res.status(201).json({ message: 'Game successfully added to database', game: newGame });
   } catch (error) {
-    console.log('Retrieval of a single game failed', error);
-    return res.status(500).json({ message: 'Internal server error fetching a game from database' });
+    console.log('Error in game creation failed', error);
+    return res.status(500).json({ message: 'Internal server error adding a game from database' });
   }
 });
 
