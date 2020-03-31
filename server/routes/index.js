@@ -5,6 +5,9 @@ const router = express.Router();
 const auth = require('./auth.router');
 router.use('/auth', auth);
 
+const games = require('./games.router');
+router.use('/games', games);
+
 //main router
 router.get('/', (req, res, next) => {
   return res.json({ message: 'Welcome to wish2play' });
