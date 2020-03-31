@@ -104,4 +104,46 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+// PUT route - edit a game
+router.put('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const {
+    name,
+    description,
+    image,
+    releaseYear,
+    platforms,
+    linkToBuy,
+    genres,
+    ESRB,
+    company
+  } = req.body;
+
+  try {
+    const editedGame = await Game.findByIdAndUpdate(
+      id,
+      {
+        name,
+        description,
+        image,
+        releaseYear,
+        platforms,
+        linkToBuy,
+        genres,
+        ESRB,
+        company
+      },
+      { new: true }
+    );
+    console.log('Game updated', editedGame);
+    return res.status(200).json({ message: 'Game successfully edited', game: editedGame });
+  } catch (error) {
+    console.log('Error updating game', error);
+
+    return res.status(500).json({
+      message: 'Editing game failed'
+    });
+  }
+});
+
 module.exports = router;
