@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const schema = new mongoose.Schema({
-  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+const requestSchema = new mongoose.Schema({
+  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   content: {
     name: String,
     description: String,
@@ -15,4 +15,4 @@ const schema = new mongoose.Schema({
   status: { type: String, enum: ['Pending', 'Approved', 'Rejected'] }
 });
 
-module.exports = mongoose.model('request', schema);
+module.exports = mongoose.model('Request', requestSchema);

@@ -12,11 +12,11 @@ const gameSchema = new mongoose.Schema(
     ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'] },
     company: String,
     rating: { type: Number, default: 0 },
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'review' }]
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
   },
   {
     timestamps: true
   }
 );
 
-module.exports = mongoose.model('game', gameSchema);
+module.exports = mongoose.model('Game', gameSchema);

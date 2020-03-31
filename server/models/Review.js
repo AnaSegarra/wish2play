@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 
-const { ObjectId } = mongoose.Schema.Types;
-const schema = new mongoose.Schema(
+const reviewSchema = new mongoose.Schema(
   {
-    author: { type: ObjectId, ref: 'user' },
-    content: String,
-    game: { type: ObjectId, ref: 'game' }
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    content: String
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('review', schema);
+module.exports = mongoose.model('Review', reviewSchema);
