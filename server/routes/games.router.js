@@ -19,11 +19,21 @@ router.get('/', async (req, res, next) => {
 
 // GET route - search by game title
 router.get('/search', async (req, res, next) => {
-  const { name } = req.query;
-  console.log('searching', name);
+  const { name, releaseYear, platforms, genres, ESRB, company } = req.query;
+  console.log('searching by ', req.query);
+
+  const queryObj = {};
+  if (name) queryObj.name = { $regex: name, $options: 'i' };
+  if (releaseYear) queryObj.releaseYear = releaseYear;
+  if (platforms) queryObj.platforms = { $all: platforms };
+  if (genres) queryObj.genres = { $all: genres };
+  if (ESRB) queryObj.ESRB = ESRB;
+  if (company) queryObj.company = company;
+
+  console.log('la condición', queryObj);
 
   try {
-    const foundGames = await Game.find({ name: { $regex: name, $options: 'i' } });
+    const foundGames = await Game.find(queryObj);
 
     if (foundGames.length === 0) {
       return res.status(200).json({
