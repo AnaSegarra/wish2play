@@ -132,13 +132,19 @@ router.post('/:id/reviews', async (req, res, next) => {
     const newReview = await Review.create({ author: req.user.id, content, rating });
     console.log('Review added ', newReview);
 
-    // add new review to reviews array
-    const reviewsCopy = [...game.reviews, newReview._id];
-    // update rating with new review's rate
-    const newRating = (game.rating + Number(rating)) / reviewsCopy.length;
-    // update game in db
-    const updatedGame = await Game.updateOne(game, { reviews: reviewsCopy, rating: newRating });
-    console.log('juego actualizado', updatedGame);
+    // include review in game's reviews array
+    const updatedGame = await Game.findByIdAndUpdate(
+      game._id,
+      { $push: { reviews: newReview } },
+      { new: true }
+    ).populate('reviews');
+
+    // update game's rating taking into account the newly created review
+    const { reviews } = updatedGame;
+    const average = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
+
+    updatedGame.totalRating = Math.round(average * 2) / 2;
+    await updatedGame.save();
 
     return res.status(201).json({ message: 'Review added successfully', review: newReview });
   } catch (error) {
@@ -163,7 +169,7 @@ router.put('/:id', async (req, res, next) => {
   } = req.body;
 
   try {
-    const editedGame = await Game.findByIdAndUpdate(
+    const updatedGame = await Game.findByIdAndUpdate(
       id,
       {
         name,
@@ -178,8 +184,14 @@ router.put('/:id', async (req, res, next) => {
       },
       { new: true }
     );
-    console.log('Game updated', editedGame);
-    return res.status(200).json({ message: 'Game successfully edited', game: editedGame });
+
+    if (!updatedGame) {
+      console.log(`Couldn't find a game with an id of ${id}`);
+      return res.status(404).json({ message: 'Game not found' });
+    }
+
+    console.log('Game updated', updatedGame);
+    return res.status(200).json({ message: 'Game successfully edited', game: updatedGame });
   } catch (error) {
     console.log('Error updating game', error);
 
@@ -190,8 +202,38 @@ router.put('/:id', async (req, res, next) => {
 });
 
 // PUT route - edit a game review
-router.put('/:id/reviews/:review_id', (req, res, next) => {
-  console.log('editing a review', req);
+router.put('/:id/reviews/:review_id', async (req, res, next) => {
+  const { id, review_id } = req.params;
+  const { content, rating } = req.body;
+
+  try {
+    const game = await Game.findById(id);
+    if (!game) return res.status(404).json({ message: 'Game not found' });
+
+    const updatedReview = await Review.findByIdAndUpdate(
+      review_id,
+      {
+        content,
+        rating
+      },
+      { new: true }
+    );
+
+    // if rating is changed, game average rate needs to be updated
+    if (rating) {
+      const updatedGame = await Game.findById(game._id).populate('reviews');
+      const { reviews } = updatedGame;
+      const average = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
+
+      updatedGame.totalRating = Math.round(average * 2) / 2;
+      await updatedGame.save();
+    }
+
+    console.log('Review updated', updatedReview);
+    return res.status(200).json({ message: 'Review successfully edited', review: updatedReview });
+  } catch (error) {
+    console.log('Error updating a review', error);
+  }
 });
 
 // DELETE route - delete game from database
@@ -203,6 +245,7 @@ router.delete('/:id', async (req, res, next) => {
       console.log(`Couldn't find a game with an id of ${id}`);
       return res.status(404).json({ message: 'Game not found' });
     }
+
     console.log(`Game removed ${deletedGame}`);
     return res.status(202).json({ message: 'Game successfully deleted from database' });
   } catch (error) {
@@ -210,5 +253,7 @@ router.delete('/:id', async (req, res, next) => {
     return res.status(500).json({ message: 'Internal server error removing a game from database' });
   }
 });
+
+// DELETE route - delete a review
 
 module.exports = router;
