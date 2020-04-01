@@ -90,6 +90,8 @@ router.post('/', async (req, res, next) => {
 
   try {
     const gameInDB = await Game.findOne({ name });
+
+    // status 400 if game is already in db
     if (gameInDB) {
       console.log(`${name} is already in db`);
       return res.status(400).json({ message: `${name} is already included in the database` });
@@ -111,6 +113,37 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     console.log('Error in game creation failed', error);
     return res.status(500).json({ message: 'Internal server error adding a game from database' });
+  }
+});
+
+// POST route - add a new game review
+router.post('/:id/reviews', async (req, res, next) => {
+  const { id } = req.params;
+  const { content, rating } = req.body;
+
+  try {
+    const game = await Game.findById(id);
+    console.log('Game found', game);
+    if (!game) {
+      console.log('Unable to find a game that matches an id of ', id);
+      return res.status(400).json({ message: `Couldn't find that game` });
+    }
+
+    const newReview = await Review.create({ author: req.user.id, content, rating });
+    console.log('Review added ', newReview);
+
+    // add new review to reviews array
+    const reviewsCopy = [...game.reviews, newReview._id];
+    // update rating with new review's rate
+    const newRating = (game.rating + Number(rating)) / reviewsCopy.length;
+    // update game in db
+    const updatedGame = await Game.updateOne(game, { reviews: reviewsCopy, rating: newRating });
+    console.log('juego actualizado', updatedGame);
+
+    return res.status(201).json({ message: 'Review added successfully', review: newReview });
+  } catch (error) {
+    console.log('Error posting a review', error);
+    return res.status(500).json({ message: 'Internal server error adding a review' });
   }
 });
 
@@ -154,6 +187,11 @@ router.put('/:id', async (req, res, next) => {
       message: 'Editing game failed'
     });
   }
+});
+
+// PUT route - edit a game review
+router.put('/:id/reviews/:review_id', (req, res, next) => {
+  console.log('editing a review', req);
 });
 
 // DELETE route - delete game from database
