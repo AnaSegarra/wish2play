@@ -14,7 +14,8 @@ const games = [
     genres: ['Action', 'Adventure'],
     ESRB: 'M',
     company: 'Naughty Dog',
-    reviews: ['5e827610e7ea2a2173759b02']
+    reviews: ['5e827610e7ea2a2173759b02'],
+    totalRating: 3.5
   },
   {
     _id: '5e80c0ab8f6fde067adeeef4',
@@ -31,7 +32,8 @@ const games = [
     genres: ['Action', 'Adventure'],
     ESRB: 'M',
     company: 'Naughty Dog',
-    reviews: []
+    reviews: ['5e85db9bb5d9adda931af826'],
+    totalRating: 3
   },
   {
     _id: '5e80c4800b959407b76c47f1',
