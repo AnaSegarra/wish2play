@@ -249,11 +249,42 @@ router.delete('/:id', async (req, res, next) => {
     console.log(`Game removed ${deletedGame}`);
     return res.status(202).json({ message: 'Game successfully deleted from database' });
   } catch (error) {
-    console.log(error);
+    console.log('Error deleting a game from db', error);
     return res.status(500).json({ message: 'Internal server error removing a game from database' });
   }
 });
 
 // DELETE route - delete a review
+router.delete('/:id/reviews/:review_id', async (req, res, next) => {
+  const { id, review_id } = req.params;
+  try {
+    const game = await Game.findById(id);
+    const review = await Review.findById(review_id);
+    if (!game || !review) {
+      console.log(`Couldn't find a review or game with ids of ${review_id} and ${id} respectively`);
+      return res.status(404).json({ message: 'Review or game not found' });
+    }
+
+    await review.delete(); //remove review from db
+
+    const updatedGame = await Game.findByIdAndUpdate(
+      id,
+      { $pull: { reviews: review_id } },
+      { new: true }
+    ).populate('reviews'); //remove review from game reviews array
+
+    // update game's rating after deleting a review
+    const { reviews } = updatedGame;
+    const average =
+      reviews.length > 0 ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length : 0;
+
+    updatedGame.totalRating = Math.round(average * 2) / 2;
+    await updatedGame.save();
+
+    return res.status(202).json({ message: 'Review successfully deleted from database' });
+  } catch (error) {
+    console.log('Error deleting a review', error);
+  }
+});
 
 module.exports = router;
