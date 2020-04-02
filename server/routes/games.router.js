@@ -260,7 +260,9 @@ router.delete('/:id/reviews/:review_id', async (req, res, next) => {
   try {
     const game = await Game.findById(id);
     const review = await Review.findById(review_id);
-    if (!game || !review) {
+
+    // status 404 if id's are incorrect or if review doesn't correspond to the game
+    if (!game || !review || !game.reviews.includes(review_id)) {
       console.log(`Couldn't find a review or game with ids of ${review_id} and ${id} respectively`);
       return res.status(404).json({ message: 'Review or game not found' });
     }
