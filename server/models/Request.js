@@ -1,18 +1,19 @@
 const mongoose = require('mongoose');
 
-const schema = new mongoose.Schema({
-  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+const requestSchema = new mongoose.Schema({
+  requestedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   content: {
     name: String,
     description: String,
     image: String,
     releaseYear: Number,
-    platform: String,
-    buyLink: [String],
+    platforms: String,
+    linkToBuy: [String],
     genres: [String],
-    ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'] }
+    ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'], default: 'RP' },
+    company: String
   },
-  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'] }
+  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' }
 });
 
-module.exports = mongoose.model('request', schema);
+module.exports = mongoose.model('Request', requestSchema);
