@@ -2,7 +2,6 @@ const requests = [
   {
     _id: '5e86fdbb5500340060e97dd7',
     requestedBy: '5e83dafc292cfa5d539c4548',
-    status: 'Pending',
     content: {
       name: 'Detroit: Become Human',
       description:
@@ -19,7 +18,6 @@ const requests = [
   {
     _id: '5e87030f023c2e06309ed64f',
     requestedBy: '5e87025d236f7605918a976b',
-    status: 'Pending',
     content: {
       name: 'Detroit: Become Human',
       description:

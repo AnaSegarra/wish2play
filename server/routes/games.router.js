@@ -68,7 +68,7 @@ router.get('/:id', (req, res, next) => {
         console.log(`Game with id ${id} is not in the database`);
         return res.status(404).json({ message: 'Game not found' });
       } else {
-        console.log('game found', game);
+        console.log('Game found', game);
         return res.status(200).json({ message: 'Game found in the database', game });
       }
     });
