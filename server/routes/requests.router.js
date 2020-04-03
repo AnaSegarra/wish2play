@@ -82,4 +82,26 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  console.log('status', status, 'id', id);
+
+  try {
+    const request = await Request.findByIdAndUpdate(id, { status }, { new: true });
+
+    if (!request) {
+      console.log(`Couldn't find a request with an id of ${id}`);
+      return res.status(404).json({ message: 'Request not found' });
+    }
+
+    console.log('Update request status', request);
+    return res.status(200).json({ message: 'Request status successfully updated', request });
+  } catch (error) {
+    console.log('Error updating request status', error);
+    return res.status(500).json({ message: 'Internal server error updating request status' });
+  }
+});
+
 module.exports = router;
