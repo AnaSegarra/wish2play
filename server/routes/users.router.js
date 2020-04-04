@@ -61,6 +61,45 @@ router.get('/friends', async (req, res, next) => {
   }
 });
 
+// GET route - retrieve games played by a user
+router.get('/:id/games-played', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const { gamesPlayed } = await User.findById(id).populate('gamesPlayed');
+    return res
+      .status(200)
+      .json({ message: 'Games played retrieved', results: gamesPlayed.length, gamesPlayed });
+  } catch (error) {
+    console.log('Error retrieving games played', error);
+    return res.status(500).json({ message: 'Internal server error fetching played games' });
+  }
+});
+
+// GET route - retrieve wishlist from a user
+router.get('/:id/wishlist', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const wishes = await Wish.find({ owner: id }).populate('game');
+
+    const wishesMapped = [...wishes].map((wish) => {
+      return {
+        name: wish.game.name,
+        totalRating: wish.game.totalRating,
+        status: wish.status,
+        isPublic: wish.isPublic,
+        id: wish._id
+      };
+    });
+
+    return res
+      .status(200)
+      .json({ message: 'Wishlist retrieved', results: wishesMapped.length, wishesMapped });
+  } catch (error) {
+    console.log('Error retrieving wishlist', error);
+    return res.status(500).json({ message: 'Internal server error fetching wishlist' });
+  }
+});
+
 // POST route - add new friend
 router.post('/friends', async (req, res, next) => {
   const { user_id } = req.body;
