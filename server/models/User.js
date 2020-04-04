@@ -13,13 +13,22 @@ const userSchema = new mongoose.Schema(
       {
         status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
         wishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }],
-        secure_url: String,
-      },
+        secure_url: String
+      }
     ],
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
   },
   {
     timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
   }
 );
 
