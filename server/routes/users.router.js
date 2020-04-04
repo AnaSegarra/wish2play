@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Wish = require('../models/Wish');
 
 // GET route - retrieve all users from database
 router.get('/', async (req, res, next) => {
@@ -46,6 +47,20 @@ router.get('/search', async (req, res, next) => {
 });
 
 // GET route - retrieve user's friends
+router.get('/friends', async (req, res, next) => {
+  try {
+    const { friends } = await User.findById(req.user.id).populate('friends');
+    const friendsMapped = [...friends].map((friend) => {
+      return { name: friend.name, username: friend.username };
+    });
+
+    return res.status(200).json({ message: 'Friends retrieved successfully', friendsMapped });
+  } catch (error) {
+    console.log('Error retrieving friends', error);
+    return res.status(500).json({ message: 'Internal server error fetching friends' });
+  }
+});
+
 // POST route - add new friend
 router.post('/friends', async (req, res, next) => {
   const { user_id } = req.body;
@@ -79,5 +94,40 @@ router.post('/friends', async (req, res, next) => {
 });
 
 // DELETE route - delete friend
+router.delete('/friends/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const isFriend = req.user.friends.includes(id);
+
+    // remove friend
+    if (isFriend) {
+      // update friend's wishes status
+      await Wish.updateMany(
+        { _id: { $in: req.user.reservedWishes }, owner: id },
+        { status: 'Free' }
+      );
+
+      // find every friend wish
+      const friendWishes = await Wish.find({ owner: id });
+
+      // remove friend and their wishes
+      const userUpdated = await User.findByIdAndUpdate(
+        req.user.id,
+        { $pull: { friends: id }, $pullAll: { reservedWishes: friendWishes } },
+        { new: true }
+      );
+
+      console.log("Friend and their wishes removed from user's list", userUpdated);
+      return res.status(200).json({ message: 'Friend removed', userUpdated });
+    }
+
+    // status 400 if they are not friends
+    console.log(`User with id ${id} is not a friend`);
+    return res.status(400).json({ message: 'You are not friends already' });
+  } catch (error) {
+    console.log('Error deleting a friend', error);
+    return res.status(500).json({ message: 'Internal server error deleting friend' });
+  }
+});
 
 module.exports = router;
