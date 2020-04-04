@@ -132,6 +132,65 @@ router.post('/friends', async (req, res, next) => {
   }
 });
 
+// POST route - add game to games played list
+router.post('/games-played', async (req, res, next) => {
+  const { game_id } = req.body;
+  try {
+    const isIncluded = req.user.gamesPlayed.includes(game_id);
+
+    if (!isIncluded) {
+      const userUpdated = await User.findByIdAndUpdate(
+        req.user.id,
+        { $push: { gamesPlayed: game_id } },
+        { new: true }
+      );
+
+      console.log('Game added', userUpdated);
+
+      return res
+        .status(200)
+        .json({ message: 'Game added successfully to games played list', userUpdated });
+    }
+
+    console.log(`Game with id ${game_id} is already in list`);
+    return res.status(400).json({ message: 'Already included in games played list' });
+  } catch (error) {
+    console.log('Error adding a game to games played list', error);
+    return res
+      .status(500)
+      .json({ message: 'Internal server error adding a game to games played list' });
+  }
+});
+
+// POST route - add game to wishlist
+router.post('/wishlist', async (req, res, next) => {
+  const { game_id } = req.body;
+  try {
+    // check if games is already in wishlist
+    const isGameWished = await Wish.find({ owner: req.user.id, game: game_id });
+    if (isGameWished.length !== 0) {
+      console.log(`Game with id ${game_id} is already in wishlist`);
+      return res.status(400).json({ message: 'Already included in wishlist' });
+    }
+
+    const newWish = await Wish.create({ owner: req.user.id, game: game_id });
+    const userUpdated = await User.findByIdAndUpdate(
+      req.user.id,
+      { $push: { 'wishlist.wishes': newWish._id } },
+      { new: true }
+    );
+
+    console.log('Game added', userUpdated, newWish);
+
+    return res.status(200).json({ message: 'Game added successfully to wishlist', userUpdated });
+  } catch (error) {
+    console.log('Error adding a game to games played list', error);
+    return res
+      .status(500)
+      .json({ message: 'Internal server error adding a game to games played list' });
+  }
+});
+
 // DELETE route - delete friend
 router.delete('/friends/:id', async (req, res, next) => {
   const { id } = req.params;
