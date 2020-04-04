@@ -9,14 +9,13 @@ const userSchema = new mongoose.Schema(
     name: String,
     isAdmin: { type: Boolean, default: false },
     gamesPlayed: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
-    wishlist: [
-      {
-        status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
-        wishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }],
-        secure_url: String
-      }
-    ],
-    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+    wishlist: {
+      status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
+      wishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }],
+      secure_url: String
+    },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    reservedWishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }]
   },
   {
     timestamps: true,
