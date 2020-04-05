@@ -12,26 +12,29 @@ export const signup = async ({ username, password }) => {
       username,
       password
     });
-    console.log('la respuesta del server al signup', data);
-    return data.user;
+
+    return data;
   } catch (error) {
-    console.log('un error de signup', error);
+    return error.response.data.message;
   }
 };
 
 export const login = async ({ username, password }) => {
-  console.log('loggin user with data ', username, password);
   try {
-    const response = await authService.post('/login', { username, password });
-    console.log('la respuesta del server al login', response);
+    const { data } = await authService.post('/login', { username, password });
+
+    return data;
   } catch (error) {
-    console.log('un error de login', error);
+    return error.response.data.message;
   }
+};
+
+export const logout = async () => {
+  await authService.post('/logout');
 };
 
 export const getCurrentUser = async () => {
   const { data } = await authService.get('/current-user');
 
-  console.log('la respuesta del server al get current-user', data);
   return data.user;
 };

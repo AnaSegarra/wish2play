@@ -1,5 +1,5 @@
 // dependencies
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 // local modules
 import { login } from '../services/authService';
@@ -8,12 +8,17 @@ import { Form } from '../components/CredentialsForm';
 
 export const Login = () => {
   const { setUser } = useContext(AuthContext);
+  const [error, setError] = useState('');
 
-  const handleLogin = async loggedUser => {
-    console.log('login in', loggedUser);
-    const user = await login(loggedUser);
-    setUser(user);
+  const handleLogin = async (loggedUser) => {
+    const response = await login(loggedUser);
+
+    response.user ? setUser(response.user) : setError(response);
   };
 
-  return <Form handleAction={handleLogin} />;
+  return (
+    <>
+      <Form handleAction={handleLogin} />
+    </>
+  );
 };
