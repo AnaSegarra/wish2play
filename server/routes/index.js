@@ -11,9 +11,7 @@ router.use('/games', games);
 const requests = require('./requests.router');
 router.use('/requests', requests);
 
-//main router
-router.get('/', (req, res, next) => {
-  return res.json({ message: 'Welcome to wish2play' });
-});
+const users = require('./users.router');
+router.use('/users', users);
 
 module.exports = router;

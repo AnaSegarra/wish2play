@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const { ObjectId } = mongoose.Schema.Types;
-
 const userSchema = new mongoose.Schema(
   {
     username: { type: String, unique: true, index: true, required: true },
@@ -10,13 +8,26 @@ const userSchema = new mongoose.Schema(
     email: String,
     name: String,
     isAdmin: { type: Boolean, default: false },
-    gameLists: [{ type: ObjectId, ref: 'List' }],
-    friends: [{ type: ObjectId, ref: 'User' }],
-    notifications: [String],
-    requests: [{ type: ObjectId, ref: 'Request' }]
+    gamesPlayed: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
+    wishlist: {
+      status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
+      wishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }],
+      secure_url: String
+    },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    reservedWishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Wish' }]
   },
   {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
   }
 );
 

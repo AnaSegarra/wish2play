@@ -26,23 +26,23 @@ router.post('/signup', async (req, res, next) => {
     // create new user
     const newUser = await User.create({
       username,
-      password: hashPassword(password)
+      password: hashPassword(password),
     });
 
     // login after signup
-    req.login(newUser, error => {
+    req.login(newUser, (error) => {
       if (!error) {
         console.log('Created user and logged', newUser);
 
         // status 201 for new user created and logged successfully
         return res.status(201).json({
           message: 'User registered successfully',
-          user: newUser
+          user: newUser,
         });
       } else {
         console.log(`Something went wrong on loging after signup: ${error}`);
         return res.status(500).json({
-          message: 'Login after signup failed'
+          message: 'Login after signup failed',
         });
       }
     });
@@ -71,11 +71,12 @@ router.post('/login', (req, res, next) => {
       return res.status(400).json({ message: 'User is already logged' });
     }
 
-    req.login(user, err => {
+    req.login(user, (err) => {
       if (err) {
+        console.log('Error in login', err);
         return res.status(500).json({ message: 'Session save failed' });
       }
-
+      console.log('User logged in ', user);
       return res.json({ status: 200, message: 'Logged in successfully', user });
     });
   })(req, res, next);
@@ -89,6 +90,24 @@ router.post('/logout', (req, res, next) => {
     return res.status(200).json({ message: 'User logged out successfully' });
   }
   return res.status(200).json({ message: 'Cannot logout if not authenticated' });
+});
+
+// PUT route - edit user's profile
+router.put('/edit', async (req, res, next) => {
+  const { id } = req.user;
+  const { username, password, email, name } = req.body;
+  try {
+    const userUpdated = await User.findByIdAndUpdate(
+      id,
+      { username, password, email, name },
+      { new: true }
+    );
+    console.log('User changed their data', userUpdated);
+    return res.status(200).json({ message: 'User successfull updated', user: userUpdated });
+  } catch (error) {
+    console.log('Error editing user profile', error);
+    return res.status(500).json({ message: 'Internal server error during profile edit' });
+  }
 });
 
 // GET route - retrieve logged user
