@@ -228,4 +228,74 @@ router.delete('/friends/:id', async (req, res, next) => {
   }
 });
 
+// DELETE route - remove game from games played list
+router.delete('/games-played/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const isIncluded = req.user.gamesPlayed.includes(id);
+
+    if (isIncluded) {
+      const userUpdated = await User.findByIdAndUpdate(
+        req.user.id,
+        { $pull: { gamesPlayed: id } },
+        { new: true }
+      );
+
+      console.log('Game removed', userUpdated);
+
+      return res
+        .status(200)
+        .json({ message: 'Game removed successfully from games played list', userUpdated });
+    }
+
+    console.log(`Game with id ${id} is not in list`);
+    return res.status(400).json({ message: 'Already not included in games played' });
+  } catch (error) {
+    console.log('Error removing game from games played list', error);
+    return res.status(500).json({ message: 'Internal server error deleting game' });
+  }
+});
+
+// DELETE route - remove wish from wishlist
+router.delete('/wishlist/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    // check whether is user's wish
+    const wish = await Wish.findOne({ _id: id, owner: req.user.id });
+    console.log('el wish', wish);
+    if (wish) {
+      // remove wish from wishlist and from db
+      const userUpdated = await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          $pull: { 'wishlist.wishes': id }
+        },
+        { new: true }
+      );
+      await Wish.findByIdAndDelete(id);
+
+      // remove wish from friend's reserved wishes list
+      if (wish.status === 'Reserved') {
+        const friend = await User.findOneAndUpdate(
+          { _id: { $in: req.user.friends }, reservedWishes: id },
+          { $pull: { reservedWishes: id } },
+          { new: true }
+        );
+
+        console.log('el amiguito actualisado', friend);
+      }
+
+      return res
+        .status(200)
+        .json({ message: 'Wish removed succesfully from wishlist', userUpdated });
+    }
+
+    console.log(`Wish with id ${id} is not in list or not yours`);
+    return res.status(400).json({ message: 'Wish is not included in your wishlist' });
+  } catch (error) {
+    console.log('Error removing wish from wishlist', error);
+    return res.status(500).json({ message: 'Internal server error deleting wish' });
+  }
+});
+
 module.exports = router;
