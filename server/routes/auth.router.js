@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../models/User');
 const { hashPassword } = require('../lib/hashing');
-const { isValidPassword } = require('../utils/validators');
+const { isValidPassword } = require('../lib/validatorMW');
 
 // POST route - signup
 router.post('/signup', isValidPassword(), async (req, res, next) => {
