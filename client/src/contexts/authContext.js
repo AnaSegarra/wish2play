@@ -11,9 +11,9 @@ export const AuthContextProvider = ({ children }) => {
       try {
         console.log('useEffect in authContext');
 
-        const response = await getCurrentUser();
-        console.log('desde el useEffect', response);
-        setUser({ username });
+        const user = await getCurrentUser();
+        console.log('desde el useEffect', user);
+        setUser(user);
       } catch (error) {
         setUser(null);
       }

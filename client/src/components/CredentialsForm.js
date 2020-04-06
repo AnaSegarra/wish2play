@@ -1,7 +1,10 @@
 // dependencies
 import React, { useState } from 'react';
 
-export const Form = ({ handleAction }) => {
+// styled components
+import { StyledForm, Input, Button } from '../StyledComponents/Form';
+
+export const Form = ({ handleAction, id }) => {
   const [newUser, setNewUser] = useState({
     username: '',
     password: ''
@@ -19,12 +22,12 @@ export const Form = ({ handleAction }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="username">Username:</label>
-      <input type="text" value={newUser.username} name="username" onChange={handleChange} />
-      <label htmlFor="password">Password:</label>
-      <input type="password" value={newUser.password} name="password" onChange={handleChange} />
-      <button type="submit">Register</button>
-    </form>
+    <StyledForm onSubmit={handleSubmit} id={id}>
+      <label htmlFor="username">Username</label>
+      <Input type="text" value={newUser.username} name="username" onChange={handleChange} />
+      <label htmlFor="password">Password</label>
+      <Input type="password" value={newUser.password} name="password" onChange={handleChange} />
+      {!id && <Button type="submit">Sign in</Button>}
+    </StyledForm>
   );
 };
