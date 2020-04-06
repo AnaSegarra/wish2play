@@ -9,10 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
-        console.log('useEffect in authContext');
-
         const user = await getCurrentUser();
-        console.log('desde el useEffect', user);
         setUser(user);
       } catch (error) {
         setUser(null);
