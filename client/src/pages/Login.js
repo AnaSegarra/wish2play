@@ -10,7 +10,7 @@ export const Login = () => {
   const { setUser } = useContext(AuthContext);
   const [error, setError] = useState('');
 
-  const handleLogin = async (loggedUser) => {
+  const handleLogin = async loggedUser => {
     const response = await login(loggedUser);
 
     response.user ? setUser(response.user) : setError(response);
