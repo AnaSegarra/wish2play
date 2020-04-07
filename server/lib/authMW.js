@@ -18,4 +18,17 @@ const isLoggedIn = () => (req, res, next) => {
   }
 };
 
-module.exports = { checkUserRole, isLoggedIn };
+// allows user to post a review only if they have played it
+const hasPlayed = () => (req, res, next) => {
+  const game_id = req.params.id;
+  const { gamesPlayed } = req.user;
+  if (gamesPlayed.includes(game_id)) {
+    return next();
+  } else {
+    return res.status(403).json({
+      message: 'You need to played the game before making a review'
+    });
+  }
+};
+
+module.exports = { checkUserRole, isLoggedIn, hasPlayed };

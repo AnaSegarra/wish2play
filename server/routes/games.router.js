@@ -3,7 +3,8 @@ const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
 const { isEmptyField } = require('../lib/validatorMW');
-const { checkUserRole, isLoggedIn } = require('../lib/authMW');
+const { checkUserRole, isLoggedIn, hasPlayed } = require('../lib/authMW');
+const calcAverage = require('../utils/avgCalculator');
 
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
@@ -85,41 +86,44 @@ router.post(
 );
 
 // POST route - add a new game review
-router.post('/:id/reviews', isLoggedIn(), async (req, res, next) => {
-  const { id } = req.params;
-  const { content, rating } = req.body;
+router.post(
+  '/:id/reviews',
+  isLoggedIn(),
+  hasPlayed(),
+  isEmptyField('content', 'rating'),
+  async (req, res, next) => {
+    const { id } = req.params;
 
-  try {
-    const game = await Game.findById(id);
-    console.log('Game found', game);
-    if (!game) {
-      console.log('Unable to find a game that matches an id of ', id);
-      return res.status(400).json({ message: `Couldn't find that game` });
+    try {
+      const game = await Game.findById(id);
+      console.log('Game found', game);
+      if (!game) {
+        console.log('Unable to find a game that matches an id of ', id);
+        return res.status(400).json({ message: `Couldn't find that game` });
+      }
+
+      const newReview = await Review.create({ ...req.body, author: req.user.id });
+      console.log('Review added ', newReview);
+
+      // include review in game's reviews array
+      const updatedGame = await Game.findByIdAndUpdate(
+        game._id,
+        { $push: { reviews: newReview } },
+        { new: true }
+      ).populate('reviews');
+
+      // update game's rating taking into account the newly created review
+      const average = calcAverage(updatedGame.reviews);
+      updatedGame.totalRating = average;
+      await updatedGame.save();
+
+      return res.status(201).json({ message: 'Review added successfully', review: newReview });
+    } catch (error) {
+      console.log('Error posting a review', error);
+      return res.status(500).json({ message: 'Internal server error adding a review' });
     }
-
-    const newReview = await Review.create({ author: req.user.id, content, rating });
-    console.log('Review added ', newReview);
-
-    // include review in game's reviews array
-    const updatedGame = await Game.findByIdAndUpdate(
-      game._id,
-      { $push: { reviews: newReview } },
-      { new: true }
-    ).populate('reviews');
-
-    // update game's rating taking into account the newly created review
-    const { reviews } = updatedGame;
-    const average = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
-
-    updatedGame.totalRating = Math.round(average * 2) / 2;
-    await updatedGame.save();
-
-    return res.status(201).json({ message: 'Review added successfully', review: newReview });
-  } catch (error) {
-    console.log('Error posting a review', error);
-    return res.status(500).json({ message: 'Internal server error adding a review' });
   }
-});
+);
 
 // PUT route - edit a game
 router.put('/:id', async (req, res, next) => {
