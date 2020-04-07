@@ -1,4 +1,5 @@
 const Review = require('../models/Review');
+const Wish = require('../models/Wish');
 
 const checkUserRole = () => (req, res, next) => {
   if (!req.user)
@@ -59,4 +60,20 @@ const hasPlayed = () => (req, res, next) => {
   }
 };
 
-module.exports = { checkUserRole, isLoggedIn, hasPlayed, checkOwnership };
+const isFriend = () => async (req, res, next) => {
+  if (!req.user)
+    return res.status(401).json({
+      message: 'Must be logged in'
+    });
+  const wish = await Wish.findById(req.body.wish, { owner: 1 });
+
+  if (req.user.friends.includes(wish.owner)) {
+    return next();
+  } else {
+    return res.status(403).json({
+      message: 'Must be friend to reserve a wish'
+    });
+  }
+};
+
+module.exports = { checkUserRole, isLoggedIn, hasPlayed, checkOwnership, isFriend };
