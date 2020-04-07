@@ -4,6 +4,7 @@ const passport = require('passport');
 const User = require('../models/User');
 const { hashPassword } = require('../utils/hashing');
 const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
+const { isLoggedIn } = require('../lib/authMW');
 
 // POST route - signup
 router.post(
@@ -72,35 +73,32 @@ router.post('/login', (req, res, next) => {
 });
 
 // POST route - logout
-router.post('/logout', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    console.log(`${req.user.username} just logged out`);
-    req.logout();
-    return res.json({ message: 'User logged out successfully' });
-  }
-  return res.json({ message: 'Cannot logout if not authenticated' });
+router.post('/logout', isLoggedIn(), (req, res, next) => {
+  console.log(`${req.user.username} just logged out`);
+  req.logout();
+  return res.json({ message: 'User logged out successfully' });
 });
 
 // PUT route - edit user's profile
-router.put('/edit', isValidPassword(), async (req, res, next) => {
-  const { id } = req.user;
+router.put(
+  '/edit',
+  isLoggedIn(),
+  isEmptyField('username', 'password'),
+  isValidPassword(),
+  async (req, res, next) => {
+    const { id } = req.user;
 
-  try {
-    const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
-    return res.status(200).json({ message: 'User successfull updated', user: userUpdated });
-  } catch (error) {
-    console.log('Error editing user profile', error);
-    return res.status(500).json({ message: 'Internal server error during profile edit' });
+    try {
+      const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
+      return res.json({ message: 'User successfull updated', user: userUpdated });
+    } catch (error) {
+      console.log('Error editing user profile', error);
+      return res.status(500).json({ message: 'Internal server error during profile edit' });
+    }
   }
-});
+);
 
 // GET route - retrieve logged user
-router.get('/current-user', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.json({ user: req.user });
-  }
-
-  return res.status(403).json({ message: 'Unauthorized to do that' });
-});
+router.get('/current-user', isLoggedIn(), (req, res, next) => res.json({ user: req.user }));
 
 module.exports = router;

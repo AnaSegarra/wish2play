@@ -1,6 +1,11 @@
 const Review = require('../models/Review');
 
 const checkUserRole = () => (req, res, next) => {
+  if (!req.user)
+    return res.status(401).json({
+      message: 'Must be logged in'
+    });
+
   if (req.user.isAdmin) {
     return next();
   } else {
@@ -11,9 +16,12 @@ const checkUserRole = () => (req, res, next) => {
 };
 
 const checkOwnership = () => async (req, res, next) => {
-  console.log('el id de la review', req.params.review_id);
+  if (!req.user)
+    return res.status(401).json({
+      message: 'Must be logged in'
+    });
+
   const review = await Review.findById(req.params.review_id).where('author').equals(req.user.id);
-  console.log('y la review', review);
   if (review) {
     return next();
   } else {
@@ -33,8 +41,13 @@ const isLoggedIn = () => (req, res, next) => {
   }
 };
 
-// allows user to post a review only if they have played it
+// allow user to post a review only if they have played the game
 const hasPlayed = () => (req, res, next) => {
+  if (!req.user)
+    return res.status(401).json({
+      message: 'Must be logged in'
+    });
+
   const game_id = req.params.id;
   const { gamesPlayed } = req.user;
   if (gamesPlayed.includes(game_id)) {

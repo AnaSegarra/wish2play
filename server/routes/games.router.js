@@ -88,7 +88,6 @@ router.post(
 // POST route - add a new game review
 router.post(
   '/:id/reviews',
-  isLoggedIn(),
   hasPlayed(),
   isEmptyField('content', 'rating'),
   async (req, res, next) => {
@@ -126,37 +125,30 @@ router.post(
 );
 
 // PUT route - edit a game
-router.put(
-  '/:id',
-  isLoggedIn(),
-  checkUserRole(),
-  isEmptyField('name', 'description'),
-  async (req, res, next) => {
-    const { id } = req.params;
-    try {
-      const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true });
+router.put('/:id', checkUserRole(), isEmptyField('name', 'description'), async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true });
 
-      if (!updatedGame) {
-        console.log(`Couldn't find a game with an id of ${id}`);
-        return res.status(404).json({ message: 'Game not found' });
-      }
-
-      console.log('Game updated', updatedGame);
-      return res.status(200).json({ message: 'Game successfully edited', game: updatedGame });
-    } catch (error) {
-      console.log('Error updating game', error);
-
-      return res.status(500).json({
-        message: 'Editing game failed'
-      });
+    if (!updatedGame) {
+      console.log(`Couldn't find a game with an id of ${id}`);
+      return res.status(404).json({ message: 'Game not found' });
     }
+
+    console.log('Game updated', updatedGame);
+    return res.status(200).json({ message: 'Game successfully edited', game: updatedGame });
+  } catch (error) {
+    console.log('Error updating game', error);
+
+    return res.status(500).json({
+      message: 'Editing game failed'
+    });
   }
-);
+});
 
 // PUT route - edit a game review
 router.put(
   '/:id/reviews/:review_id',
-  isLoggedIn(),
   checkOwnership(),
   isEmptyField('content', 'rating'),
   async (req, res, next) => {
@@ -188,7 +180,7 @@ router.put(
 );
 
 // DELETE route - delete game from database
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', checkUserRole(), async (req, res, next) => {
   const { id } = req.params;
   try {
     const deletedGame = await Game.findByIdAndDelete(id);
@@ -206,7 +198,7 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 // DELETE route - delete a review
-router.delete('/:id/reviews/:review_id', async (req, res, next) => {
+router.delete('/:id/reviews/:review_id', checkOwnership(), async (req, res, next) => {
   const { id, review_id } = req.params;
   try {
     const game = await Game.findById(id);
@@ -227,11 +219,8 @@ router.delete('/:id/reviews/:review_id', async (req, res, next) => {
     ).populate('reviews'); //remove review from game reviews array
 
     // update game's rating after deleting a review
-    const { reviews } = updatedGame;
-    const average =
-      reviews.length > 0 ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length : 0;
-
-    updatedGame.totalRating = Math.round(average * 2) / 2;
+    const average = calcAverage(updatedGame.reviews);
+    updatedGame.totalRating = average;
     await updatedGame.save();
 
     return res.status(202).json({ message: 'Review successfully deleted from database' });
