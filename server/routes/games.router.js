@@ -2,15 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
+const { isEmptyField } = require('../lib/validatorMW');
+const { checkUserRole, isLoggedIn } = require('../lib/authMW');
 
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
   try {
     const games = await Game.find();
-    console.log(games);
-    return res
-      .status(200)
-      .json({ message: 'Games fetched successfully', results: games.length, games });
+    return res.status(200).json({ results: games.length, games });
   } catch (error) {
     console.log('Error retrieving games', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });
@@ -19,18 +18,12 @@ router.get('/', async (req, res, next) => {
 
 // GET route - search by game title
 router.get('/search', async (req, res, next) => {
-  const { name, releaseYear, platforms, genres, ESRB, company } = req.query;
-  console.log('searching by ', req.query);
+  const { name, platforms, genres } = req.query;
+  const queryObj = { ...req.query };
 
-  const queryObj = {};
   if (name) queryObj.name = { $regex: name, $options: 'i' };
-  if (releaseYear) queryObj.releaseYear = releaseYear;
   if (platforms) queryObj.platforms = { $all: platforms };
   if (genres) queryObj.genres = { $all: genres };
-  if (ESRB) queryObj.ESRB = ESRB;
-  if (company) queryObj.company = company;
-
-  console.log('la condición', queryObj);
 
   try {
     const foundGames = await Game.find(queryObj);
@@ -42,10 +35,7 @@ router.get('/search', async (req, res, next) => {
       });
     }
 
-    console.log('Games found', foundGames);
-    return res
-      .status(200)
-      .json({ message: 'Successful query', results: foundGames.length, game: foundGames });
+    return res.status(200).json({ results: foundGames.length, game: foundGames });
   } catch (error) {
     console.log('Search failed', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });
@@ -53,71 +43,49 @@ router.get('/search', async (req, res, next) => {
 });
 
 // GET route - retrieve a single game
-router.get('/:id', (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
-
-  Game.findById(id)
-    .populate('reviews')
-    .exec((err, game) => {
-      if (err) {
-        console.log('Error populating game', err);
-        return res
-          .status(500)
-          .json({ message: 'Internal server error fetching a game from database' });
-      } else if (!game) {
-        console.log(`Game with id ${id} is not in the database`);
-        return res.status(404).json({ message: 'Game not found' });
-      } else {
-        console.log('Game found', game);
-        return res.status(200).json({ message: 'Game found in the database', game });
-      }
-    });
-});
-
-// POST route - add a new game
-router.post('/', async (req, res, next) => {
-  const {
-    name,
-    description,
-    image,
-    releaseYear,
-    platforms,
-    linkToBuy,
-    genres,
-    ESRB,
-    company
-  } = req.body;
-
   try {
-    const gameInDB = await Game.findOne({ name });
+    const game = await Game.findById(id).populate('reviews');
+    if (!game) res.status(404).json({ message: 'Game not found' });
 
-    // status 400 if game is already in db
-    if (gameInDB) {
-      console.log(`${name} is already in db`);
-      return res.status(400).json({ message: `${name} is already included in the database` });
-    }
-
-    const newGame = await Game.create({
-      name,
-      description,
-      image,
-      releaseYear,
-      platforms,
-      linkToBuy,
-      genres,
-      ESRB,
-      company
-    });
-    console.log('New game added to database', newGame);
-    return res.status(201).json({ message: 'Game successfully added to database', game: newGame });
+    return res.status(200).json(game);
   } catch (error) {
-    console.log('Error in game creation failed', error);
-    return res.status(500).json({ message: 'Internal server error adding a game from database' });
+    console.log('Error retrieving a single game', error);
+    return res.status(500).json({ message: 'Internal server error fetching a game from database' });
   }
 });
 
+// POST route - add a new game
+router.post(
+  '/',
+  isLoggedIn(),
+  checkUserRole(),
+  isEmptyField('name', 'description'),
+  async (req, res, next) => {
+    try {
+      const gameInDB = await Game.findOne({ name: req.body.name });
+
+      // status 400 if game is already in db
+      if (gameInDB)
+        return res
+          .status(400)
+          .json({ message: `${req.body.name} is already included in the database` });
+
+      // otherwise create new user
+      const newGame = await Game.create(req.body);
+      return res
+        .status(201)
+        .json({ message: 'Game successfully added to database', game: newGame });
+    } catch (error) {
+      console.log('Error in game creation failed', error);
+      return res.status(500).json({ message: 'Internal server error adding a game from database' });
+    }
+  }
+);
+
 // POST route - add a new game review
-router.post('/:id/reviews', async (req, res, next) => {
+router.post('/:id/reviews', isLoggedIn(), async (req, res, next) => {
   const { id } = req.params;
   const { content, rating } = req.body;
 
