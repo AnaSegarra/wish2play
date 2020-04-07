@@ -3,47 +3,49 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../models/User');
 const { hashPassword } = require('../lib/hashing');
-const { isValidPassword } = require('../lib/validatorMW');
+const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
 
 // POST route - signup
-router.post('/signup', isValidPassword(), async (req, res, next) => {
-  const { username, password } = req.body;
+router.post(
+  '/signup',
+  isEmptyField('username', 'password'),
+  isValidPassword(),
+  async (req, res, next) => {
+    const { username, password } = req.body;
 
-  // status 400 if no username or password were entered
-  if (!username || !password) return res.status(400).json({ message: 'Credentials are necessary' });
+    try {
+      // check if username already exists in db - status 400 if username is taken
+      const registeredUser = await User.findOne({ username });
+      if (registeredUser)
+        return res.status(400).json({ message: `Username '${username}' is already taken` });
 
-  try {
-    // check if username already exists in db - status 400 if username is taken
-    const registeredUser = await User.findOne({ username });
-    if (registeredUser)
-      return res.status(400).json({ message: `Username '${username}' is already taken` });
+      // otherwise create new user
+      const newUser = await User.create({
+        username,
+        password: hashPassword(password)
+      });
 
-    // otherwise create new user
-    const newUser = await User.create({
-      username,
-      password: hashPassword(password)
-    });
-
-    // login after signup
-    req.login(newUser, error => {
-      if (!error) {
-        // status 201 for new user created and logged successfully
-        return res.status(201).json({
-          user: newUser
-        });
-      } else {
-        console.log(`Error on loging after signup: ${error}`);
-        return res.status(500).json({
-          message: 'Internal server error during signup'
-        });
-      }
-    });
-  } catch (error) {
-    // status 500 for internal server error
-    console.log('Signup failed', error.errors);
-    return res.status(500).json({ message: 'Internal server error during signup' });
+      // login after signup
+      req.login(newUser, error => {
+        if (!error) {
+          // status 201 for new user created and logged successfully
+          return res.status(201).json({
+            user: newUser
+          });
+        } else {
+          console.log(`Error on loging after signup: ${error}`);
+          return res.status(500).json({
+            message: 'Internal server error during signup'
+          });
+        }
+      });
+    } catch (error) {
+      // status 500 for internal server error
+      console.log('Signup failed', error.errors);
+      return res.status(500).json({ message: 'Internal server error during signup' });
+    }
   }
-});
+);
 
 // POST route - login
 router.post('/login', (req, res, next) => {

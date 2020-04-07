@@ -1,7 +1,7 @@
 const isValidPassword = () => (req, res, next) => {
   const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
   const { password } = req.body;
-  if (password && password.match(passwordPattern)) {
+  if (password.match(passwordPattern)) {
     return next();
   } else {
     return res.status(400).json({
@@ -11,4 +11,16 @@ const isValidPassword = () => (req, res, next) => {
   }
 };
 
-module.exports = { isValidPassword };
+const isEmptyField = (...fields) => (req, res, next) => {
+  const isEveryField = fields.every(field => req.body[field]);
+  const itemFields = fields.join(', ').replace(/, ([^,]*)$/, ' and $1');
+  if (isEveryField) {
+    return next();
+  } else {
+    return res.status(400).json({
+      message: `${itemFields} are necessary`
+    });
+  }
+};
+
+module.exports = { isValidPassword, isEmptyField };
