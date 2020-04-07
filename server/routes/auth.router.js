@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const User = require('../models/User');
-const { hashPassword } = require('../lib/hashing');
+const { hashPassword } = require('../utils/hashing');
 const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
 
 // POST route - signup
