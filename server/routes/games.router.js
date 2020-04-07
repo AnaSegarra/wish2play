@@ -3,7 +3,7 @@ const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
 const { isEmptyField } = require('../lib/validatorMW');
-const { checkUserRole, isLoggedIn, hasPlayed } = require('../lib/authMW');
+const { checkUserRole, isLoggedIn, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
 
 // GET route - retrieve all games from database
@@ -126,87 +126,66 @@ router.post(
 );
 
 // PUT route - edit a game
-router.put('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const {
-    name,
-    description,
-    image,
-    releaseYear,
-    platforms,
-    linkToBuy,
-    genres,
-    ESRB,
-    company
-  } = req.body;
+router.put(
+  '/:id',
+  isLoggedIn(),
+  checkUserRole(),
+  isEmptyField('name', 'description'),
+  async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true });
 
-  try {
-    const updatedGame = await Game.findByIdAndUpdate(
-      id,
-      {
-        name,
-        description,
-        image,
-        releaseYear,
-        platforms,
-        linkToBuy,
-        genres,
-        ESRB,
-        company
-      },
-      { new: true }
-    );
+      if (!updatedGame) {
+        console.log(`Couldn't find a game with an id of ${id}`);
+        return res.status(404).json({ message: 'Game not found' });
+      }
 
-    if (!updatedGame) {
-      console.log(`Couldn't find a game with an id of ${id}`);
-      return res.status(404).json({ message: 'Game not found' });
+      console.log('Game updated', updatedGame);
+      return res.status(200).json({ message: 'Game successfully edited', game: updatedGame });
+    } catch (error) {
+      console.log('Error updating game', error);
+
+      return res.status(500).json({
+        message: 'Editing game failed'
+      });
     }
-
-    console.log('Game updated', updatedGame);
-    return res.status(200).json({ message: 'Game successfully edited', game: updatedGame });
-  } catch (error) {
-    console.log('Error updating game', error);
-
-    return res.status(500).json({
-      message: 'Editing game failed'
-    });
   }
-});
+);
 
 // PUT route - edit a game review
-router.put('/:id/reviews/:review_id', async (req, res, next) => {
-  const { id, review_id } = req.params;
-  const { content, rating } = req.body;
+router.put(
+  '/:id/reviews/:review_id',
+  isLoggedIn(),
+  checkOwnership(),
+  isEmptyField('content', 'rating'),
+  async (req, res, next) => {
+    const { id, review_id } = req.params;
+    const { content, rating } = req.body;
 
-  try {
-    const game = await Game.findById(id);
-    if (!game) return res.status(404).json({ message: 'Game not found' });
+    try {
+      const updatedReview = await Review.findByIdAndUpdate(
+        review_id,
+        {
+          content,
+          rating
+        },
+        { new: true }
+      );
 
-    const updatedReview = await Review.findByIdAndUpdate(
-      review_id,
-      {
-        content,
-        rating
-      },
-      { new: true }
-    );
-
-    // if rating is changed, game average rate needs to be updated
-    if (rating) {
-      const updatedGame = await Game.findById(game._id).populate('reviews');
-      const { reviews } = updatedGame;
-      const average = reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length;
-
-      updatedGame.totalRating = Math.round(average * 2) / 2;
+      // if rating is changed, game average rate needs to be updated
+      const updatedGame = await Game.findById(id).populate('reviews');
+      const average = calcAverage(updatedGame.reviews);
+      updatedGame.totalRating = average;
       await updatedGame.save();
-    }
 
-    console.log('Review updated', updatedReview);
-    return res.status(200).json({ message: 'Review successfully edited', review: updatedReview });
-  } catch (error) {
-    console.log('Error updating a review', error);
+      return res.status(200).json({ message: 'Review successfully edited', review: updatedReview });
+    } catch (error) {
+      console.log('Error updating a review', error);
+      return res.status(500).json({ message: 'Internal server error updating a review' });
+    }
   }
-});
+);
 
 // DELETE route - delete game from database
 router.delete('/:id', async (req, res, next) => {
