@@ -3,7 +3,7 @@ const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
 const { isEmptyField } = require('../lib/validatorMW');
-const { checkUserRole, isLoggedIn, hasPlayed, checkOwnership } = require('../lib/authMW');
+const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
 
 // GET route - retrieve all games from database
@@ -58,32 +58,24 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST route - add a new game
-router.post(
-  '/',
-  isLoggedIn(),
-  checkUserRole(),
-  isEmptyField('name', 'description'),
-  async (req, res, next) => {
-    try {
-      const gameInDB = await Game.findOne({ name: req.body.name });
+router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (req, res, next) => {
+  try {
+    const gameInDB = await Game.findOne({ name: req.body.name });
 
-      // status 400 if game is already in db
-      if (gameInDB)
-        return res
-          .status(400)
-          .json({ message: `${req.body.name} is already included in the database` });
-
-      // otherwise create new user
-      const newGame = await Game.create(req.body);
+    // status 400 if game is already in db
+    if (gameInDB)
       return res
-        .status(201)
-        .json({ message: 'Game successfully added to database', game: newGame });
-    } catch (error) {
-      console.log('Error in game creation failed', error);
-      return res.status(500).json({ message: 'Internal server error adding a game from database' });
-    }
+        .status(400)
+        .json({ message: `${req.body.name} is already included in the database` });
+
+    // otherwise create new user
+    const newGame = await Game.create(req.body);
+    return res.status(201).json({ message: 'Game successfully added to database', game: newGame });
+  } catch (error) {
+    console.log('Error in game creation failed', error);
+    return res.status(500).json({ message: 'Internal server error adding a game from database' });
   }
-);
+});
 
 // POST route - add a new game review
 router.post(

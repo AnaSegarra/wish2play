@@ -6,6 +6,9 @@ const { hashPassword } = require('../utils/hashing');
 const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
 const { isLoggedIn } = require('../lib/authMW');
 
+// GET route - retrieve logged user
+router.get('/current-user', isLoggedIn(), (req, res, next) => res.json({ user: req.user }));
+
 // POST route - signup
 router.post(
   '/signup',
@@ -97,8 +100,5 @@ router.put(
     }
   }
 );
-
-// GET route - retrieve logged user
-router.get('/current-user', isLoggedIn(), (req, res, next) => res.json({ user: req.user }));
 
 module.exports = router;

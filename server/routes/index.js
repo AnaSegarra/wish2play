@@ -14,4 +14,7 @@ router.use('/requests', requests);
 const users = require('./users.router');
 router.use('/users', users);
 
+const wishes = require('./wishes.router');
+router.use('/wishes', wishes);
+
 module.exports = router;

@@ -18,7 +18,7 @@ const isEmptyField = (...fields) => (req, res, next) => {
     return next();
   } else {
     return res.status(400).json({
-      message: `${itemFields} are necessary`
+      message: `${itemFields} ${fields.length > 1 ? 'are' : 'is'} necessary`
     });
   }
 };
