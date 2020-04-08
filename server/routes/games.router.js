@@ -140,16 +140,16 @@ router.put('/:id', checkUserRole(), isEmptyField('name', 'description'), async (
 
 // PUT route - edit a game review
 router.put(
-  '/:id/reviews/:review_id',
-  checkOwnership(),
+  '/:game_id/reviews/:id',
+  checkOwnership(Review, 'author'),
   isEmptyField('content', 'rating'),
   async (req, res, next) => {
-    const { id, review_id } = req.params;
+    const { game_id, id } = req.params;
     const { content, rating } = req.body;
 
     try {
       const updatedReview = await Review.findByIdAndUpdate(
-        review_id,
+        id,
         {
           content,
           rating
@@ -158,7 +158,7 @@ router.put(
       );
 
       // if rating is changed, game average rate needs to be updated
-      const updatedGame = await Game.findById(id).populate('reviews');
+      const updatedGame = await Game.findById(game_id).populate('reviews');
       const average = calcAverage(updatedGame.reviews);
       updatedGame.totalRating = average;
       await updatedGame.save();
@@ -190,25 +190,26 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
 });
 
 // DELETE route - delete a review
-router.delete('/:id/reviews/:review_id', checkOwnership(), async (req, res, next) => {
-  const { id, review_id } = req.params;
+router.delete('/:game_id/reviews/:id', checkOwnership(Review, 'author'), async (req, res, next) => {
+  const { game_id, id } = req.params;
   try {
-    const game = await Game.findById(id);
-    const review = await Review.findById(review_id);
+    const game = await Game.findById(game_id);
+    const review = await Review.findById(id);
 
     // status 404 if id's are incorrect or if review doesn't correspond to the game
-    if (!game || !review || !game.reviews.includes(review_id)) {
-      console.log(`Couldn't find a review or game with ids of ${review_id} and ${id} respectively`);
+    if (!game || !review || !game.reviews.includes(id)) {
+      console.log(`Couldn't find a review or game with ids of ${id} and ${game_id} respectively`);
       return res.status(404).json({ message: 'Review or game not found' });
     }
 
     await review.delete(); //remove review from db
 
+    //remove review from game reviews array
     const updatedGame = await Game.findByIdAndUpdate(
-      id,
-      { $pull: { reviews: review_id } },
+      game_id,
+      { $pull: { reviews: id } },
       { new: true }
-    ).populate('reviews'); //remove review from game reviews array
+    ).populate('reviews');
 
     // update game's rating after deleting a review
     const average = calcAverage(updatedGame.reviews);

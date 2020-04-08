@@ -16,18 +16,19 @@ const checkUserRole = () => (req, res, next) => {
   }
 };
 
-const checkOwnership = () => async (req, res, next) => {
+const checkOwnership = (Model, field) => async (req, res, next) => {
+  console.log('el middleware 🌈', Model, field);
   if (!req.user)
     return res.status(401).json({
       message: 'Must be logged in'
     });
 
-  const review = await Review.findById(req.params.review_id).where('author').equals(req.user.id);
+  const review = await Model.findById(req.params.id).where(field).equals(req.user.id);
   if (review) {
     return next();
   } else {
     return res.status(403).json({
-      message: 'Cannot modify a review from another user'
+      message: 'Unauthorized'
     });
   }
 };

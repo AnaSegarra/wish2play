@@ -135,7 +135,9 @@ router.delete('/friends/:id', isLoggedIn(), async (req, res, next) => {
     if (isFriend) {
       // update friend's wishes status
       await Wish.updateMany(
-        { _id: { $in: req.user.reservedWishes }, owner: id },
+        {
+          $and: [{ _id: { $in: req.user.reservedWishes } }, { owner: id }, { status: 'Reserved' }]
+        },
         { status: 'Free' }
       );
 

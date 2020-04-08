@@ -92,7 +92,11 @@ router.put(
     const { id } = req.user;
 
     try {
-      const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
+      const userUpdated = await User.findByIdAndUpdate(
+        id,
+        { ...req.body, password: hashPassword(req.body.password) },
+        { new: true }
+      );
       return res.json({ message: 'User successfull updated', user: userUpdated });
     } catch (error) {
       console.log('Error editing user profile', error);
