@@ -30,8 +30,13 @@ export const Button = styled.button`
   color: #fffffe;
   padding: 0.5em 1em;
   border-radius: 0.5em;
+  border: 0.1em solid #6314d2;
   background: linear-gradient(-180deg, #7016ea, #6246ea 90%);
+  outline: none;
   &:hover {
     background: linear-gradient(-180deg, #6314d2, #4f30e8 90%);
+  }
+  &:focus {
+    box-shadow: 0 0 0.3em 0.2em #6246ea;
   }
 `;
