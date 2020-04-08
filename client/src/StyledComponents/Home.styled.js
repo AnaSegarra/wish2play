@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { Paper } from '@material-ui/core';
 
 export const StyledPaper = styled(Paper)`
-  width: 25%;
-  margin: 0 auto;
   border: 0.08em solid #d1d1e9;
   overflow: hidden;
 

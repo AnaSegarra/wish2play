@@ -11,12 +11,12 @@ import {
 } from '@material-ui/core';
 
 // local modules
-import { signup } from '../services/authService';
-import { AuthContext } from '../contexts/authContext';
-import { Form } from '../components/CredentialsForm';
+import { signup } from '../../services/authService';
+import { AuthContext } from '../../contexts/authContext';
+import { Form } from '../../components/CredentialsForm';
 
 // styled components
-import { ModalOpener } from '../StyledComponents/Home.styled';
+import { ModalOpener } from '../../StyledComponents/Home.styled';
 
 const useStyles = makeStyles({
   title: {
