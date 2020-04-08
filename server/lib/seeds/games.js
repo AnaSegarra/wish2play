@@ -1,6 +1,5 @@
 const games = [
   {
-    _id: '5e80a79e7ebc4201f8e44251',
     name: 'The Last Of Us',
     description:
       'Abandoned cities reclaimed by nature. A population decimated by a modern plague. Survivors are killing each other for food, weapons whatever they can get their hands on. Joel, a brutal survivor, and Ellie, a brave young teenage girl who is wise beyond her years, must work together if they hope to survive their journey across the US.',
@@ -12,12 +11,9 @@ const games = [
       'https://www.amazon.es/The-Last-of-us-Hits/dp/B07FF8XJWT/ref=sr_1_1?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=1UYWVAYTNRIKB&dchild=1&keywords=the+last+of+us&qid=1585927861&sprefix=the+last+%2Caps%2C173&sr=8-1',
     genres: ['Action', 'Adventure'],
     ESRB: 'M',
-    company: 'Naughty Dog',
-    reviews: ['5e827610e7ea2a2173759b02'],
-    totalRating: 3.5
+    company: 'Naughty Dog'
   },
   {
-    _id: '5e80c0ab8f6fde067adeeef4',
     name: 'The Last Of Us: Left Behind',
     description:
       'New light is shed on Ellie’s relationship with Riley, her best friend and sometime-mentor from a military boarding school they grew up in together. After disappearing for weeks, Riley returns with a surprising revelation on her whereabouts. Ellie and Riley sneak out of school for the last time, leading to a series of events that will forever change both of their lives.',
@@ -29,12 +25,9 @@ const games = [
       'https://store.playstation.com/es-es/product/EP9000-CUSA00558_00-THELASTOFUS00000?emcid=pa-st-233073',
     genres: ['Action', 'Adventure'],
     ESRB: 'M',
-    company: 'Naughty Dog',
-    reviews: ['5e85db9bb5d9adda931af826'],
-    totalRating: 3
+    company: 'Naughty Dog'
   },
   {
-    _id: '5e80c4800b959407b76c47f1',
     name: "Uncharted: Drake's Fortune",
     description:
       'A 400-year-old clue in the coffin of Sir Francis Drake sets a modern-day fortune hunter on a exploration for the fabled treasure of El Dorado, leading to the discovery of a forgotten island in the middle of the Pacific Ocean. The search turns deadly when Nathan Drake becomes stranded on the island and hunted by mercenaries. Outnumbered and outgunned, Drake and his companions must fight to survive as they begin to unravel the terrible secrets hidden on the Island.',
@@ -49,7 +42,6 @@ const games = [
     company: 'Naughty Dog'
   },
   {
-    _id: '5e847df652a3737b30a13c63',
     name: 'Uncharted 2: Among Thieves',
     description:
       'In this sequel, Drake is drawn back into the treacherous world of thieves and treasure-seekers. A mystery artifact propels him to undertake an expedition to the legendary Himalayan valley of Shambhala where he finds himself embroiled in a dangerous game of cat-and-mouse against a fugitive war criminal. Pushed to his limits, Drake is forced to risk everything.',
@@ -64,7 +56,6 @@ const games = [
     company: 'Naughty Dog'
   },
   {
-    _id: '5e874fa3ab50dc1e97b72cc2',
     name: "Uncharted 3: Drake's Deception",
     description:
       'A search for the fabled "Atlantis of the Sands" propels fortune hunter Nathan Drake into a desperate bid for survival that strains the limits of his endurance, forcing him to confront his deepest fears.',
@@ -79,7 +70,6 @@ const games = [
     company: 'Naughty Dog'
   },
   {
-    _id: '5e8733c63898be1c842be8cf',
     name: "Uncharted 4: A thief's End",
     description:
       'Several years after his last adventure, retired fortune hunter, Nathan Drake, is forced back into the world of thieves. With the stakes much more personal, Drake embarks on a globe-trotting journey in pursuit of a historical conspiracy behind a fabled pirate treasure. His greatest adventure will test his physical limits, his resolve, and ultimately what he’s willing to sacrifice to save the ones he loves.',
@@ -94,7 +84,6 @@ const games = [
     company: 'Naughty Dog'
   },
   {
-    _id: '5e83dfa0caa7e861e2a43625',
     name: 'Watch Dogs 2',
     description:
       'Play as Marcus Holloway, a brilliant young hacker living in the birthplace of the tech revolution, the San Francisco Bay Area.',
@@ -109,7 +98,6 @@ const games = [
     company: 'Ubisoft'
   },
   {
-    _id: '5e83e190a88e5462a996bb42',
     name: 'Watch Dogs',
     description:
       'Become Aiden Pearce, a brilliant hacker whose criminal past lead to a violent family tragedy. While on the hunt for those responsible, you will be able to tap into the city’s omnipresent security cameras, download personal information, control systems such as traffic lights and the electrical grid to stop a chase, and more.',
@@ -138,7 +126,6 @@ const games = [
     company: 'Kojima Productions'
   },
   {
-    _id: '5e8488f8085ae07e7ce425e3',
     name: 'Until Dawn',
     description:
       'Eight friends are trapped together on a remote mountain retreat, and they aren’t alone. Gripped by dread, with tensions running high, they must fight through their fear if they all hope to make it through the night in one piece. Play as each of the eight characters and experience fear like you never have before. Every decision you make in your terrifying search for answers could mean the difference between life and death, but for whom? Your actions alone will decide who survives Until Dawn.',
@@ -153,7 +140,6 @@ const games = [
     company: 'Supermassive Games'
   },
   {
-    _id: '5e8488f8085ae07e7ce425e4',
     name: 'Fallout 4',
     description:
       'As the sole survivor of Vault 111, you enter a world destroyed by nuclear war. Only you can rebuild and determine the fate of the Wasteland. Welcome home.',
@@ -168,7 +154,6 @@ const games = [
     company: 'Bethesda Game Studios'
   },
   {
-    _id: '5e8484d4e32c067caec49d8b',
     name: 'Fallout 76',
     description:
       'Reclamation Day, 2102. Twenty-five years after the bombs fall, you and your fellow Vault Dwellers—chosen from the nation’s best and brightest – emerge into post-nuclear America. Play solo or join together as you explore, quest, build, scavenge and triumph against the wasteland’s greatest threats.',
@@ -182,7 +167,6 @@ const games = [
     company: 'Bethesda Game Studios'
   },
   {
-    _id: '5e848b777b96277f9a8cc798',
     name: 'The Dark Pictures Anthology: Man Of Medan',
     description:
       'In Man of Medan, five friends set sail on a holiday diving trip that soon changes into something much more sinister... Embark on a horrific journey aboard a ghost ship. All playable characters can live or die. The choices you make will decide their fate. Who will you save?',
@@ -197,7 +181,6 @@ const games = [
     company: 'Supermassive Games'
   },
   {
-    _id: '5e8731a82317e91b345bc822',
     name: 'Detroit: Become Human',
     description:
       'Set in Detroit City during the year 2036, the city has been revitalized by the invention and introduction of Androids into everyday life. But when Androids start behaving as if they are alive, events begin to spin out of control. Step into the roles of the story’s pivotal three playable characters, each with unique perspectives as they face their new way of life. In this ambitiously bending and thrilling narrative, every choice and action will not only determine the character’s fate, but that of the entire city and possibly beyond.',
@@ -212,7 +195,6 @@ const games = [
     company: 'Quantic Dream'
   },
   {
-    _id: '5e874fa3ab50dc1e97b72ccc',
     name: 'Crash Bandicoot™ N. Sane Trilogy',
     description:
       "Your favourite marsupial, Crash Bandicoot™, is back! He's enhanced, entranced & ready-to-dance with the N. Sane Trilogy game collection. Now you can experience Crash Bandicoot™ like never before. Spin, jump, wump and repeat as you take on the epic challenges and adventures through the three games that started it all, Crash Bandicoot™, Crash Bandicoot™ 2: Cortex Strikes Back and Crash Bandicoot™: Warped. Relive all your favourite Crash moments in their fully-remastered graphical glory and get ready to put some UMPH in your WUMP!",
@@ -227,7 +209,6 @@ const games = [
     company: 'Naughty Dog'
   },
   {
-    _id: '5e8751e73bb5ce1fb8eb87f8',
     name: 'The Sims™ 4',
     description:
       "Unleash your imagination and create a unique world of Sims that's an expression of you! Explore and customize every detail from Sims to homes, and much more.",
@@ -242,7 +223,6 @@ const games = [
     company: 'Maxis'
   },
   {
-    _id: '5e87551f39c26d212c2560e8',
     name: "Assassin's Creed® Odyssey",
     description:
       'Write your own epic odyssey and become a legendary Spartan hero. Forge your destiny in a world on the brink of tearing itself apart. Influence how history unfolds in an ever-changing world shaped by your choices.',
@@ -257,7 +237,6 @@ const games = [
     company: 'Ubisoft'
   },
   {
-    _id: '5e8759e951213923c76ca19a',
     name: 'Life is Strange',
     description:
       'Follow the story of Max Caulfield, a photography senior who discovers she can rewind time while saving her best friend Chloe Price. The pair soon find themselves investigating the mysterious disappearance of fellow student Rachel Amber, uncovering a dark side to life in Arcadia Bay. Meanwhile, Max must quickly learn that changing the past can sometimes lead to a devastating future.',
@@ -272,7 +251,6 @@ const games = [
     company: 'Dontnod Entertainment'
   },
   {
-    _id: '5e875c201d6a9a250ea9ddf0',
     name: 'Heavy Rain',
     description:
       'Experience a gripping psychological thriller filled with innumerable twists and turns. Spanning four days of mystery and suspense, the hunt is on for a murderer known only as the Origami Killer - named after his macabre calling card of leaving behind folded paper shapes at crime scenes. Four characters, each following their own leads and with their own motives, must take part in a desperate attempt to prevent the killer from claiming a new victim. You need to think fast and act even faster, as every choice and move you make can result in dramatic, game-changing consequences – and even determine who lives… and who dies. How this story ends is entirely up to you.',
@@ -287,7 +265,6 @@ const games = [
     company: 'Quantic Dream'
   },
   {
-    _id: '5e875e7703013e25eb4676ca',
     name: 'FIFA 20',
     description:
       'This year FIFA 20 brings two sides of The World’s Game to life, the prestige of the professional stage and an all new authentic street soccer experience in EA sports VOLTA.',
@@ -302,7 +279,6 @@ const games = [
     company: 'EA Sports'
   },
   {
-    _id: '5e87605ba6426626b12b4444',
     name: 'Horizon Zero Dawn',
     description:
       'Take on the role of skilled hunter Aloy as you explore a lush world inhabited by mysterious mechanized creatures in an exhilarating open world. How have machines dominated this world, and what is their purpose? What happened to the civilization here before? Scour every corner of a realm filled with ancient relics and mysterious buildings in order to uncover your past and unearth the many secrets of a forgotten land.',
