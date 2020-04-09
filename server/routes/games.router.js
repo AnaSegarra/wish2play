@@ -9,36 +9,20 @@ const calcAverage = require('../utils/avgCalculator');
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
   try {
-    const games = await Game.find();
+    const { name, platforms, genres } = req.query;
+    const filter = {};
+    if (name) filter.name = { $regex: name, $options: 'i' };
+    if (platforms) filter.platforms = { $all: platforms };
+    if (genres) filter.genres = { $all: genres };
+
+    const limit = Number(req.query.limit);
+    const sort = req.query.sort;
+
+    const games = await Game.findGames(filter, limit, sort);
+
     return res.status(200).json({ results: games.length, games });
   } catch (error) {
     console.log('Error retrieving games', error);
-    return res.status(500).json({ message: 'Internal server error fetching games from database' });
-  }
-});
-
-// GET route - search by game title
-router.get('/search', async (req, res, next) => {
-  const { name, platforms, genres } = req.query;
-  const queryObj = { ...req.query };
-
-  if (name) queryObj.name = { $regex: name, $options: 'i' };
-  if (platforms) queryObj.platforms = { $all: platforms };
-  if (genres) queryObj.genres = { $all: genres };
-
-  try {
-    const foundGames = await Game.find(queryObj);
-
-    if (foundGames.length === 0) {
-      return res.status(200).json({
-        message: 'Sorry, there are no games in our database that match your search',
-        results: foundGames.length
-      });
-    }
-
-    return res.status(200).json({ results: foundGames.length, game: foundGames });
-  } catch (error) {
-    console.log('Search failed', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });
   }
 });
