@@ -7,7 +7,6 @@ export const Navbar = styled.nav`
   background-color: ${({ theme }) => theme.main.button};
   padding: 1em;
   box-shadow: ${({ theme }) => theme.shadows.nav};
-  color: #fffffe;
 
   div {
     display: flex;
@@ -17,6 +16,15 @@ export const Navbar = styled.nav`
   svg {
     margin-left: 1em;
     cursor: pointer;
+    color: #fffffe;
+  }
+  a {
+    text-decoration: none;
+    color: #fffffe;
+  }
+  a.selected {
+    font-weight: 700;
+    border-bottom: 0.1em solid #d1d1e9;
   }
 `;
 

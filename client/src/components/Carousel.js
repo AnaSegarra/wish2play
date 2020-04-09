@@ -1,17 +1,19 @@
 // dependencies
 import React, { useState, useEffect } from 'react';
 import { ArrowToLeft, ArrowToRight } from '@styled-icons/boxicons-solid';
-import { Paper } from '@material-ui/core';
 
 // local modules
 import { fetchGames } from '../services/gamesService';
+
+// styled components
 import { StyledSlider, StyledPaper } from '../StyledComponents/Home.styled';
+
 export const GamesCarousel = ({ sort }) => {
   const [games, setGames] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const results = await fetchGames(5, sort);
+      const results = await fetchGames(5, 'image', sort);
       console.log('en el carousel ', results);
       setGames(results);
     })();

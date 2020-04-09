@@ -11,6 +11,7 @@ import { logout } from '../services/authService';
 
 // styled components
 import { Navbar, SubBar } from '../StyledComponents/Navbar';
+import { Link, NavLink } from 'react-router-dom';
 
 export const Header = ({ toggleTheme }) => {
   const { user, setUser } = useContext(AuthContext);
@@ -30,9 +31,13 @@ export const Header = ({ toggleTheme }) => {
   return (
     <header>
       <Navbar theme={theme}>
-        <GameController size="25" />
+        <Link to="/">
+          <GameController size="25" />
+        </Link>
         <div>
-          <a>Games</a>
+          <NavLink to="/games" exact activeClassName="selected">
+            Games
+          </NavLink>
           {isLight ? (
             <Sun onClick={changeTheme} size="25" />
           ) : (
