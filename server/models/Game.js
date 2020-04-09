@@ -19,8 +19,8 @@ const gameSchema = new mongoose.Schema(
   }
 );
 
-gameSchema.statics.findGames = function (filter, limit, sort) {
-  const query = this.find(filter).limit(limit).sort(sort);
+gameSchema.statics.findGames = function (filter, limit, sort, fields) {
+  const query = this.find(filter).limit(limit).sort(sort).select(fields);
   return query;
 };
 

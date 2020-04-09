@@ -9,16 +9,16 @@ const calcAverage = require('../utils/avgCalculator');
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
   try {
-    const { name, platforms, genres } = req.query;
+    const { name, platforms, genres, sort, fields } = req.query;
     const filter = {};
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (platforms) filter.platforms = { $all: platforms };
     if (genres) filter.genres = { $all: genres };
 
     const limit = Number(req.query.limit);
-    const sort = req.query.sort;
+    console.log('hola, fields', fields);
 
-    const games = await Game.findGames(filter, limit, sort);
+    const games = await Game.findGames(filter, limit, sort, fields);
 
     return res.status(200).json({ results: games.length, games });
   } catch (error) {
