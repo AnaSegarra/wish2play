@@ -5,8 +5,8 @@ const gamesService = axios.create({
   withCredentials: true
 });
 
-export const fetchGames = async (numResults, sortBy) => {
-  const params = { limit: numResults, sort: sortBy };
+export const fetchGames = async (numResults, showedFields, sortBy) => {
+  const params = { limit: numResults, sort: sortBy, fields: showedFields };
   const { data } = await gamesService.get('/', { params });
   console.log(data);
   return data.games;
