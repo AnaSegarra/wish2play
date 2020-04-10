@@ -7,7 +7,6 @@ import Pagination from '@material-ui/lab/Pagination';
 export const GameList = () => {
   const [games, setGames] = useState([]);
   const [totalGames, setTotalGames] = useState();
-  const [currentPage, setCurrentPage] = useState(2);
 
   useEffect(() => {
     (async () => {
@@ -17,11 +16,9 @@ export const GameList = () => {
     })();
   }, []);
 
-  const paginate = async () => {
-    console.log('clicked');
-    const { results } = await fetchGames(9, 'image name', '', currentPage);
-    console.log('pasando página');
-    setCurrentPage(prev => (prev += 1));
+  const paginate = async (e, page) => {
+    console.log('go to page', page);
+    const { results } = await fetchGames(9, 'image name', '', page);
     setGames(results);
   };
 
@@ -36,7 +33,7 @@ export const GameList = () => {
           })
         )}
       </Grid>
-      <Pagination count={Math.ceil(totalGames / 9)} onClick={paginate} />
+      <Pagination count={Math.ceil(totalGames / 9)} onChange={paginate} />
     </Container>
   );
 };
