@@ -5,10 +5,11 @@ export const CardTitle = styled.p`
   text-align: center;
 `;
 
-export const LinkContainer = styled.div`
-  text-align: right;
+export const BottomCard = styled.div`
   padding: 2em;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   a {
     color: ${({ theme }) => theme.main.button};
     text-decoration: none;
