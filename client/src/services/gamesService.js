@@ -18,7 +18,7 @@ export const fetchGames = async (numResults, showedFields, sortBy, page, searchT
   };
   const { data } = await gamesService.get('/', { params });
 
-  console.log('los filtritos', filters);
+  console.log('los filtritos', sortBy);
   console.log(data);
   return { results: data.games, total: data.total };
 };

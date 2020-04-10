@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Container } from '@material-ui/core';
+import { Grid, Container, FormControlLabel, Checkbox, FormGroup } from '@material-ui/core';
 import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
 import { GameCard } from '../../components/GameCard';
 import Pagination from '@material-ui/lab/Pagination';
-import { Input } from '../../StyledComponents/Form';
-import Select from 'react-select';
+import { Filters } from './Filters';
 import { formatOptions, groupFilters } from '../../helpers/filters';
 
 export const GameList = () => {
@@ -26,6 +25,7 @@ export const GameList = () => {
   const [filters, setFilters] = useState({});
   const [groupedOptions, setGroupedOptions] = useState([{ label: 'ESRB', options: ESRB }]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +47,7 @@ export const GameList = () => {
 
   const paginate = async (e, page) => {
     console.log('go to page', page);
-    const { results } = await fetchGames(numOfResults, fields, '', page, searchTerm, filters);
+    const { results } = await fetchGames(numOfResults, fields, sortBy, page, searchTerm, filters);
     setGames(results);
     setCurrentPage(page);
   };
@@ -65,7 +65,7 @@ export const GameList = () => {
     const platforms = groupFilters(filters, 'platforms');
     const ESRB = groupFilters(filters, 'ESRB');
 
-    const { results, total } = await fetchGames(numOfResults, fields, '', '', searchTerm, {
+    const { results, total } = await fetchGames(numOfResults, fields, sortBy, '', searchTerm, {
       genres,
       platforms,
       ESRB
@@ -76,10 +76,39 @@ export const GameList = () => {
     setCurrentPage(1);
   };
 
+  const handleSort = async e => {
+    const { name, checked } = e.target;
+    const sortCondition = checked ? [...sortBy, name] : sortBy.filter(el => el !== name);
+
+    const { results } = await fetchGames(
+      numOfResults,
+      fields,
+      sortCondition,
+      '',
+      searchTerm,
+      filters
+    );
+    setSortBy(sortCondition);
+    setGames(results);
+    setCurrentPage(1);
+  };
   return (
     <Container>
-      <Input onChange={e => search(e.target.value)} placeholder="Search for games" />
-      <Select options={groupedOptions} isMulti onChange={handleSelect} />
+      <Filters search={search} options={groupedOptions} handleSelect={handleSelect} />
+      <FormGroup row>
+        <FormControlLabel
+          control={
+            <Checkbox name="-releaseYear" checked={sortBy.releaseYear} onChange={handleSort} />
+          }
+          label="What's new"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox name="-totalRating" checked={sortBy.totalRating} onChange={handleSort} />
+          }
+          label="Highest rating to lowest"
+        />
+      </FormGroup>
       <Grid container spacing={4}>
         {games.length === 0 ? (
           <p>Loading...</p>
