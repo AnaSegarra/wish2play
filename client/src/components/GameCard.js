@@ -9,7 +9,6 @@ import { CardTitle, BottomCard } from '../StyledComponents/Games.styled';
 
 export const GameCard = ({ name, image, _id, genres }) => {
   const theme = useContext(ThemeContext);
-  console.log('los géneros', genres);
   return (
     <Grid item xs={4}>
       <Card elevation={3}>
@@ -21,8 +20,8 @@ export const GameCard = ({ name, image, _id, genres }) => {
         </CardActionArea>
         <BottomCard theme={theme}>
           <div>
-            {genres.map(genre => (
-              <Chip label={genre} />
+            {genres.map((genre, i) => (
+              <Chip key={i} label={genre} />
             ))}
           </div>
           <Link to={`/games/${_id}`}>See details</Link>

@@ -10,19 +10,17 @@ const getOptions = require('../utils/getOptions');
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
   try {
-    const { name, platforms, genres, sort, fields } = req.query;
+    const { name, platforms, genres, ESRB, sortBy, fields } = req.query;
     const filter = {};
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (platforms) filter.platforms = { $all: platforms };
     if (genres) filter.genres = { $all: genres };
-    console.log('loh filtroh', filter);
+    if (ESRB) filter.ESRB = ESRB;
+
     const limit = Number(req.query.limit) || 9;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
-
-    console.log('hola, fields', fields);
-    console.log('hola, número de página', page);
-    console.log('hola, name buscado', name);
+    const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
 
     const numOfGames = await Game.findGames(filter);
     console.log(numOfGames.length);

@@ -8,16 +8,16 @@ const gamesService = axios.create({
 export const fetchGames = async (numResults, showedFields, sortBy, page, searchTerm, filters) => {
   const params = {
     limit: numResults,
-    sort: sortBy,
     fields: showedFields,
+    sortBy,
     page,
     name: searchTerm,
     genres: filters && filters.genres,
-    platforms: filters && filters.platforms
+    platforms: filters && filters.platforms,
+    ESRB: filters && filters.ESRB
   };
   const { data } = await gamesService.get('/', { params });
-  // console.log('qué onda', page);
-  // console.log('looking for', searchTerm);
+
   console.log('los filtritos', filters);
   console.log(data);
   return { results: data.games, total: data.total };

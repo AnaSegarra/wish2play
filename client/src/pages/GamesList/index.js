@@ -8,17 +8,28 @@ import Select from 'react-select';
 import { formatOptions, groupFilters } from '../../helpers/filters';
 
 export const GameList = () => {
+  // recurrent variables
+  const fields = 'name image genres totalRating'; //query to receive only these fields
+  const numOfResults = 9;
+  const ESRB = [
+    { group: 'ESRB', value: 'E', label: 'E' },
+    { group: 'ESRB', value: 'E 10+', label: 'E 10+' },
+    { group: 'ESRB', value: 'T', label: 'T' },
+    { group: 'ESRB', value: 'M', label: 'M' },
+    { group: 'ESRB', value: 'A', label: 'A' }
+  ];
+
+  // state
   const [games, setGames] = useState([]);
   const [totalGames, setTotalGames] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({});
-  const [groupedOptions, setGroupedOptions] = useState([]);
+  const [groupedOptions, setGroupedOptions] = useState([{ label: 'ESRB', options: ESRB }]);
   const [currentPage, setCurrentPage] = useState(1);
-  const fields = 'name image genres totalRating';
 
   useEffect(() => {
     (async () => {
-      const { results, total } = await fetchGames(9, fields);
+      const { results, total } = await fetchGames(numOfResults, fields);
       const { genres, platforms } = await fetchFilterOptions();
       const genresOptions = formatOptions(genres, 'genres');
       const platformOptions = formatOptions(platforms, 'platforms');
@@ -36,14 +47,13 @@ export const GameList = () => {
 
   const paginate = async (e, page) => {
     console.log('go to page', page);
-    const { results } = await fetchGames(9, fields, '', page, searchTerm, filters);
+    const { results } = await fetchGames(numOfResults, fields, '', page, searchTerm, filters);
     setGames(results);
     setCurrentPage(page);
   };
 
   const search = async term => {
-    console.log('searching!', term);
-    const { results, total } = await fetchGames(9, fields, '', '', term, filters);
+    const { results, total } = await fetchGames(numOfResults, fields, '', '', term, filters);
     setGames(results);
     setSearchTerm(term);
     setTotalGames(total);
@@ -53,14 +63,16 @@ export const GameList = () => {
   const handleSelect = async filters => {
     const genres = groupFilters(filters, 'genres');
     const platforms = groupFilters(filters, 'platforms');
+    const ESRB = groupFilters(filters, 'ESRB');
 
-    const { results, total } = await fetchGames(9, fields, '', '', searchTerm, {
+    const { results, total } = await fetchGames(numOfResults, fields, '', '', searchTerm, {
       genres,
-      platforms
+      platforms,
+      ESRB
     });
     setGames(results);
     setTotalGames(total);
-    setFilters({ genres, platforms });
+    setFilters({ genres, platforms, ESRB });
     setCurrentPage(1);
   };
 
@@ -77,7 +89,11 @@ export const GameList = () => {
           })
         )}
       </Grid>
-      <Pagination count={Math.ceil(totalGames / 9)} onChange={paginate} page={currentPage} />
+      <Pagination
+        count={Math.ceil(totalGames / numOfResults)}
+        onChange={paginate}
+        page={currentPage}
+      />
     </Container>
   );
 };
