@@ -5,6 +5,7 @@ const Review = require('../models/Review');
 const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
+const getOptions = require('../utils/getOptions');
 
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
@@ -14,21 +15,37 @@ router.get('/', async (req, res, next) => {
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (platforms) filter.platforms = { $all: platforms };
     if (genres) filter.genres = { $all: genres };
-
+    console.log('loh filtroh', filter);
     const limit = Number(req.query.limit) || 9;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
 
     console.log('hola, fields', fields);
     console.log('hola, número de página', page);
+    console.log('hola, name buscado', name);
 
-    const numOfGames = await Game.countDocuments();
+    const numOfGames = await Game.findGames(filter);
+    console.log(numOfGames.length);
     const games = await Game.findGames(filter, limit, sort, fields, skip);
 
-    return res.status(200).json({ results: games.length, games, total: numOfGames });
+    return res.status(200).json({ results: games.length, games, total: numOfGames.length });
   } catch (error) {
     console.log('Error retrieving games', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });
+  }
+});
+
+// GET route - retrieve all platforms and genres avaiable in db
+router.get('/filters', async (req, res, next) => {
+  try {
+    const retrievedGames = await Game.find({}, { platforms: 1, genres: 1, _id: 0 });
+    const platforms = getOptions(retrievedGames, 'platforms');
+    const genres = getOptions(retrievedGames, 'genres');
+
+    return res.json({ platforms, genres });
+  } catch (error) {
+    console.log('Error retrieving games', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
