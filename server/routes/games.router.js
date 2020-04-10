@@ -15,12 +15,17 @@ router.get('/', async (req, res, next) => {
     if (platforms) filter.platforms = { $all: platforms };
     if (genres) filter.genres = { $all: genres };
 
-    const limit = Number(req.query.limit);
+    const limit = Number(req.query.limit) || 9;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+
     console.log('hola, fields', fields);
+    console.log('hola, número de página', page);
 
-    const games = await Game.findGames(filter, limit, sort, fields);
+    const numOfGames = await Game.countDocuments();
+    const games = await Game.findGames(filter, limit, sort, fields, skip);
 
-    return res.status(200).json({ results: games.length, games });
+    return res.status(200).json({ results: games.length, games, total: numOfGames });
   } catch (error) {
     console.log('Error retrieving games', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });

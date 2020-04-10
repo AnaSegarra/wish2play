@@ -5,9 +5,10 @@ const gamesService = axios.create({
   withCredentials: true
 });
 
-export const fetchGames = async (numResults, showedFields, sortBy) => {
-  const params = { limit: numResults, sort: sortBy, fields: showedFields };
+export const fetchGames = async (numResults, showedFields, sortBy, page) => {
+  const params = { limit: numResults, sort: sortBy, fields: showedFields, page };
   const { data } = await gamesService.get('/', { params });
+  console.log('qué onda', page);
   console.log(data);
-  return data.games;
+  return { results: data.games, total: data.total };
 };
