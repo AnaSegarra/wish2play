@@ -11,12 +11,12 @@ import {
 } from '@material-ui/core';
 
 // local modules
-import { signup } from '../services/authService';
-import { AuthContext } from '../contexts/authContext';
-import { Form } from '../components/CredentialsForm';
+import { signup } from '../../services/authService';
+import { AuthContext } from '../../contexts/authContext';
+import { Form } from '../../components/CredentialsForm';
 
 // styled components
-import { ModalOpener } from '../StyledComponents/Home.styled';
+import { ModalOpener } from '../../StyledComponents/Home.styled';
 
 const useStyles = makeStyles({
   title: {
@@ -27,6 +27,12 @@ const useStyles = makeStyles({
   paragraph: {
     margin: 0,
     padding: '1em 2em 0'
+  },
+  btn: {
+    color: '#6246ea',
+    '&:hover': {
+      backgroundColor: 'rgba(209, 209, 233, 0.5)'
+    }
   }
 });
 
@@ -46,7 +52,7 @@ export const Signup = () => {
   };
 
   return (
-    <div>
+    <div className="mb">
       <p>
         Don't have an account yet? <ModalOpener onClick={handleOpen}>Sign up here!</ModalOpener>
       </p>
@@ -62,10 +68,10 @@ export const Signup = () => {
           <Form handleAction={handleSignup} id="signupForm" />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleClose} className={classes.btn}>
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary" form="signupForm" type="submit">
+          <Button onClick={handleClose} form="signupForm" type="submit" className={classes.btn}>
             Subscribe
           </Button>
         </DialogActions>

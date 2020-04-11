@@ -5,41 +5,47 @@ const Review = require('../models/Review');
 const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
+const getOptions = require('../utils/getOptions');
 
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
   try {
-    const games = await Game.find();
-    return res.status(200).json({ results: games.length, games });
+    const { name, platforms, genres, ESRB, sortBy, fields } = req.query;
+    const filter = {};
+    if (name) filter.name = { $regex: name, $options: 'i' };
+    if (platforms) filter.platforms = { $all: platforms };
+    if (genres) filter.genres = { $all: genres };
+    if (ESRB) filter.ESRB = ESRB;
+
+    const limit = Number(req.query.limit) || 9;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+    const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
+
+    const numOfGames = await Game.findGames(filter);
+    console.log(numOfGames.length);
+
+    const games = await Game.findGames(filter, limit, sort, fields, skip);
+
+    return res.status(200).json({ results: games.length, games, total: numOfGames.length });
   } catch (error) {
     console.log('Error retrieving games', error);
     return res.status(500).json({ message: 'Internal server error fetching games from database' });
   }
 });
 
-// GET route - search by game title
-router.get('/search', async (req, res, next) => {
-  const { name, platforms, genres } = req.query;
-  const queryObj = { ...req.query };
-
-  if (name) queryObj.name = { $regex: name, $options: 'i' };
-  if (platforms) queryObj.platforms = { $all: platforms };
-  if (genres) queryObj.genres = { $all: genres };
-
+// GET route - retrieve all platforms and genres avaiable in db
+router.get('/filters', async (req, res, next) => {
   try {
-    const foundGames = await Game.find(queryObj);
+    const retrievedGames = await Game.find({}, { platforms: 1, genres: 1, _id: 0 });
+    const platforms = getOptions(retrievedGames, 'platforms');
+    const genres = getOptions(retrievedGames, 'genres');
+    const ESRB = Game.schema.path('ESRB').enumValues;
 
-    if (foundGames.length === 0) {
-      return res.status(200).json({
-        message: 'Sorry, there are no games in our database that match your search',
-        results: foundGames.length
-      });
-    }
-
-    return res.status(200).json({ results: foundGames.length, game: foundGames });
+    return res.json({ platforms, genres, ESRB });
   } catch (error) {
-    console.log('Search failed', error);
-    return res.status(500).json({ message: 'Internal server error fetching games from database' });
+    console.log('Error retrieving games', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -47,7 +53,11 @@ router.get('/search', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const game = await Game.findById(id).populate('reviews');
+    const game = await Game.findById(id).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
+
     if (!game) res.status(404).json({ message: 'Game not found' });
 
     return res.status(200).json(game);

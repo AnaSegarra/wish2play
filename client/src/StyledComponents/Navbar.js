@@ -4,10 +4,28 @@ export const Navbar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #6246ea;
+  background-color: ${({ theme }) => theme.main.button};
   padding: 1em;
-  box-shadow: 0em 0.2em 0.2em #333;
-  color: #fffffe;
+  box-shadow: ${({ theme }) => theme.shadows.nav};
+
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-left: 1em;
+    cursor: pointer;
+    color: #fffffe;
+  }
+  a {
+    text-decoration: none;
+    color: #fffffe;
+  }
+  a.selected {
+    font-weight: 700;
+    border-bottom: 0.1em solid #d1d1e9;
+  }
 `;
 
 export const SubBar = styled.div`
@@ -15,7 +33,7 @@ export const SubBar = styled.div`
   justify-content: flex-end;
   align-items: center;
   padding: 1.5em 1em;
-  visibility: ${(props) => (!props.user ? 'hidden' : 'visible')};
+  visibility: ${props => (!props.user ? 'hidden' : 'visible')};
 
   p,
   svg {
