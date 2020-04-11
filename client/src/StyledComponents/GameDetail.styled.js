@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { Paper } from '@material-ui/core';
 
+// game content
 export const Container = styled.div`
   display: flex;
 
@@ -65,6 +67,25 @@ export const Content = styled.div`
     }
   }
   .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+
+// reviews
+export const ReviewsContainer = styled(Paper)`
+  padding: 2em;
+  margin: 2em 0;
+`;
+
+export const Review = styled.div`
+  border: 0.1em solid ${({ theme }) => theme.main.secondary};
+  background-color: ${({ theme }) => theme.chip.background};
+  border-radius: 0.4em;
+  padding: 1em;
+  margin-top: 1em;
+  .stats {
     display: flex;
     justify-content: space-between;
     align-items: center;
