@@ -1,10 +1,13 @@
+// dependencies
 import React, { useState, useEffect } from 'react';
 import { Grid, Container, FormControlLabel, Checkbox, FormGroup } from '@material-ui/core';
-import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
-import { GameCard } from '../../components/GameCard';
 import Pagination from '@material-ui/lab/Pagination';
-import { Filters } from './Filters';
+
+// local modules
+import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
 import { formatOptions, groupFilters } from '../../helpers/filters';
+import { GameCard } from '../../components/GameCard';
+import { Filters } from './Filters';
 
 export const GameList = () => {
   // recurrent variables

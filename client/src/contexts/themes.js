@@ -8,6 +8,9 @@ export const lightTheme = {
   },
   shadows: {
     nav: '0em 0.2em 0.2em #333'
+  },
+  chip: {
+    background: 'rgba(210, 210, 233, 0.3)'
   }
 };
 export const darkTheme = {
@@ -20,5 +23,8 @@ export const darkTheme = {
   },
   shadows: {
     nav: '0em 0.2em 0.2em #e6e6e6'
+  },
+  chip: {
+    background: 'rgb(114, 117, 126, 0.2)'
   }
 };
