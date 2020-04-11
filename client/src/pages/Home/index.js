@@ -15,7 +15,7 @@ export const Home = () => {
   const theme = useContext(ThemeContext);
 
   return (
-    <Container maxWidth={false}>
+    <Container>
       <Grid container spacing={3}>
         <Grid item xs={12} lg={9}>
           <GamesCarousel sort="-totalRating" />

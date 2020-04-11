@@ -18,13 +18,16 @@ export const fetchGames = async (numResults, showedFields, sortBy, page, searchT
   };
   const { data } = await gamesService.get('/', { params });
 
-  console.log('los filtritos', sortBy);
-  console.log(data);
   return { results: data.games, total: data.total };
 };
 
 export const fetchFilterOptions = async () => {
   const { data } = await gamesService.get('/filters');
+  return { platforms: data.platforms, genres: data.genres, ESRB: data.ESRB };
+};
 
-  return { platforms: data.platforms, genres: data.genres };
+export const fetchSingleGame = async endpoint => {
+  const { data } = await gamesService.get(`/${endpoint}`);
+
+  return data;
 };

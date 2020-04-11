@@ -24,6 +24,7 @@ router.get('/', async (req, res, next) => {
 
     const numOfGames = await Game.findGames(filter);
     console.log(numOfGames.length);
+
     const games = await Game.findGames(filter, limit, sort, fields, skip);
 
     return res.status(200).json({ results: games.length, games, total: numOfGames.length });
@@ -39,8 +40,9 @@ router.get('/filters', async (req, res, next) => {
     const retrievedGames = await Game.find({}, { platforms: 1, genres: 1, _id: 0 });
     const platforms = getOptions(retrievedGames, 'platforms');
     const genres = getOptions(retrievedGames, 'genres');
+    const ESRB = Game.schema.path('ESRB').enumValues;
 
-    return res.json({ platforms, genres });
+    return res.json({ platforms, genres, ESRB });
   } catch (error) {
     console.log('Error retrieving games', error);
     return res.status(500).json({ message: 'Internal server error' });
@@ -51,7 +53,11 @@ router.get('/filters', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
-    const game = await Game.findById(id).populate('reviews');
+    const game = await Game.findById(id).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
+
     if (!game) res.status(404).json({ message: 'Game not found' });
 
     return res.status(200).json(game);
