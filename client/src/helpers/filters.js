@@ -5,7 +5,5 @@ export const formatOptions = (arr, group) => {
 };
 
 export const groupFilters = (arr, filterBy) => {
-  console.log('el array a filtrar', arr);
-
   return arr ? arr.filter(item => item.group === filterBy).map(item => item.value) : '';
 };

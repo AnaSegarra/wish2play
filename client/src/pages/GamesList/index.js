@@ -13,32 +13,26 @@ export const GameList = () => {
   // recurrent variables
   const fields = 'name image genres totalRating'; //query to receive only these fields
   const numOfResults = 9;
-  const ESRB = [
-    { group: 'ESRB', value: 'E', label: 'E' },
-    { group: 'ESRB', value: 'E 10+', label: 'E 10+' },
-    { group: 'ESRB', value: 'T', label: 'T' },
-    { group: 'ESRB', value: 'M', label: 'M' },
-    { group: 'ESRB', value: 'A', label: 'A' }
-  ];
 
   // state
   const [games, setGames] = useState([]);
   const [totalGames, setTotalGames] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({});
-  const [groupedOptions, setGroupedOptions] = useState([{ label: 'ESRB', options: ESRB }]);
+  const [groupedOptions, setGroupedOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState([]);
 
   useEffect(() => {
     (async () => {
       const { results, total } = await fetchGames(numOfResults, fields);
-      const { genres, platforms } = await fetchFilterOptions();
+      const { genres, platforms, ESRB } = await fetchFilterOptions();
+      const ESRBOptions = formatOptions(ESRB, 'ESRB');
       const genresOptions = formatOptions(genres, 'genres');
       const platformOptions = formatOptions(platforms, 'platforms');
 
       setGroupedOptions([
-        ...groupedOptions,
+        { label: 'ESRB', options: ESRBOptions },
         { label: 'Genres', options: genresOptions },
         { label: 'Platforms', options: platformOptions }
       ]);

@@ -26,7 +26,7 @@ export const Game = props => {
           <BSO name={game.name} />
         </Grid>
       </Grid>
-      <GameReviews {...game} />
+      <GameReviews reviews={game.reviews} />
     </Container>
   ) : (
     <div></div>

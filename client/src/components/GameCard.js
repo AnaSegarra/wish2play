@@ -1,15 +1,7 @@
 // dependencies
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Grid,
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
-  Chip,
-  makeStyles
-} from '@material-ui/core';
+import { Grid, Card, CardMedia, CardContent, Chip, makeStyles } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ThemeContext } from 'styled-components';
 import ScrollAnimation from 'react-animate-on-scroll';
@@ -17,7 +9,7 @@ import ScrollAnimation from 'react-animate-on-scroll';
 // local modules
 import { BottomCard, TopCard } from '../StyledComponents/Games.styled';
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
   chip: theme => ({
     backgroundColor: theme.chip.background,
     margin: '0 .5em',
@@ -33,15 +25,13 @@ export const GameCard = ({ name, image, _id, genres, totalRating }) => {
     <Grid item lg={4} md={6} xs={12}>
       <ScrollAnimation animateIn="fadeIn">
         <Card elevation={3}>
-          <CardActionArea>
-            <CardMedia style={{ height: 500 }} image={image} title={name} />
-            <CardContent>
-              <TopCard>
-                <p>{name}</p>
-                <Rating name="half-rating-read" value={totalRating} readOnly precision={0.5} />
-              </TopCard>
-            </CardContent>
-          </CardActionArea>
+          <CardMedia style={{ height: 500 }} image={image} title={name} />
+          <CardContent>
+            <TopCard>
+              <p>{name}</p>
+              <Rating name="half-rating-read" value={totalRating} readOnly precision={0.5} />
+            </TopCard>
+          </CardContent>
           <BottomCard theme={theme}>
             <div>
               {genres.map((genre, i) => (

@@ -10,7 +10,7 @@ export const StyledPaper = styled(Paper)`
     padding: 0 2em;
   }
   div.mb {
-    margin-bottom: 2.4em;
+    margin-bottom: 1.2em;
   }
   p.paper-title {
     font-size: 1.25rem;

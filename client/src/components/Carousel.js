@@ -14,7 +14,6 @@ export const GamesCarousel = ({ sort }) => {
   useEffect(() => {
     (async () => {
       const { results } = await fetchGames(5, 'image', sort);
-      console.log('en el carousel ', results);
       setGames(results);
     })();
   }, []);
