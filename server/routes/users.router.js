@@ -60,10 +60,10 @@ router.get('/friends', isLoggedIn(), async (req, res, next) => {
 });
 
 // GET route - retrieve games played by a user
-router.get('/:id/games-played', async (req, res, next) => {
-  const { id } = req.params;
+router.get('/:user_id/games-played', async (req, res, next) => {
+  const { user_id } = req.params;
   try {
-    const { gamesPlayed } = await User.findById(id).populate('gamesPlayed');
+    const { gamesPlayed } = await User.findById(user_id).populate('gamesPlayed');
     return res
       .status(200)
       .json({ message: 'Games played retrieved', results: gamesPlayed.length, gamesPlayed });

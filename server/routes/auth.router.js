@@ -76,10 +76,14 @@ router.post('/login', (req, res, next) => {
 });
 
 // POST route - logout
-router.post('/logout', isLoggedIn(), (req, res, next) => {
-  console.log(`${req.user.username} just logged out`);
-  req.logout();
-  return res.json({ message: 'User logged out successfully' });
+router.post('/logout', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    console.log(`${req.user.username} just logged out`);
+    req.logout();
+    return res.status(200).json({ message: 'Log out successfully' });
+  }
+
+  return res.json({ message: 'Cannot logout if not authenticated' });
 });
 
 // PUT route - edit user's profile
