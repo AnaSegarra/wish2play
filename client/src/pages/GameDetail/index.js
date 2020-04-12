@@ -12,10 +12,10 @@ export const Game = props => {
   useEffect(() => {
     (async () => {
       const response = await fetchSingleGame(id);
-      console.log(response);
       setGame(response);
     })();
   }, []);
+
   return game ? (
     <Container>
       <Grid container>

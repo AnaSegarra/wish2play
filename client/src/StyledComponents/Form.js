@@ -34,6 +34,7 @@ export const Button = styled.button`
   border: 0.1em solid ${({ theme }) => theme.button.border};
   background: ${({ theme }) => theme.button.bg};
   outline: none;
+  cursor: pointer;
   &:hover {
     background: ${({ theme }) => theme.button.hover};
   }

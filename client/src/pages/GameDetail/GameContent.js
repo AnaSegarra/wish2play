@@ -1,10 +1,16 @@
+// dependencies
 import React, { useContext } from 'react';
 import { Paper, Chip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
-import { Container, ImageContainer, Content } from '../../StyledComponents/GameDetail.styled';
-import { useStyles } from '../../components/GameCard';
 import { ThemeContext } from 'styled-components';
+
+// local modules
+import { useStyles } from '../../components/GameCard';
+import { UserButtons } from './UserInteraction';
+
+// styled components
+import { Container, ImageContainer, Content } from '../../StyledComponents/GameDetail.styled';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);
@@ -20,10 +26,12 @@ export const GameContent = props => {
     totalRating,
     linkToBuy,
     description,
-    genres
+    genres,
+    _id
   } = props;
   return (
     <Paper elevation={3}>
+      <UserButtons gameID={_id} />
       <Container>
         <ImageContainer>
           <img src={image} />

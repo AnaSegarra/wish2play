@@ -73,6 +73,32 @@ export const Content = styled.div`
   }
 `;
 
+// buttons
+export const ButtonsContainer = styled.div`
+  display: ${props => (props.user ? 'flex' : 'none')};
+  padding: 2em 2em 0;
+  justify-content: space-between;
+
+  svg {
+    margin-left: 0.5em;
+    color: ${({ theme }) => theme.main.tertiary};
+  }
+  button {
+    color: ${({ theme }) => theme.main.tertiary};
+    font-size: 0.8rem;
+    background-color: ${({ theme }) => theme.chip.background};
+    outline: none;
+    border-radius: 1em;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(206, 206, 206, 0.5);
+    }
+    &:focus {
+      box-shadow: 0 0 0.3em 0.2em ${({ theme }) => theme.main.tertiary};
+    }
+  }
+`;
+
 // reviews
 export const ReviewsContainer = styled(Paper)`
   padding: 2em;
