@@ -4,7 +4,7 @@ import { ButtonsContainer } from '../../StyledComponents/GameDetail.styled';
 import { Gamepad } from 'styled-icons/remix-fill';
 import { Gamepad as GamepadOutlined } from 'styled-icons/remix-line';
 import { ThemeContext } from 'styled-components';
-import { addGamePlayed } from '../../services/usersService';
+import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
@@ -14,14 +14,14 @@ export const UserButtons = ({ gameID }) => {
   const isGamePlayed = id => user.gamesPlayed.includes(id);
 
   // delete game from user's list
-  const removeGame = gameID => {
-    console.log('removing game', gameID);
+  const removeGame = async gameID => {
+    const updatedUser = await removeGamePlayed(gameID);
+    setUser(updatedUser);
   };
 
   // add game to user's list
   const addGame = async gameID => {
     const updatedUser = await addGamePlayed(gameID);
-    console.log('usuario', updatedUser);
     setUser(updatedUser);
   };
 

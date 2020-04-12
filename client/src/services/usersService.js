@@ -6,9 +6,13 @@ const usersService = axios.create({
 });
 
 export const addGamePlayed = async game_id => {
-  console.log('adding game with id of', game_id);
   const { data } = await usersService.post('/games-played', { game_id });
-  console.log('games played en el server', data);
+
+  return data.userUpdated;
+};
+
+export const removeGamePlayed = async game_id => {
+  const { data } = await usersService.delete(`/games-played/${game_id}`);
 
   return data.userUpdated;
 };

@@ -163,15 +163,15 @@ router.delete('/friends/:id', isLoggedIn(), async (req, res, next) => {
 });
 
 // DELETE route - remove game from games played list
-router.delete('/games-played/:id', isLoggedIn(), async (req, res, next) => {
-  const { id } = req.params;
+router.delete('/games-played/:game_id', isLoggedIn(), async (req, res, next) => {
+  const { game_id } = req.params;
   try {
-    const isIncluded = req.user.gamesPlayed.includes(id);
+    const isIncluded = req.user.gamesPlayed.includes(game_id);
 
     if (isIncluded) {
       const userUpdated = await User.findByIdAndUpdate(
         req.user.id,
-        { $pull: { gamesPlayed: id } },
+        { $pull: { gamesPlayed: game_id } },
         { new: true }
       );
 
