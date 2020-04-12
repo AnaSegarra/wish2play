@@ -7,8 +7,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Snackbar
 } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 // local modules
 import { signup } from '../../services/authService';
@@ -17,6 +19,7 @@ import { Form } from '../../components/CredentialsForm';
 
 // styled components
 import { ModalOpener } from '../../StyledComponents/Home.styled';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles({
   title: {
@@ -38,17 +41,22 @@ const useStyles = makeStyles({
 
 export const Signup = () => {
   const { setUser } = useContext(AuthContext);
-  const [error, setError] = useState('');
+  const [error, setError] = useState({ isError: false, errorMsg: '' });
   const [open, setOpen] = useState(false);
   const classes = useStyles();
+  const history = useHistory();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSignup = async newUser => {
     const response = await signup(newUser);
-
-    response.user ? setUser(response.user) : setError(response);
+    if (response.user) {
+      setUser(response.user);
+      history.push(`/wish2play/${response.user.username}`);
+    } else {
+      setError({ ...error, isError: true, errorMsg: response });
+    }
   };
 
   return (
@@ -71,11 +79,20 @@ export const Signup = () => {
           <Button onClick={handleClose} className={classes.btn}>
             Cancel
           </Button>
-          <Button onClick={handleClose} form="signupForm" type="submit" className={classes.btn}>
+          <Button form="signupForm" type="submit" className={classes.btn}>
             Subscribe
           </Button>
         </DialogActions>
       </Dialog>
+      {error.isError && (
+        <Snackbar
+          open={error.isError}
+          autoHideDuration={4000}
+          onClose={() => setError({ ...error, isError: false, errorMsg: '' })}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+          <Alert severity="error">{error.errorMsg}</Alert>
+        </Snackbar>
+      )}
     </div>
   );
 };

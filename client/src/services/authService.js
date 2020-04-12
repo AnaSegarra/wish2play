@@ -6,7 +6,6 @@ const authService = axios.create({
 });
 
 export const signup = async ({ username, password }) => {
-  console.log('creating user with data ', username, password);
   try {
     const { data } = await authService.post('/signup', {
       username,

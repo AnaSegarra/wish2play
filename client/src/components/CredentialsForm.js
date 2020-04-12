@@ -17,7 +17,6 @@ export const Form = ({ handleAction, id }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('submiting');
     handleAction(newUser);
   };
 

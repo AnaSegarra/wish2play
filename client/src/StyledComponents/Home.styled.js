@@ -6,11 +6,9 @@ export const StyledPaper = styled(Paper)`
   border: 0.08em solid ${({ theme }) => theme.main.secondary};
   overflow: hidden;
   margin-bottom: 2em;
-  div {
-    padding: 0 2em;
-  }
   div.mb {
     margin-bottom: 1.2em;
+    padding: 0 2em;
   }
   p.paper-title {
     font-size: 1.25rem;
