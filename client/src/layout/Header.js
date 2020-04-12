@@ -29,8 +29,8 @@ export const Header = ({ toggleTheme }) => {
   };
 
   return (
-    <header>
-      <Navbar theme={theme}>
+    <header theme={theme}>
+      <Navbar>
         <Link to="/">
           <GameController size="25" />
         </Link>
@@ -46,8 +46,10 @@ export const Header = ({ toggleTheme }) => {
         </div>
       </Navbar>
       <SubBar user={user}>
-        <p>{user && user.username}</p>
-        <UserCircle size="25" />
+        <Link to={`/wish2play/${user && user.username}`}>
+          <span>{user && user.username}</span>
+          <UserCircle size="25" />
+        </Link>
         <LogOut size="25" onClick={handleLogout} />
       </SubBar>
     </header>
