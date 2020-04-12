@@ -4,5 +4,5 @@ import { AuthContext } from '../contexts/authContext';
 
 export const withProtectedRoute = Component => () => {
   const { user, isLoading } = useContext(AuthContext);
-  return user ? <Component /> : !user && !isLoading ? <Redirect to="/login" /> : <></>; // empty placeholder
+  return user ? <Component /> : !user && !isLoading ? <Redirect to="/" /> : <></>; // empty placeholder
 };
