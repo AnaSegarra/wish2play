@@ -29,7 +29,9 @@ export const login = async ({ username, password }) => {
 };
 
 export const logout = async () => {
-  await authService.post('/logout');
+  const response = await authService.post('/logout');
+  console.log('response al logout', response);
+  return res.data;
 };
 
 export const getCurrentUser = async () => {

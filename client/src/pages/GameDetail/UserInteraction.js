@@ -25,8 +25,8 @@ export const UserButtons = ({ gameID }) => {
     setUser(updatedUser);
   };
 
-  return (
-    <ButtonsContainer user={user} theme={theme}>
+  return user ? (
+    <ButtonsContainer theme={theme}>
       {isGamePlayed(gameID) ? (
         <button onClick={() => removeGame(gameID)}>
           Played it!
@@ -39,5 +39,7 @@ export const UserButtons = ({ gameID }) => {
       )}
       <div>otros botones</div>
     </ButtonsContainer>
+  ) : (
+    <></>
   );
 };

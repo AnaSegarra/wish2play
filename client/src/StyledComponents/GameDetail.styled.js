@@ -75,7 +75,7 @@ export const Content = styled.div`
 
 // buttons
 export const ButtonsContainer = styled.div`
-  display: ${props => (props.user ? 'flex' : 'none')};
+  display: flex;
   padding: 2em 2em 0;
   justify-content: space-between;
 
