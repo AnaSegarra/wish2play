@@ -35,6 +35,6 @@ export const StyledSlider = styled(Slider)`
   }
   .carousel-prev,
   .carousel-next {
-    color: #fffffe;
+    color: ${({ theme }) => theme.main.button};
   }
 `;

@@ -1,6 +1,7 @@
 // dependencies
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ArrowToLeft, ArrowToRight } from '@styled-icons/boxicons-solid';
+import { ThemeContext } from 'styled-components';
 
 // local modules
 import { fetchGames } from '../services/gamesService';
@@ -9,6 +10,7 @@ import { fetchGames } from '../services/gamesService';
 import { StyledSlider, StyledPaper } from '../StyledComponents/Home.styled';
 
 export const GamesCarousel = ({ sort }) => {
+  const theme = useContext(ThemeContext);
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -37,7 +39,8 @@ export const GamesCarousel = ({ sort }) => {
           <button className="carousel-arrow carousel-next button">
             <ArrowToRight size={30} />
           </button>
-        }>
+        }
+        theme={theme}>
         {games.map((game, i) => {
           return (
             <div key={i}>

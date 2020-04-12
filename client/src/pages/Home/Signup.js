@@ -11,6 +11,7 @@ import {
   Snackbar
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { ThemeContext } from 'styled-components';
 
 // local modules
 import { signup } from '../../services/authService';
@@ -21,29 +22,30 @@ import { Form } from '../../components/CredentialsForm';
 import { ModalOpener } from '../../StyledComponents/Home.styled';
 import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles({
-  title: {
+const useStyles = makeStyles(theme => ({
+  title: theme => ({
     padding: '1em 3.6em',
-    backgroundColor: '#6246ea',
+    backgroundColor: theme.main.button,
     color: '#fffffe'
-  },
+  }),
   paragraph: {
     margin: 0,
     padding: '1em 2em 0'
   },
-  btn: {
-    color: '#6246ea',
+  btn: theme => ({
+    color: theme.main.button,
     '&:hover': {
       backgroundColor: 'rgba(209, 209, 233, 0.5)'
     }
-  }
-});
+  })
+}));
 
 export const Signup = () => {
   const { setUser } = useContext(AuthContext);
   const [error, setError] = useState({ isError: false, errorMsg: '' });
   const [open, setOpen] = useState(false);
-  const classes = useStyles();
+  const theme = useContext(ThemeContext);
+  const classes = useStyles(theme);
   const history = useHistory();
 
   const handleOpen = () => setOpen(true);
@@ -64,7 +66,7 @@ export const Signup = () => {
       <p>
         Don't have an account yet? <ModalOpener onClick={handleOpen}>Sign up here!</ModalOpener>
       </p>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" theme={theme}>
         <DialogTitle id="form-dialog-title" className={classes.title}>
           Create your account
         </DialogTitle>
