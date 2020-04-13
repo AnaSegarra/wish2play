@@ -3,9 +3,14 @@ import React, { useState, useEffect } from 'react';
 
 // local modules
 import { fetchGamesPlayedList } from '../../services/usersService';
+import { GamesGrid } from '../../components/GamesGrid';
 
 export const GamesPlayedPreview = ({ userID }) => {
   const [gamesPlayed, setGamesPlayed] = useState([]);
+
+  console.log('todos los juegos', gamesPlayed);
+
+  const firstFive = gamesPlayed.slice(0, 5);
 
   useEffect(() => {
     (async () => {
@@ -14,14 +19,5 @@ export const GamesPlayedPreview = ({ userID }) => {
       setGamesPlayed(games);
     })();
   }, []);
-  return (
-    <div>
-      <p>El perfil del usuario</p>
-      <p>Los juegos jugados</p>
-      {gamesPlayed.length > 0 &&
-        gamesPlayed.map((game, i) => {
-          return <p key={i}>{game.name}</p>;
-        })}
-    </div>
-  );
+  return <>{gamesPlayed.length > 0 && <GamesGrid gamesArr={firstFive} />}</>;
 };
