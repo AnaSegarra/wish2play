@@ -43,7 +43,7 @@ export const DataForm = ({ setEditStatus }) => {
         <ErrorMsg
           isError={error.isError}
           handleClose={() => setError({ isError: false, errorMsg: '' })}
-          position={{ vertical: 'center', horizontal: 'left' }}
+          position={{ vertical: 'bottom', horizontal: 'left' }}
           errorMsg={error.errorMsg}
         />
       )}
@@ -51,8 +51,10 @@ export const DataForm = ({ setEditStatus }) => {
   );
 };
 
-export const ImageForm = ({ setFile, setImgStatus }) => {
+export const ImageForm = ({ setFile, showImgForm }) => {
+  const { setUser } = useContext(AuthContext);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [error, setError] = useState({ isError: false, errorMsg: '' });
 
   const handleImgEdit = e => {
     const imgSelected = e.target.files[0];
@@ -64,14 +66,30 @@ export const ImageForm = ({ setFile, setImgStatus }) => {
     e.preventDefault();
     const img = new FormData();
     img.append('image', selectedFile);
-    const newImage = await uploadImage(img);
-    setImgStatus(false);
+    try {
+      const response = await uploadImage(img);
+      setUser(response.user);
+      showImgForm();
+    } catch (error) {
+      setError({ isError: true, errorMsg: error.message });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} id="upload-form">
-      <input type="file" onChange={handleImgEdit} />
-      <button type="submit">Save changes</button>
-    </form>
+    <>
+      <form onSubmit={handleSubmit} id="upload-form">
+        <input type="file" onChange={handleImgEdit} />
+        <button type="submit">Save changes</button>
+      </form>
+      <button onClick={showImgForm}>Cancel</button>
+      {error.isError && (
+        <ErrorMsg
+          isError={error.isError}
+          handleClose={() => setError({ isError: false, errorMsg: '' })}
+          position={{ vertical: 'bottom', horizontal: 'left' }}
+          errorMsg={error.errorMsg}
+        />
+      )}
+    </>
   );
 };

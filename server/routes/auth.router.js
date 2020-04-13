@@ -105,27 +105,23 @@ router.put('/edit', isLoggedIn(), async (req, res, next) => {
 // PUT route - update user's avatar
 router.put('/upload', uploader.single('image'), async (req, res, next) => {
   const { file } = req;
-  console.log('Uploading', file);
-
   if (!file) {
-    return next(new Error('No file uploaded!'));
+    return res.status(400).json({ message: 'No file uploaded!' });
   }
-
+  console.log('aquí!!!', file);
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
       {
-        image: file.secure_url
+        image: file.url
       },
       { new: true }
     );
-    console.log('User image uploaded ', updatedUser);
     return res.status(200).json({
       message: 'File successfully uploaded',
-      image: file.secure_url
+      user: updatedUser
     });
   } catch (error) {
-    console.log('Error uploading file', error);
     return res.status(500).json({
       message: 'Image upload failed'
     });

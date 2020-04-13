@@ -13,7 +13,9 @@ const storage = cloudinaryStorage({
   folder: 'wish2play',
   allowedFormats: ['jpg', 'png', 'jpeg'],
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const { id } = req.user;
+    console.log('el file', file);
+    cb(null, `userImg-${id}`);
   }
 });
 

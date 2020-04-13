@@ -15,11 +15,14 @@ export const UserData = () => {
 
   const showEditForm = () => setIsEditing(!isEditing);
 
-  const handleAvatar = () => setIsChangingImg(!isChangingImg);
+  const showImgForm = () => {
+    setIsChangingImg(!isChangingImg);
+    setSelectedFile(null);
+  };
 
   return (
     <div>
-      <Tooltip title="Change your avatar" arrow onClick={handleAvatar}>
+      <Tooltip title="Change your avatar" arrow onClick={showImgForm}>
         <img
           src={
             selectedFile ||
@@ -32,7 +35,7 @@ export const UserData = () => {
           height="200"
         />
       </Tooltip>
-      {isChangingImg && <ImageForm setFile={setSelectedFile} setImgStatus={setIsChangingImg} />}
+      {isChangingImg && <ImageForm setFile={setSelectedFile} showImgForm={showImgForm} />}
       {!isEditing ? (
         <>
           <p>{name && name}</p>

@@ -47,5 +47,15 @@ export const updateProfile = async newData => {
 };
 
 export const uploadImage = async img => {
-  await authService.put('/upload', img);
+  try {
+    const { data } = await authService.put('/upload', img);
+    return data;
+  } catch (error) {
+    if (error.response.status === 400) {
+      throw new Error('You need to choose a picture');
+    }
+    if (error.response.status === 500) {
+      throw new Error('File format not allowed');
+    }
+  }
 };
