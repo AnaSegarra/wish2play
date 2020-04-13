@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const uploader = require('../configs/cloudinary.config');
 const User = require('../models/User');
 const { hashPassword } = require('../utils/hashing');
 const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
@@ -108,5 +109,35 @@ router.put(
     }
   }
 );
+
+// PUT route - update user's avatar
+router.put('/upload', uploader.single('image'), async (req, res, next) => {
+  const { file } = req;
+  console.log('Uploading', file);
+
+  if (!file) {
+    return next(new Error('No file uploaded!'));
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        image: file.secure_url
+      },
+      { new: true }
+    );
+    console.log('User image uploaded ', updatedUser);
+    return res.status(200).json({
+      message: 'File successfully uploaded',
+      image: file.secure_url
+    });
+  } catch (error) {
+    console.log('Error uploading file', error);
+    return res.status(500).json({
+      message: 'Image upload failed'
+    });
+  }
+});
 
 module.exports = router;
