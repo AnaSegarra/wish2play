@@ -21,7 +21,6 @@ export const signup = async ({ username, password }) => {
 export const login = async ({ username, password }) => {
   try {
     const { data } = await authService.post('/login', { username, password });
-
     return data;
   } catch (error) {
     return error.response.data.message;
@@ -35,6 +34,14 @@ export const logout = async () => {
 
 export const getCurrentUser = async () => {
   const { data } = await authService.get('/current-user');
-
   return data.user;
+};
+
+export const updateProfile = async newData => {
+  try {
+    const { data } = await authService.put('/edit', newData);
+    return data;
+  } catch (error) {
+    return error.response.data.message;
+  }
 };

@@ -9,8 +9,6 @@ export const GamesPlayedPreview = ({ userID }) => {
 
   useEffect(() => {
     (async () => {
-      console.log('getting games');
-
       const games = await fetchGamesPlayedList(userID);
 
       setGamesPlayed(games);
@@ -21,8 +19,8 @@ export const GamesPlayedPreview = ({ userID }) => {
       <p>El perfil del usuario</p>
       <p>Los juegos jugados</p>
       {gamesPlayed.length > 0 &&
-        gamesPlayed.map(game => {
-          return <p>{game.name}</p>;
+        gamesPlayed.map((game, i) => {
+          return <p key={i}>{game.name}</p>;
         })}
     </div>
   );

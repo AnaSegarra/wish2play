@@ -88,27 +88,19 @@ router.post('/logout', (req, res, next) => {
 });
 
 // PUT route - edit user's profile
-router.put(
-  '/edit',
-  isLoggedIn(),
-  isEmptyField('username', 'password'),
-  isValidPassword(),
-  async (req, res, next) => {
-    const { id } = req.user;
-
-    try {
-      const userUpdated = await User.findByIdAndUpdate(
-        id,
-        { ...req.body, password: hashPassword(req.body.password) },
-        { new: true }
-      );
-      return res.json({ message: 'User successfull updated', user: userUpdated });
-    } catch (error) {
-      console.log('Error editing user profile', error);
-      return res.status(500).json({ message: 'Internal server error during profile edit' });
+router.put('/edit', isLoggedIn(), async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
+    return res.json({ message: 'User successfully updated', user: userUpdated });
+  } catch (error) {
+    if (error.name === 'MongoError') {
+      return res.status(400).json({ message: `Username ${req.body.username} is already taken` });
+    } else {
+      return res.status(500).json({ error });
     }
   }
-);
+});
 
 // PUT route - update user's avatar
 router.put('/upload', uploader.single('image'), async (req, res, next) => {
