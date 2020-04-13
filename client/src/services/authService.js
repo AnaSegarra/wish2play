@@ -30,8 +30,7 @@ export const login = async ({ username, password }) => {
 
 export const logout = async () => {
   const response = await authService.post('/logout');
-  console.log('response al logout', response);
-  return res.data;
+  return response.data;
 };
 
 export const getCurrentUser = async () => {

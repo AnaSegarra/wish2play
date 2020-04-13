@@ -18,8 +18,8 @@ export const Header = ({ toggleTheme }) => {
   const [isLight, setIsLight] = useState(true);
   const theme = useContext(ThemeContext);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setUser(null);
   };
 
