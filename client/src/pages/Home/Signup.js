@@ -8,16 +8,15 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  Snackbar
+  DialogTitle
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import { ThemeContext } from 'styled-components';
 
 // local modules
 import { signup } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
+import { ErrorMsg } from '../../components/ErrorMsg';
 
 // styled components
 import { ModalOpener } from '../../styledComponents/Home.styled';
@@ -87,13 +86,12 @@ export const Signup = () => {
         </DialogActions>
       </Dialog>
       {error.isError && (
-        <Snackbar
-          open={error.isError}
-          autoHideDuration={4000}
-          onClose={() => setError({ ...error, isError: false, errorMsg: '' })}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-          <Alert severity="error">{error.errorMsg}</Alert>
-        </Snackbar>
+        <ErrorMsg
+          isError={error.isError}
+          handleClose={() => setError({ isError: false, errorMsg: '' })}
+          position={{ vertical: 'bottom', horizontal: 'center' }}
+          errorMsg={error.errorMsg}
+        />
       )}
     </div>
   );

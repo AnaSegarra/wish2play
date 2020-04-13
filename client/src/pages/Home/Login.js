@@ -1,13 +1,12 @@
 // dependencies
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 
 // local modules
 import { login } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
+import { ErrorMsg } from '../../components/ErrorMsg';
 
 export const Login = () => {
   const { setUser } = useContext(AuthContext);
@@ -20,7 +19,7 @@ export const Login = () => {
       setUser(response.user);
       history.push(`/wish2play/${response.user.username}`);
     } else {
-      setError({ ...error, isError: true, errorMsg: response });
+      setError({ isError: true, errorMsg: response });
     }
   };
 
@@ -28,13 +27,12 @@ export const Login = () => {
     <>
       <Form handleAction={handleLogin} />
       {error.isError && (
-        <Snackbar
-          open={error.isError}
-          autoHideDuration={4000}
-          onClose={() => setError({ ...error, isError: false, errorMsg: '' })}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-          <Alert severity="error">{error.errorMsg}</Alert>
-        </Snackbar>
+        <ErrorMsg
+          isError={error.isError}
+          handleClose={() => setError({ isError: false, errorMsg: '' })}
+          position={{ vertical: 'bottom', horizontal: 'right' }}
+          errorMsg={error.errorMsg}
+        />
       )}
     </>
   );
