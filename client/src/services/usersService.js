@@ -19,7 +19,6 @@ export const removeGamePlayed = async game_id => {
 
 export const fetchGamesPlayedList = async user_id => {
   const { data } = await usersService.get(`/${user_id}/games-played`);
-  console.log('response en el browser', data);
 
   return data.gamesPlayed;
 };

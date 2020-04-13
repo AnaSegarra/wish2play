@@ -45,3 +45,7 @@ export const updateProfile = async newData => {
     return error.response.data.message;
   }
 };
+
+export const uploadImage = async img => {
+  await authService.put('/upload', img);
+};

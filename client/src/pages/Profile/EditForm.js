@@ -2,11 +2,11 @@
 import React, { useContext, useState } from 'react';
 
 // local modules
-import { updateProfile } from '../../services/authService';
+import { updateProfile, uploadImage } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { ErrorMsg } from '../../components/ErrorMsg';
 
-export const EditForm = ({ setEditStatus }) => {
+export const DataForm = ({ setEditStatus }) => {
   const { user, setUser } = useContext(AuthContext);
   const [updatedUser, setUpdatedUser] = useState(user);
   const [error, setError] = useState({ isError: false, errorMsg: '' });
@@ -48,5 +48,30 @@ export const EditForm = ({ setEditStatus }) => {
         />
       )}
     </>
+  );
+};
+
+export const ImageForm = ({ setFile, setImgStatus }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleImgEdit = e => {
+    const imgSelected = e.target.files[0];
+    setFile(URL.createObjectURL(imgSelected)); // creates image preview
+    setSelectedFile(imgSelected);
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const img = new FormData();
+    img.append('image', selectedFile);
+    const newImage = await uploadImage(img);
+    setImgStatus(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} id="upload-form">
+      <input type="file" onChange={handleImgEdit} />
+      <button type="submit">Save changes</button>
+    </form>
   );
 };
