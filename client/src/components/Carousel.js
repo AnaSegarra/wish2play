@@ -7,7 +7,7 @@ import { ThemeContext } from 'styled-components';
 import { fetchGames } from '../services/gamesService';
 
 // styled components
-import { StyledSlider, StyledPaper } from '../StyledComponents/Home.styled';
+import { StyledSlider, StyledPaper } from '../styledComponents/Home.styled';
 
 export const GamesCarousel = ({ sort }) => {
   const theme = useContext(ThemeContext);

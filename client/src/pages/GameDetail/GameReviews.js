@@ -1,8 +1,11 @@
+// dependencies
 import React, { useContext } from 'react';
 import { Rating } from '@material-ui/lab';
 import { Grid } from '@material-ui/core';
-import { ReviewsContainer, Review } from '../../StyledComponents/GameDetail.styled';
 import ScrollAnimation from 'react-animate-on-scroll';
+
+// styled components
+import { ReviewsContainer, Review } from '../../styledComponents/GameDetail.styled';
 
 export const GameReviews = ({ reviews }) => {
   return (

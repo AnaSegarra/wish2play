@@ -1,5 +1,6 @@
 // dependencies
 import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
   Dialog,
@@ -19,8 +20,7 @@ import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
 
 // styled components
-import { ModalOpener } from '../../StyledComponents/Home.styled';
-import { useHistory } from 'react-router-dom';
+import { ModalOpener } from '../../styledComponents/Home.styled';
 
 const useStyles = makeStyles(theme => ({
   title: theme => ({

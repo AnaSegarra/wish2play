@@ -7,7 +7,7 @@ import { ThemeContext } from 'styled-components';
 import ScrollAnimation from 'react-animate-on-scroll';
 
 // local modules
-import { BottomCard, TopCard } from '../StyledComponents/Games.styled';
+import { BottomCard, TopCard } from '../styledComponents/Games.styled';
 
 export const useStyles = makeStyles(theme => ({
   chip: theme => ({

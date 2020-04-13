@@ -19,7 +19,8 @@ export const ImageContainer = styled.div`
   padding: 2em;
   width: 100%;
   img {
-    border-radius: 2em;
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.5em #333;
   }
 
   @media (max-width: 768px) {

@@ -1,6 +1,9 @@
+// dependencies
 import React, { useState, useEffect } from 'react';
-import { fetchSingleGame } from '../../services/gamesService';
 import { Container, Grid } from '@material-ui/core';
+
+// local modules
+import { fetchSingleGame } from '../../services/gamesService';
 import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
 import { BSO } from './GameBSO';

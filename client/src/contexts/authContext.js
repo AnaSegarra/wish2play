@@ -1,7 +1,10 @@
+// dependencies
 import React, { createContext, useState, useEffect } from 'react';
+
+// local modules
 import { getCurrentUser } from '../services/authService';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(); // user context
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState();

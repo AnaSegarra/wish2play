@@ -1,6 +1,9 @@
+// dependencies
 import React from 'react';
-import { Input } from '../../StyledComponents/Form';
 import Select from 'react-select';
+
+// styled components
+import { Input } from '../../styledComponents/Form';
 
 export const Filters = ({ search, options, handleSelect }) => {
   return (

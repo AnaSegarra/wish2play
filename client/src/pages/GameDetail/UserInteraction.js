@@ -1,10 +1,15 @@
+// dependencies
 import React, { useContext } from 'react';
-import { AuthContext } from '../../contexts/authContext';
-import { ButtonsContainer } from '../../StyledComponents/GameDetail.styled';
 import { Gamepad } from 'styled-icons/remix-fill';
 import { Gamepad as GamepadOutlined } from 'styled-icons/remix-line';
 import { ThemeContext } from 'styled-components';
+
+// local modules
+import { AuthContext } from '../../contexts/authContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
+
+// styled components
+import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
