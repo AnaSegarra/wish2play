@@ -8,8 +8,6 @@ import { GamesGrid } from '../../components/GamesGrid';
 export const GamesPlayedPreview = ({ userID }) => {
   const [gamesPlayed, setGamesPlayed] = useState([]);
 
-  console.log('todos los juegos', gamesPlayed);
-
   const firstFive = gamesPlayed.slice(0, 5);
 
   useEffect(() => {

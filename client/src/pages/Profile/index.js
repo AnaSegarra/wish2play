@@ -5,7 +5,7 @@ import { Grid, Container } from '@material-ui/core';
 // local modules
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { AuthContext } from '../../contexts/authContext';
-import { GamesPlayedPreview } from './GamesPlayed';
+import { GamesPlayedPreview } from './GamesPlayedPreview';
 import { WishlistPreview } from './WishlistPreview';
 import { UserData } from './UserDetails';
 
