@@ -10,11 +10,7 @@ const userSchema = new mongoose.Schema(
     name: String,
     isAdmin: { type: Boolean, default: false },
     gamesPlayed: [{ type: ObjectId, ref: 'Game' }],
-    wishlist: {
-      status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
-      wishes: [{ type: ObjectId, ref: 'Wish' }],
-      secure_url: String
-    },
+    wishlist: [{ type: ObjectId, ref: 'Wish' }],
     friends: [{ type: ObjectId, ref: 'User' }],
     reservedWishes: [{ type: ObjectId, ref: 'Wish' }]
   },

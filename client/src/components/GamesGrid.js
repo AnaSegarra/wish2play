@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { GridList, GridListTile, GridListTileBar, IconButton, makeStyles } from '@material-ui/core';
 import { ThemeContext } from 'styled-components';
 import { Gamepad } from 'styled-icons/remix-fill';
+import { Heart } from 'styled-icons/entypo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,11 +29,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const GamesGrid = ({ gamesArr }) => {
+export const GamesGrid = ({ gamesArr, type }) => {
   const theme = useContext(ThemeContext);
   const classes = useStyles(theme);
 
-  console.log('los juegos del slider', gamesArr);
+  const handleDelete = () => console.log('clicked delete');
 
   return (
     <div className={classes.root}>
@@ -40,7 +41,12 @@ export const GamesGrid = ({ gamesArr }) => {
         {gamesArr.map(game => (
           <GridListTile key={game._id} style={{ height: '300px' }}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src={game.image} alt={game.name} height="300" />
+              <img
+                src={game.image}
+                alt={game.name}
+                height="300"
+                width={gamesArr.length > 1 ? 'auto' : '100%'}
+              />
             </div>
             <GridListTileBar
               classes={{
@@ -52,8 +58,12 @@ export const GamesGrid = ({ gamesArr }) => {
                 </Link>
               }
               actionIcon={
-                <IconButton aria-label={`${game._id}`}>
-                  <Gamepad size="25" color={theme.main.tertiary} />
+                <IconButton aria-label={`${game._id}`} onClick={handleDelete}>
+                  {type === 'wishlist' ? (
+                    <Heart size="25" color={theme.main.tertiary} />
+                  ) : (
+                    <Gamepad size="25" color={theme.main.tertiary} />
+                  )}
                 </IconButton>
               }
             />
