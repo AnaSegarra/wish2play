@@ -31,3 +31,8 @@ export const fetchSingleGame = async endpoint => {
 
   return data;
 };
+
+export const addReview = async (game_id, { content, rating }) => {
+  const { data } = await gamesService.post(`/${game_id}/reviews`, { content, rating });
+  return data.game;
+};

@@ -6,6 +6,7 @@ import { Container, Grid } from '@material-ui/core';
 import { fetchSingleGame } from '../../services/gamesService';
 import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
+import { ReviewForm } from './ReviewForm';
 import { BSO } from './GameBSO';
 
 export const Game = props => {
@@ -14,6 +15,7 @@ export const Game = props => {
 
   useEffect(() => {
     (async () => {
+      console.log('el useEffect!!');
       const response = await fetchSingleGame(id);
       setGame(response);
     })();
@@ -29,6 +31,7 @@ export const Game = props => {
           <BSO name={game.name} />
         </Grid>
       </Grid>
+      <ReviewForm gameID={game._id} updateGame={setGame} />
       <GameReviews reviews={game.reviews} />
     </Container>
   ) : (

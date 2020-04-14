@@ -6,6 +6,7 @@ import { Grid, Container } from '@material-ui/core';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { AuthContext } from '../../contexts/authContext';
 import { GamesPlayedPreview } from './GamesPlayed';
+import { WishlistPreview } from './WishlistPreview';
 import { UserData } from './UserDetails';
 
 const Profile = () => {
@@ -19,6 +20,7 @@ const Profile = () => {
         </Grid>
         <Grid item lg={9}>
           <GamesPlayedPreview userID={_id} />
+          <WishlistPreview userID={_id} />
         </Grid>
       </Grid>
     </Container>

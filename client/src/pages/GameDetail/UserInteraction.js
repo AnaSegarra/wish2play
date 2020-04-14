@@ -7,6 +7,7 @@ import { ThemeContext } from 'styled-components';
 // local modules
 import { AuthContext } from '../../contexts/authContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
+import { isGameIncluded } from '../../helpers/gameCheckers';
 
 // styled components
 import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
@@ -14,9 +15,6 @@ import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
   const theme = useContext(ThemeContext);
-
-  // check if user has played the game
-  const isGamePlayed = id => user.gamesPlayed.includes(id);
 
   // delete game from user's list
   const removeGame = async gameID => {
@@ -32,7 +30,7 @@ export const UserButtons = ({ gameID }) => {
 
   return user ? (
     <ButtonsContainer theme={theme}>
-      {isGamePlayed(gameID) ? (
+      {isGameIncluded(gameID, user.gamesPlayed) ? (
         <button onClick={() => removeGame(gameID)}>
           Played it!
           <Gamepad size="25" />
