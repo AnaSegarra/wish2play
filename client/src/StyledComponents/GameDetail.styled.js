@@ -78,10 +78,9 @@ export const Content = styled.div`
 export const ButtonsContainer = styled.div`
   display: flex;
   padding: 2em 2em 0;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   svg {
-    margin-left: 0.5em;
     color: ${({ theme }) => theme.main.tertiary};
   }
   button {
@@ -91,6 +90,7 @@ export const ButtonsContainer = styled.div`
     outline: none;
     border-radius: 1em;
     cursor: pointer;
+    margin-left: 1em;
     &:hover {
       background-color: rgba(206, 206, 206, 0.5);
     }
@@ -116,5 +116,9 @@ export const Review = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .btns {
+    display: flex;
+    justify-content: flex-end;
   }
 `;

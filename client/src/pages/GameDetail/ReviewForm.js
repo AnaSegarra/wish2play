@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext';
-import { isGameIncluded } from '../../helpers/gameCheckers';
+import { isIncluded } from '../../helpers/gamesHelpers';
 import styled from 'styled-components';
 import { Tooltip } from '@material-ui/core';
 import { ReviewsContainer } from '../../styledComponents/GameDetail.styled';
@@ -35,7 +35,7 @@ export const ReviewForm = ({ gameID, updateGame }) => {
                 setReview({ ...review, rating: newValue });
               }}
               precision={0.5}
-              disabled={!isGameIncluded(gameID, user.gamesPlayed)}
+              disabled={!isIncluded(gameID, user.gamesPlayed)}
             />
             <textarea
               name="content"
@@ -44,15 +44,15 @@ export const ReviewForm = ({ gameID, updateGame }) => {
               style={{ width: '100%', resize: 'none' }}
               onChange={e => setReview({ ...review, content: e.target.value })}
               placeholder="Did you like it? Would you recommend it?"
-              disabled={!isGameIncluded(gameID, user.gamesPlayed)}></textarea>
+              disabled={!isIncluded(gameID, user.gamesPlayed)}></textarea>
             <Tooltip
               title={
-                !isGameIncluded(gameID, user.gamesPlayed)
+                !isIncluded(gameID, user.gamesPlayed)
                   ? 'You have to play it before making a review'
                   : ''
               }>
               <span>
-                <SubmitBtn type="submit" disabled={!isGameIncluded(gameID, user.gamesPlayed)}>
+                <SubmitBtn type="submit" disabled={!isIncluded(gameID, user.gamesPlayed)}>
                   Publish
                 </SubmitBtn>
               </span>

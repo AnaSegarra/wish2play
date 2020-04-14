@@ -15,7 +15,6 @@ export const Game = props => {
 
   useEffect(() => {
     (async () => {
-      console.log('el useEffect!!');
       const response = await fetchSingleGame(id);
       setGame(response);
     })();
@@ -32,7 +31,7 @@ export const Game = props => {
         </Grid>
       </Grid>
       <ReviewForm gameID={game._id} updateGame={setGame} />
-      <GameReviews reviews={game.reviews} />
+      <GameReviews gameID={game._id} reviews={game.reviews} />
     </Container>
   ) : (
     <div></div>

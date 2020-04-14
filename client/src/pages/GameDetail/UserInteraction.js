@@ -3,17 +3,21 @@ import React, { useContext } from 'react';
 import { Gamepad } from 'styled-icons/remix-fill';
 import { Gamepad as GamepadOutlined } from 'styled-icons/remix-line';
 import { ThemeContext } from 'styled-components';
+import { Heart, HeartOutlined } from 'styled-icons/entypo';
 
 // local modules
 import { AuthContext } from '../../contexts/authContext';
+import { WishlistContext } from '../../contexts/wishlistContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
-import { isGameIncluded } from '../../helpers/gameCheckers';
+import { addGameWished, removeGameWished } from '../../services/wishesService';
+import { isIncluded, arrMapped } from '../../helpers/gamesHelpers';
 
 // styled components
 import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
+  const { wishlist, setWishlist } = useContext(WishlistContext);
   const theme = useContext(ThemeContext);
 
   // delete game from user's list
@@ -28,9 +32,23 @@ export const UserButtons = ({ gameID }) => {
     setUser(updatedUser);
   };
 
-  return user ? (
+  // add game to wishlist
+  const addNewWish = async gameID => {
+    const updatedUser = await addGameWished(gameID);
+    console.log(updatedUser);
+    setUser(updatedUser);
+  };
+
+  // remove game from wishlist
+  const removeWish = async gameID => {
+    const wish = wishlist.find(wish => wish.game._id === gameID);
+    const updatedUser = await removeGameWished(wish._id);
+    setUser(updatedUser);
+  };
+
+  return user && wishlist ? (
     <ButtonsContainer theme={theme}>
-      {isGameIncluded(gameID, user.gamesPlayed) ? (
+      {isIncluded(gameID, user.gamesPlayed) ? (
         <button onClick={() => removeGame(gameID)}>
           Played it!
           <Gamepad size="25" />
@@ -40,7 +58,15 @@ export const UserButtons = ({ gameID }) => {
           Not played yet <GamepadOutlined size="25" />
         </button>
       )}
-      <div>otros botones</div>
+      {isIncluded(gameID, arrMapped(wishlist)) ? (
+        <button>
+          <Heart size="25" onClick={() => removeWish(gameID)} />
+        </button>
+      ) : (
+        <button onClick={() => addNewWish(gameID)}>
+          <HeartOutlined size="25" />
+        </button>
+      )}
     </ButtonsContainer>
   ) : (
     <></>
