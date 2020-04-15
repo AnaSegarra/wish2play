@@ -1,8 +1,12 @@
+// dependencies
 import React, { useState, useEffect } from 'react';
-import { fetchSingleGame } from '../../services/gamesService';
 import { Container, Grid } from '@material-ui/core';
+
+// local modules
+import { fetchSingleGame } from '../../services/gamesService';
 import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
+import { ReviewForm } from './ReviewForm';
 import { BSO } from './GameBSO';
 
 export const Game = props => {
@@ -12,10 +16,10 @@ export const Game = props => {
   useEffect(() => {
     (async () => {
       const response = await fetchSingleGame(id);
-      console.log(response);
       setGame(response);
     })();
   }, []);
+
   return game ? (
     <Container>
       <Grid container>
@@ -26,7 +30,8 @@ export const Game = props => {
           <BSO name={game.name} />
         </Grid>
       </Grid>
-      <GameReviews reviews={game.reviews} />
+      <ReviewForm gameID={game._id} updateGame={setGame} />
+      <GameReviews gameID={game._id} reviews={game.reviews} />
     </Container>
   ) : (
     <div></div>

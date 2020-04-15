@@ -11,32 +11,34 @@ export const StyledForm = styled.form`
 `;
 
 export const Input = styled.input`
-  color: #172c66;
+  color: ${({ theme }) => theme.input.color};
   font-size: 1rem;
   padding: 0.5em 1em;
   margin-bottom: 2em;
-  border: 0.1em solid #d1d1e9;
+  border: 0.1em solid ${({ theme }) => theme.main.secondary};
   border-radius: 0.5em;
   outline: none;
 
   &:focus {
     color: #6246ea;
-    border: 0.1em solid #6246ea;
-    box-shadow: 0 0 0.2em 0.1em rgba(98, 70, 234, 0.5);
+    border: 0.1em solid ${({ theme }) => theme.input.focus};
+    box-shadow: 0 0 0.2em 0.1em ${({ theme }) => theme.input.shadow};
   }
 `;
 
 export const Button = styled.button`
+  font-size: 1rem;
   color: #fffffe;
   padding: 0.5em 1em;
   border-radius: 0.5em;
-  border: 0.1em solid #6314d2;
-  background: linear-gradient(-180deg, #7016ea, #6246ea 90%);
+  border: 0.1em solid ${({ theme }) => theme.button.border};
+  background: ${({ theme }) => theme.button.bg};
   outline: none;
+  cursor: pointer;
   &:hover {
-    background: linear-gradient(-180deg, #6314d2, #4f30e8 90%);
+    background: ${({ theme }) => theme.button.hover};
   }
   &:focus {
-    box-shadow: 0 0 0.3em 0.2em #6246ea;
+    box-shadow: ${({ theme }) => theme.button.focus};
   }
 `;

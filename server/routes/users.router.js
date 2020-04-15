@@ -7,10 +7,32 @@ const { isLoggedIn } = require('../lib/authMW');
 // GET route - retrieve all users from database
 router.get('/', async (req, res, next) => {
   try {
-    const users = await User.find();
+    const { searchTerm } = req.query;
+    const queryCondition = { $regex: searchTerm, $options: 'i' };
+
+    let filter = {
+      _id: { $not: { $in: req.user.friends } },
+      $and: [{ _id: { $ne: req.user.id } }]
+    }; // removes users friends and current user
+
+    // finds users by username or name but excludes current user
+    if (searchTerm) {
+      filter = {
+        ...filter,
+        $or: [{ username: queryCondition }, { name: queryCondition }]
+      };
+    }
+    const numOfUsers = await User.findUsers(filter); // total num of users that are not friends
+
+    const limit = Number(req.query.limit) || 4;
+    const page = Number(req.query.page) || 1;
+    const skip = (page - 1) * limit;
+
+    const users = await User.findUsers(filter).skip(skip).limit(limit);
+
     return res.json({
       message: 'Users successfully retrieved from database',
-      results: users.length,
+      total: numOfUsers.length,
       users
     });
   } catch (error) {
@@ -19,40 +41,21 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET route - search users by name
-router.get('/search', async (req, res, next) => {
-  const { searchTerm } = req.query;
-  const queryCondition = { $regex: searchTerm, $options: 'i' };
-
-  try {
-    // find users matching either username and name
-    const foundUsers = await User.find({
-      $or: [{ username: queryCondition }, { name: queryCondition }]
-    });
-
-    if (foundUsers.length === 0) {
-      return res.json({
-        message: 'There are no users in our database that match that search',
-        results: foundUsers.length
-      });
-    }
-
-    return res.json({ message: 'Successful query', results: foundUsers.length, users: foundUsers });
-  } catch (error) {
-    console.log('User search failed', error);
-    return res.status(500).json({ message: 'Internal server error fetching users from database' });
-  }
-});
-
 // GET route - retrieve user's friends
 router.get('/friends', isLoggedIn(), async (req, res, next) => {
   try {
-    const { friends } = await User.findById(req.user.id).populate('friends');
-    const friendsMapped = [...friends].map(friend => {
-      return { name: friend.name, username: friend.username };
+    const page = Number(req.query.page) || 1;
+    const user = await User.findById(req.user.id).populate({
+      path: 'friends',
+      select: 'name username _id',
+      skip: (page - 1) * 4
     });
 
-    return res.json({ message: 'Friends retrieved successfully', friends: friendsMapped });
+    return res.json({
+      message: 'Friends retrieved successfully',
+      total: user.friends.length,
+      friends: user.friends
+    });
   } catch (error) {
     console.log('Error retrieving friends', error);
     return res.status(500).json({ message: 'Internal server error fetching friends' });
@@ -60,10 +63,10 @@ router.get('/friends', isLoggedIn(), async (req, res, next) => {
 });
 
 // GET route - retrieve games played by a user
-router.get('/:id/games-played', async (req, res, next) => {
-  const { id } = req.params;
+router.get('/:user_id/games-played', async (req, res, next) => {
+  const { user_id } = req.params;
   try {
-    const { gamesPlayed } = await User.findById(id).populate('gamesPlayed');
+    const { gamesPlayed } = await User.findById(user_id).populate('gamesPlayed');
     return res
       .status(200)
       .json({ message: 'Games played retrieved', results: gamesPlayed.length, gamesPlayed });
@@ -90,7 +93,7 @@ router.post('/friends', isLoggedIn(), async (req, res, next) => {
         { $push: { friends: user_id } },
         { new: true }
       );
-      return res.json({ message: 'New friend added successfully', friends: userUpdated });
+      return res.json({ message: 'New friend added successfully', userUpdated });
     }
 
     // status 400 if is already a friend
@@ -127,27 +130,31 @@ router.post('/games-played', isLoggedIn(), async (req, res, next) => {
 });
 
 // DELETE route - delete friend
-router.delete('/friends/:id', isLoggedIn(), async (req, res, next) => {
-  const { id } = req.params;
+router.delete('/friends/:user_id', isLoggedIn(), async (req, res, next) => {
+  const { user_id } = req.params;
   try {
-    const isFriend = req.user.friends.includes(id);
+    const isFriend = req.user.friends.includes(user_id);
 
     if (isFriend) {
       // update friend's wishes status
       await Wish.updateMany(
         {
-          $and: [{ _id: { $in: req.user.reservedWishes } }, { owner: id }, { status: 'Reserved' }]
+          $and: [
+            { _id: { $in: req.user.reservedWishes } },
+            { owner: user_id },
+            { status: 'Reserved' }
+          ]
         },
         { status: 'Free' }
       );
 
       // find every friend wish
-      const friendWishes = await Wish.find({ owner: id });
+      const friendWishes = await Wish.find({ owner: user_id });
 
       // remove friend and their wishes
       const userUpdated = await User.findByIdAndUpdate(
         req.user.id,
-        { $pull: { friends: id }, $pullAll: { reservedWishes: friendWishes } },
+        { $pull: { friends: user_id }, $pullAll: { reservedWishes: friendWishes } },
         { new: true }
       );
 
@@ -163,15 +170,15 @@ router.delete('/friends/:id', isLoggedIn(), async (req, res, next) => {
 });
 
 // DELETE route - remove game from games played list
-router.delete('/games-played/:id', isLoggedIn(), async (req, res, next) => {
-  const { id } = req.params;
+router.delete('/games-played/:game_id', isLoggedIn(), async (req, res, next) => {
+  const { game_id } = req.params;
   try {
-    const isIncluded = req.user.gamesPlayed.includes(id);
+    const isIncluded = req.user.gamesPlayed.includes(game_id);
 
     if (isIncluded) {
       const userUpdated = await User.findByIdAndUpdate(
         req.user.id,
-        { $pull: { gamesPlayed: id } },
+        { $pull: { gamesPlayed: game_id } },
         { new: true }
       );
 

@@ -31,3 +31,13 @@ export const fetchSingleGame = async endpoint => {
 
   return data;
 };
+
+export const addReview = async (game_id, { content, rating }) => {
+  const { data } = await gamesService.post(`/${game_id}/reviews`, { content, rating });
+  return data.game;
+};
+
+export const deleteReview = async (game_id, id) => {
+  const response = await gamesService.delete(`/${game_id}/reviews/${id}`);
+  console.log('respuesta', response);
+};

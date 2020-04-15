@@ -19,7 +19,8 @@ export const ImageContainer = styled.div`
   padding: 2em;
   width: 100%;
   img {
-    border-radius: 2em;
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.5em #333;
   }
 
   @media (max-width: 768px) {
@@ -73,6 +74,32 @@ export const Content = styled.div`
   }
 `;
 
+// buttons
+export const ButtonsContainer = styled.div`
+  display: flex;
+  padding: 2em 2em 0;
+  justify-content: flex-end;
+
+  svg {
+    color: ${({ theme }) => theme.main.tertiary};
+  }
+  button {
+    color: ${({ theme }) => theme.main.tertiary};
+    font-size: 0.8rem;
+    background-color: ${({ theme }) => theme.chip.background};
+    outline: none;
+    border-radius: 1em;
+    cursor: pointer;
+    margin-left: 1em;
+    &:hover {
+      background-color: rgba(206, 206, 206, 0.5);
+    }
+    &:focus {
+      box-shadow: 0 0 0.3em 0.2em ${({ theme }) => theme.main.tertiary};
+    }
+  }
+`;
+
 // reviews
 export const ReviewsContainer = styled(Paper)`
   padding: 2em;
@@ -89,5 +116,9 @@ export const Review = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .btns {
+    display: flex;
+    justify-content: flex-end;
   }
 `;

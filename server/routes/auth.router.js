@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const uploader = require('../configs/cloudinary.config');
 const User = require('../models/User');
 const { hashPassword } = require('../utils/hashing');
 const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
@@ -76,33 +77,55 @@ router.post('/login', (req, res, next) => {
 });
 
 // POST route - logout
-router.post('/logout', isLoggedIn(), (req, res, next) => {
-  console.log(`${req.user.username} just logged out`);
-  req.logout();
-  return res.json({ message: 'User logged out successfully' });
+router.post('/logout', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    console.log(`${req.user.username} just logged out`);
+    req.logout();
+    return res.status(200).json({ message: 'Log out successfully' });
+  }
+
+  return res.json({ message: 'Cannot logout if not authenticated' });
 });
 
 // PUT route - edit user's profile
-router.put(
-  '/edit',
-  isLoggedIn(),
-  isEmptyField('username', 'password'),
-  isValidPassword(),
-  async (req, res, next) => {
-    const { id } = req.user;
-
-    try {
-      const userUpdated = await User.findByIdAndUpdate(
-        id,
-        { ...req.body, password: hashPassword(req.body.password) },
-        { new: true }
-      );
-      return res.json({ message: 'User successfull updated', user: userUpdated });
-    } catch (error) {
-      console.log('Error editing user profile', error);
-      return res.status(500).json({ message: 'Internal server error during profile edit' });
+router.put('/edit', isLoggedIn(), async (req, res, next) => {
+  const { id } = req.user;
+  try {
+    const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
+    return res.json({ message: 'User successfully updated', user: userUpdated });
+  } catch (error) {
+    if (error.name === 'MongoError') {
+      return res.status(400).json({ message: `Username ${req.body.username} is already taken` });
+    } else {
+      return res.status(500).json({ error });
     }
   }
-);
+});
+
+// PUT route - update user's avatar
+router.put('/upload', uploader.single('image'), async (req, res, next) => {
+  const { file } = req;
+  if (!file) {
+    return res.status(400).json({ message: 'No file uploaded!' });
+  }
+  console.log('aquí!!!', file);
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        image: file.url
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      message: 'File successfully uploaded',
+      user: updatedUser
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Image upload failed'
+    });
+  }
+});
 
 module.exports = router;

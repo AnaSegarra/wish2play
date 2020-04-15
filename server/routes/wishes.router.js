@@ -6,25 +6,18 @@ const Game = require('../models/Game');
 const { isLoggedIn, isFriend, checkOwnership } = require('../lib/authMW');
 
 // GET route - retrieve wishlist from a user
-router.get('/:id/wishlist', async (req, res, next) => {
-  const { id } = req.params;
+router.get('/:user_id/wishlist', async (req, res, next) => {
+  const { user_id } = req.params;
   try {
-    const wishes = await Wish.find({ owner: id }).populate('game');
-
-    const wishesMapped = [...wishes].map(wish => {
-      return {
-        name: wish.game.name,
-        totalRating: wish.game.totalRating,
-        status: wish.status,
-        isPublic: wish.isPublic,
-        id: wish._id
-      };
+    const { wishlist } = await User.findById(user_id).populate({
+      path: 'wishlist',
+      populate: { path: 'game', select: 'name image totalRating' }
     });
 
     return res.json({
       message: 'Wishlist retrieved',
-      results: wishesMapped.length,
-      wishlist: wishesMapped
+      results: wishlist.length,
+      wishlist
     });
   } catch (error) {
     console.log('Error retrieving wishlist', error);
@@ -47,7 +40,7 @@ router.post('/wishlist', isLoggedIn(), async (req, res, next) => {
     const newWish = await Wish.create({ owner: req.user.id, game: game_id });
     const userUpdated = await User.findByIdAndUpdate(
       req.user.id,
-      { $push: { 'wishlist.wishes': newWish._id } },
+      { $push: { wishlist: newWish._id } },
       { new: true }
     );
 
@@ -113,7 +106,7 @@ router.delete(
       const userUpdated = await User.findByIdAndUpdate(
         req.user.id,
         {
-          $pull: { 'wishlist.wishes': id }
+          $pull: { wishlist: id }
         },
         { new: true }
       );

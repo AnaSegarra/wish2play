@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
     const filter = {};
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (platforms) filter.platforms = { $all: platforms };
-    if (genres) filter.genres = { $all: genres };
+    if (genres) filter.genres = { $in: genres };
     if (ESRB) filter.ESRB = ESRB;
 
     const limit = Number(req.query.limit) || 9;
@@ -23,7 +23,6 @@ router.get('/', async (req, res, next) => {
     const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
 
     const numOfGames = await Game.findGames(filter);
-    console.log(numOfGames.length);
 
     const games = await Game.findGames(filter, limit, sort, fields, skip);
 
@@ -89,36 +88,36 @@ router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (re
 
 // POST route - add a new game review
 router.post(
-  '/:id/reviews',
+  '/:game_id/reviews',
   hasPlayed(),
   isEmptyField('content', 'rating'),
   async (req, res, next) => {
-    const { id } = req.params;
-
+    const { game_id } = req.params;
     try {
-      const game = await Game.findById(id);
-      console.log('Game found', game);
+      const game = await Game.findById(game_id);
       if (!game) {
-        console.log('Unable to find a game that matches an id of ', id);
+        console.log('Unable to find a game that matches an id of ', game_id);
         return res.status(400).json({ message: `Couldn't find that game` });
       }
 
       const newReview = await Review.create({ ...req.body, author: req.user.id });
-      console.log('Review added ', newReview);
 
       // include review in game's reviews array
       const updatedGame = await Game.findByIdAndUpdate(
         game._id,
         { $push: { reviews: newReview } },
         { new: true }
-      ).populate('reviews');
+      ).populate({
+        path: 'reviews',
+        populate: { path: 'author', select: 'username' }
+      });
 
       // update game's rating taking into account the newly created review
       const average = calcAverage(updatedGame.reviews);
       updatedGame.totalRating = average;
       await updatedGame.save();
 
-      return res.status(201).json({ message: 'Review added successfully', review: newReview });
+      return res.status(201).json({ message: 'Review added successfully', game: updatedGame });
     } catch (error) {
       console.log('Error posting a review', error);
       return res.status(500).json({ message: 'Internal server error adding a review' });

@@ -1,5 +1,6 @@
 // dependencies
 import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   makeStyles,
   Dialog,
@@ -9,46 +10,54 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
+import { ThemeContext } from 'styled-components';
 
 // local modules
 import { signup } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
+import { ErrorMsg } from '../../components/ErrorMsg';
 
 // styled components
-import { ModalOpener } from '../../StyledComponents/Home.styled';
+import { ModalOpener } from '../../styledComponents/Home.styled';
 
-const useStyles = makeStyles({
-  title: {
+const useStyles = makeStyles(theme => ({
+  title: theme => ({
     padding: '1em 3.6em',
-    backgroundColor: '#6246ea',
+    backgroundColor: theme.main.button,
     color: '#fffffe'
-  },
+  }),
   paragraph: {
     margin: 0,
     padding: '1em 2em 0'
   },
-  btn: {
-    color: '#6246ea',
+  btn: theme => ({
+    color: theme.main.button,
     '&:hover': {
       backgroundColor: 'rgba(209, 209, 233, 0.5)'
     }
-  }
-});
+  })
+}));
 
 export const Signup = () => {
   const { setUser } = useContext(AuthContext);
-  const [error, setError] = useState('');
+  const [error, setError] = useState({ isError: false, errorMsg: '' });
   const [open, setOpen] = useState(false);
-  const classes = useStyles();
+  const theme = useContext(ThemeContext);
+  const classes = useStyles(theme);
+  const history = useHistory();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleSignup = async newUser => {
     const response = await signup(newUser);
-
-    response.user ? setUser(response.user) : setError(response);
+    if (response.user) {
+      setUser(response.user);
+      history.push(`/wish2play/${response.user.username}`);
+    } else {
+      setError({ ...error, isError: true, errorMsg: response });
+    }
   };
 
   return (
@@ -56,7 +65,7 @@ export const Signup = () => {
       <p>
         Don't have an account yet? <ModalOpener onClick={handleOpen}>Sign up here!</ModalOpener>
       </p>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" theme={theme}>
         <DialogTitle id="form-dialog-title" className={classes.title}>
           Create your account
         </DialogTitle>
@@ -71,11 +80,19 @@ export const Signup = () => {
           <Button onClick={handleClose} className={classes.btn}>
             Cancel
           </Button>
-          <Button onClick={handleClose} form="signupForm" type="submit" className={classes.btn}>
+          <Button form="signupForm" type="submit" className={classes.btn}>
             Subscribe
           </Button>
         </DialogActions>
       </Dialog>
+      {error.isError && (
+        <ErrorMsg
+          isError={error.isError}
+          handleClose={() => setError({ isError: false, errorMsg: '' })}
+          position={{ vertical: 'bottom', horizontal: 'center' }}
+          errorMsg={error.errorMsg}
+        />
+      )}
     </div>
   );
 };

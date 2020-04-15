@@ -7,15 +7,10 @@ const userSchema = new mongoose.Schema(
     username: { type: String, unique: true, index: true, required: true },
     password: { type: String, required: true },
     image: String,
-    email: String,
     name: String,
     isAdmin: { type: Boolean, default: false },
     gamesPlayed: [{ type: ObjectId, ref: 'Game' }],
-    wishlist: {
-      status: { type: String, enum: ['Public', 'Private'], default: 'Private' },
-      wishes: [{ type: ObjectId, ref: 'Wish' }],
-      secure_url: String
-    },
+    wishlist: [{ type: ObjectId, ref: 'Wish' }],
     friends: [{ type: ObjectId, ref: 'User' }],
     reservedWishes: [{ type: ObjectId, ref: 'Wish' }]
   },
@@ -32,5 +27,10 @@ const userSchema = new mongoose.Schema(
     }
   }
 );
+
+userSchema.statics.findUsers = function (filter, page, limit, fields) {
+  const query = this.find(filter).limit(limit).skip(page).select(fields);
+  return query;
+};
 
 module.exports = mongoose.model('User', userSchema);

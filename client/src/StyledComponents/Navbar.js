@@ -6,7 +6,7 @@ export const Navbar = styled.nav`
   align-items: center;
   background-color: ${({ theme }) => theme.main.button};
   padding: 1em;
-  box-shadow: ${({ theme }) => theme.shadows.nav};
+  box-shadow: ${({ theme }) => theme.nav.shadow};
 
   div {
     display: flex;
@@ -34,17 +34,23 @@ export const SubBar = styled.div`
   align-items: center;
   padding: 1.5em 1em;
   visibility: ${props => (!props.user ? 'hidden' : 'visible')};
+  color: ${({ theme }) => theme.main.paragraph};
 
-  p,
-  svg {
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.main.paragraph};
+    &:hover {
+      color: ${({ theme }) => theme.nav.hover};
+    }
+  }
+  svg,
+  span {
     margin: 0;
     cursor: pointer;
     margin-left: 1em;
-  }
-  svg {
     transform: scaleX(-1);
     &:hover {
-      color: #6246ea;
+      color: ${({ theme }) => theme.nav.hover};
     }
   }
 `;

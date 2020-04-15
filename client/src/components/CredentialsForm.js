@@ -1,10 +1,12 @@
 // dependencies
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { ThemeContext } from 'styled-components';
 
 // styled components
-import { StyledForm, Input, Button } from '../StyledComponents/Form';
+import { StyledForm, Input, Button } from '../styledComponents/Form';
 
 export const Form = ({ handleAction, id }) => {
+  const theme = useContext(ThemeContext);
   const [newUser, setNewUser] = useState({
     username: '',
     password: ''
@@ -17,12 +19,11 @@ export const Form = ({ handleAction, id }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log('submiting');
     handleAction(newUser);
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit} id={id}>
+    <StyledForm onSubmit={handleSubmit} id={id} theme={theme}>
       <label htmlFor="username">Username</label>
       <Input type="text" value={newUser.username} name="username" onChange={handleChange} />
       <label htmlFor="password">Password</label>

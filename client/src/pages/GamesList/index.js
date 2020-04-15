@@ -89,6 +89,12 @@ export const GameList = () => {
     setGames(results);
     setCurrentPage(1);
   };
+
+  const isSearching = () => {
+    const setFilters = Object.values(filters).some(group => group.length !== 0);
+    return searchTerm || setFilters;
+  };
+
   return (
     <Container>
       <Filters search={search} options={groupedOptions} handleSelect={handleSelect} />
@@ -107,12 +113,14 @@ export const GameList = () => {
         />
       </FormGroup>
       <Grid container spacing={4}>
-        {games.length === 0 ? (
-          <p>Loading...</p>
-        ) : (
+        {games.length > 0 ? (
           games.map((game, i) => {
             return <GameCard {...game} key={i} />;
           })
+        ) : games.length === 0 && isSearching() ? (
+          <p>No results found</p>
+        ) : (
+          <p>Loading...</p>
         )}
       </Grid>
       <Pagination

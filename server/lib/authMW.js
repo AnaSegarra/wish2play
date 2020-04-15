@@ -50,7 +50,7 @@ const hasPlayed = () => (req, res, next) => {
       message: 'Must be logged in'
     });
 
-  const game_id = req.params.id;
+  const { game_id } = req.params;
   const { gamesPlayed } = req.user;
   if (gamesPlayed.includes(game_id)) {
     return next();
