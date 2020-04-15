@@ -21,6 +21,7 @@ export const Navbar = styled.nav`
   a {
     text-decoration: none;
     color: #fffffe;
+    margin-left: 0.3em;
   }
   a.selected {
     font-weight: 700;

@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { fetchFilterOptions, addGame } from '../../services/gamesService';
-import { formatOptions, groupFilters } from '../../helpers/filters';
-import { SuccessMsg, ErrorMsg } from '../../components/AlertMsg';
+import { fetchFilterOptions, addGame } from '../services/gamesService';
+import { formatOptions, groupFilters } from '../helpers/filters';
+import { SuccessMsg } from './AlertMsg';
 
-export const GameForm = () => {
+export const GameForm = ({ handleAction = addGame }) => {
   const ESRBOptions = formatOptions(['E', 'E 10+', 'T', 'M', 'A', 'RP'], 'ESRB');
-
   const [genresAvailable, setGenresAvailable] = useState([]);
   const [platformsAvailable, setPlatformsAvailable] = useState([]);
-  const [newGame, setNewGame] = useState({});
+  const [newGame, setNewGame] = useState();
   const [successMsg, setSuccessMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -48,10 +47,8 @@ export const GameForm = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const img = new FormData();
-    img.append('image', selectedFile);
 
-    const response = await addGame(newGame, img);
+    const response = await handleAction(newGame);
     console.log('respuesta', response);
     setSuccessMsg(response);
   };
@@ -65,9 +62,8 @@ export const GameForm = () => {
         <textarea name="description" onChange={handleChange}></textarea>
         <label htmlFor="releaseYear">Released on</label>
         <input type="number" name="releaseYear" onChange={handleChange} />
-        <label htmlFor="ESRB">ESRB rating</label>
-        <label htmlFor="image"></label>
         <input type="file" name="image" onChange={handleImgUpload} />
+        <label htmlFor="ESRB">ESRB rating</label>
         <Select
           isClearable
           options={ESRBOptions}

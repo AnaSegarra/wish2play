@@ -21,7 +21,7 @@ import { ErrorMsg } from '../../components/AlertMsg';
 // styled components
 import { ModalOpener } from '../../styledComponents/Home.styled';
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
   title: theme => ({
     padding: '1em 3.6em',
     backgroundColor: theme.main.button,

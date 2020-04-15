@@ -38,6 +38,11 @@ export const Header = ({ toggleTheme }) => {
           <NavLink to="/games" exact activeClassName="selected">
             Games
           </NavLink>
+          {user && !user.isAdmin && (
+            <NavLink to="/games/request" exact activeClassName="selected">
+              Request a game
+            </NavLink>
+          )}
           {isLight ? (
             <Sun onClick={changeTheme} size="25" />
           ) : (
