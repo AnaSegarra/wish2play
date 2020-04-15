@@ -7,6 +7,7 @@ export const FriendsList = () => {
   const { user, setUser } = useContext(AuthContext);
   const [friends, setFriends] = useState('');
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -20,18 +21,21 @@ export const FriendsList = () => {
   }, [user]);
 
   const handleSearch = async e => {
-    const response = await searchFriends(e.target.value);
+    const searchTerm = e.target.value;
+    setSearch(searchTerm);
+    const response = await searchFriends(searchTerm);
     setUsers(response);
   };
   const handleNewFriend = async userID => {
     const userUpdated = await addFriend(userID);
     setUser(userUpdated);
+    setSearch('');
   };
 
   const handleRemoveFriend = async userID => {
     const userUpdated = await removeFriend(userID);
-    console.log('removing', userID);
     setUser(userUpdated);
+    setSearch('');
   };
 
   return (
@@ -44,7 +48,7 @@ export const FriendsList = () => {
       )}
 
       <p>Find more</p>
-      <input type="text" onChange={handleSearch} />
+      <input type="text" onChange={handleSearch} value={search} />
       {users.length === 0 ? (
         <p>No results found</p>
       ) : (

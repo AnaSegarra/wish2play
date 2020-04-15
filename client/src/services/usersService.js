@@ -37,7 +37,7 @@ export const searchFriends = async (searchTerm, page, numOfResults) => {
 
 export const fetchFriends = async () => {
   const { data } = await usersService.get('/friends');
-  console.log(data);
+  // console.log(data);
   return data.friends;
 };
 
