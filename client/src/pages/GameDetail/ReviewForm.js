@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext';
-import { isIncluded } from '../../helpers/gamesHelpers';
+import { isIncluded } from '../../helpers/listsHelpers';
 import styled from 'styled-components';
 import { Tooltip } from '@material-ui/core';
 import { ReviewsContainer } from '../../styledComponents/GameDetail.styled';

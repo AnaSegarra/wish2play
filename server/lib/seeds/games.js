@@ -271,7 +271,7 @@ const games = [
     image:
       'https://res.cloudinary.com/diimdgeux/image/upload/v1586272716/wish2play/games/fifa20_yocnxg.jpg',
     releaseYear: 2019,
-    platforms: ['ps4', 'Xbox', 'PC', 'Nintento Switch'],
+    platforms: ['ps4', 'Xbox', 'PC', 'Nintendo Switch'],
     linkToBuy:
       'https://www.amazon.es/Electronic-Arts-FIFA-20-Est%C3%A1ndar/dp/B07SRD5GGF/ref=sr_1_1?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&dchild=1&keywords=fifa+20&qid=1585929431&sr=8-1',
     genres: ['Sports'],

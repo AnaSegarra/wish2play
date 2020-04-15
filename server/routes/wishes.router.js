@@ -16,7 +16,7 @@ router.get('/:user_id/wishlist', async (req, res, next) => {
 
     return res.json({
       message: 'Wishlist retrieved',
-      resulst: wishlist.length,
+      results: wishlist.length,
       wishlist
     });
   } catch (error) {

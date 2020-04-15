@@ -6,8 +6,13 @@ const wishesService = axios.create({
 });
 
 export const fetchWishlist = async user_id => {
-  const { data } = await wishesService.get(`${user_id}/wishlist`);
-  return data.wishlist;
+  try {
+    const { data } = await wishesService.get(`${user_id}/wishlist`);
+    // console.log(data);
+    return data.wishlist;
+  } catch (error) {
+    throw new Error('No user logged');
+  }
 };
 
 export const addGameWished = async game_id => {

@@ -10,7 +10,7 @@ import { AuthContext } from '../../contexts/authContext';
 import { WishlistContext } from '../../contexts/wishlistContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
 import { addGameWished, removeGameWished } from '../../services/wishesService';
-import { isIncluded, arrMapped } from '../../helpers/gamesHelpers';
+import { isIncluded, arrMapped } from '../../helpers/listsHelpers';
 
 // styled components
 import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
@@ -35,7 +35,6 @@ export const UserButtons = ({ gameID }) => {
   // add game to wishlist
   const addNewWish = async gameID => {
     const updatedUser = await addGameWished(gameID);
-    console.log(updatedUser);
     setUser(updatedUser);
   };
 

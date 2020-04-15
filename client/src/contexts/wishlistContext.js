@@ -9,12 +9,13 @@ export const WishlistContext = createContext(); // wishlist context
 
 export const WishlistContextProvider = ({ children }) => {
   const { user } = useContext(AuthContext);
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState();
 
   useEffect(() => {
     (async () => {
+      // console.log('user', user);
       const response = user && (await fetchWishlist(user._id));
-
+      // console.log(response);
       setWishlist(response);
     })();
   }, [user]);

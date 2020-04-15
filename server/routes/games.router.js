@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
     const filter = {};
     if (name) filter.name = { $regex: name, $options: 'i' };
     if (platforms) filter.platforms = { $all: platforms };
-    if (genres) filter.genres = { $all: genres };
+    if (genres) filter.genres = { $in: genres };
     if (ESRB) filter.ESRB = ESRB;
 
     const limit = Number(req.query.limit) || 9;
@@ -23,7 +23,6 @@ router.get('/', async (req, res, next) => {
     const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
 
     const numOfGames = await Game.findGames(filter);
-    console.log(numOfGames.length);
 
     const games = await Game.findGames(filter, limit, sort, fields, skip);
 
