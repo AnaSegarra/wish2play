@@ -4,7 +4,7 @@ import React, { useContext, useState } from 'react';
 // local modules
 import { updateProfile, uploadImage } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
-import { ErrorMsg } from '../../components/ErrorMsg';
+import { ErrorMsg } from '../../components/AlertMsg';
 
 export const DataForm = ({ setEditStatus }) => {
   const { user, setUser } = useContext(AuthContext);

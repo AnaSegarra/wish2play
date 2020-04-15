@@ -32,6 +32,17 @@ export const fetchSingleGame = async endpoint => {
   return data;
 };
 
+export const addGame = async game => {
+  try {
+    const { data } = await gamesService.post('/', game);
+    console.log('respuesta', data);
+    return data.message;
+  } catch (error) {
+    throw new Error('Error creating a game');
+  }
+};
+
+// reviews utilities
 export const addReview = async (game_id, { content, rating }) => {
   const { data } = await gamesService.post(`/${game_id}/reviews`, { content, rating });
   return data.game;

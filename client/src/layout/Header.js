@@ -46,7 +46,7 @@ export const Header = ({ toggleTheme }) => {
         </div>
       </Navbar>
       <SubBar user={user}>
-        <Link to={`/wish2play/${user && user.username}`}>
+        <Link to={user && !user.isAdmin ? `/wish2play/${user.username}` : '/admin'}>
           <span>{user && user.username}</span>
           <UserCircle size="25" />
         </Link>

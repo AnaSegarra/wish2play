@@ -16,7 +16,7 @@ import { ThemeContext } from 'styled-components';
 import { signup } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
-import { ErrorMsg } from '../../components/ErrorMsg';
+import { ErrorMsg } from '../../components/AlertMsg';
 
 // styled components
 import { ModalOpener } from '../../styledComponents/Home.styled';

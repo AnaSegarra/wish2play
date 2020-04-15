@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { login } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
-import { ErrorMsg } from '../../components/ErrorMsg';
+import { ErrorMsg } from '../../components/AlertMsg';
 
 export const Login = () => {
   const { setUser } = useContext(AuthContext);
