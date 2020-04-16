@@ -19,7 +19,9 @@ const Profile = () => {
           <UserData />
         </Grid>
         <Grid item lg={9}>
+          <h3>Games you played</h3>
           <GamesPlayedPreview userID={_id} />
+          <h3>Your wishlist</h3>
           <WishlistPreview userID={_id} />
         </Grid>
       </Grid>

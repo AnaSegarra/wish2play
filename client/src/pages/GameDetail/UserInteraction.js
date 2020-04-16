@@ -1,5 +1,5 @@
 // dependencies
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Gamepad } from 'styled-icons/remix-fill';
 import { Gamepad as GamepadOutlined } from 'styled-icons/remix-line';
 import { ThemeContext } from 'styled-components';
@@ -7,9 +7,8 @@ import { Heart, HeartOutlined } from 'styled-icons/entypo';
 
 // local modules
 import { AuthContext } from '../../contexts/authContext';
-import { WishlistContext } from '../../contexts/wishlistContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
-import { addGameWished, removeGameWished } from '../../services/wishesService';
+import { addGameWished, removeGameWished, fetchWishlist } from '../../services/wishesService';
 import { isIncluded, arrMapped } from '../../helpers/listsHelpers';
 
 // styled components
@@ -17,8 +16,21 @@ import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
-  const { wishlist, setWishlist } = useContext(WishlistContext);
+  const [wishlist, setWishlist] = useState([]);
+  const [gamesWished, setGamesWished] = useState([]);
   const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    (async () => {
+      if (user) {
+        const response = user && (await fetchWishlist(user._id));
+        console.log(response);
+        setWishlist(response);
+        const arrGames = arrMapped(response);
+        setGamesWished(arrGames);
+      }
+    })();
+  }, [user]);
 
   // delete game from user's list
   const removeGame = async gameID => {
@@ -57,7 +69,7 @@ export const UserButtons = ({ gameID }) => {
           Not played yet <GamepadOutlined size="25" />
         </button>
       )}
-      {isIncluded(gameID, arrMapped(wishlist)) ? (
+      {isIncluded(gameID, gamesWished) ? (
         <button>
           <Heart size="25" onClick={() => removeWish(gameID)} />
         </button>

@@ -1,10 +1,9 @@
 // dependencies
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { GridList, GridListTile, GridListTileBar, IconButton, makeStyles } from '@material-ui/core';
+import { GridList, GridListTile, GridListTileBar, makeStyles } from '@material-ui/core';
 import { ThemeContext } from 'styled-components';
-import { Gamepad } from 'styled-icons/remix-fill';
-import { Heart } from 'styled-icons/entypo';
+import { StyledGridListTile } from '../styledComponents/Profile.styled';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,7 +11,8 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    marginBottom: '1em'
   },
   gridList: {
     flexWrap: 'nowrap'
@@ -25,15 +25,14 @@ const useStyles = makeStyles(theme => ({
   }),
   titleBar: {
     background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)'
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+    textAlign: 'center'
   }
 }));
 
-export const GamesGrid = ({ gamesArr, type }) => {
+export const GamesGrid = ({ gamesArr, type, userID }) => {
   const theme = useContext(ThemeContext);
   const classes = useStyles(theme);
-
-  const handleDelete = () => console.log('clicked delete');
 
   return (
     <div className={classes.root}>
@@ -57,21 +56,12 @@ export const GamesGrid = ({ gamesArr, type }) => {
                   {game.name}
                 </Link>
               }
-              actionIcon={
-                <IconButton aria-label={`${game._id}`} onClick={handleDelete}>
-                  {type === 'wishlist' ? (
-                    <Heart size="25" color={theme.main.tertiary} />
-                  ) : (
-                    <Gamepad size="25" color={theme.main.tertiary} />
-                  )}
-                </IconButton>
-              }
             />
           </GridListTile>
         ))}
-        <GridListTile style={{ height: '300px' }}>
-          <p>See full list</p>
-        </GridListTile>
+        <StyledGridListTile theme={theme} style={{ height: '300px' }}>
+          <Link to={`/${type}/${userID}`}>See full list</Link>
+        </StyledGridListTile>
       </GridList>
     </div>
   );

@@ -15,5 +15,7 @@ export const WishlistPreview = ({ userID }) => {
       setWishlist(wishlistMapped);
     })();
   }, []);
-  return <>{wishlist.length > 0 && <GamesGrid gamesArr={wishlist} type="wishlist" />}</>;
+  return (
+    <>{wishlist.length > 0 && <GamesGrid gamesArr={wishlist} type="wishlist" userID={userID} />}</>
+  );
 };
