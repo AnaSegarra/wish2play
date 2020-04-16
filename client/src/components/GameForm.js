@@ -10,7 +10,7 @@ import { Button, Input } from '../styledComponents/Form';
 import { ThemeContext } from 'styled-components';
 import { StyledPaper } from '../styledComponents/Home.styled';
 
-export const GameForm = ({ prefilled, handleAction = addGame }) => {
+export const GameForm = ({ handleAction = addGame }) => {
   const theme = useContext(ThemeContext);
   const ESRBOptions = formatOptions(['E', 'E 10+', 'T', 'M', 'A', 'RP'], 'ESRB');
   const [genresAvailable, setGenresAvailable] = useState([]);

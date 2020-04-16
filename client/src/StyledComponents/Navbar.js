@@ -40,6 +40,8 @@ export const SubBar = styled.div`
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.main.paragraph};
+    display: flex;
+    align-items: center;
     &:hover {
       color: ${({ theme }) => theme.nav.hover};
     }
@@ -48,10 +50,12 @@ export const SubBar = styled.div`
   span {
     margin: 0;
     cursor: pointer;
-    margin-left: 1em;
-    transform: scaleX(-1);
+    margin: 0 0.8em;
     &:hover {
       color: ${({ theme }) => theme.nav.hover};
     }
+  }
+  svg {
+    transform: scaleX(-1);
   }
 `;
