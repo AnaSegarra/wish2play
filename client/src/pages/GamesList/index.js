@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Container, FormControlLabel, Checkbox, FormGroup } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
+import { Link } from 'react-router-dom';
 
 // local modules
 import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
@@ -118,7 +119,12 @@ export const GameList = () => {
             return <GameCard {...game} key={i} />;
           })
         ) : games.length === 0 && isSearching() ? (
-          <p>No results found</p>
+          <>
+            <p>No results found</p>
+            <p>
+              You can fill in a request for this game <Link to="/games/request">here</Link>
+            </p>
+          </>
         ) : (
           <p>Loading...</p>
         )}

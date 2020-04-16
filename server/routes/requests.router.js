@@ -37,8 +37,12 @@ router.get('/', isLoggedIn(), async (req, res, next) => {
 // POST route - add a request
 router.post('/', isLoggedIn(), isEmptyField('name'), async (req, res, next) => {
   try {
+    const { name } = req.body;
     // status 400 if there's already a pending request for that game
-    const requestRegistered = await Request.findOne({ 'content.name': name, status: 'Pending' });
+    const requestRegistered = await Request.findOne({
+      'content.name': name,
+      status: 'Pending'
+    });
     if (requestRegistered)
       return res.status(400).json({ message: `A request for ${name} is already being processed` });
 
@@ -48,6 +52,7 @@ router.post('/', isLoggedIn(), isEmptyField('name'), async (req, res, next) => {
     if (requestApproved || gameInDb)
       return res.status(400).json({ message: `${name} is already in the games list!` });
 
+    // confirm request otherwise
     const newRequest = await Request.create({
       requestedBy: req.user.id,
       content: req.body

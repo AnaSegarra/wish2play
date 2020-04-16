@@ -10,12 +10,22 @@ cloudinary.config({
 
 const storage = cloudinaryStorage({
   cloudinary,
-  folder: 'wish2play',
+  folder: function (req, file, cb) {
+    if (req.params.game) {
+      cb(null, 'wish2play/games');
+    } else {
+      cb(null, 'wish2play/users');
+    }
+  },
   allowedFormats: ['jpg', 'png', 'jpeg'],
   filename: function (req, file, cb) {
-    const { id } = req.user;
-    console.log('el file', file);
-    cb(null, `userImg-${id}`);
+    console.log('el file', file, req.params);
+    if (req.params.game) {
+      cb(null, file.originalname);
+    } else {
+      const { id } = req.user;
+      cb(null, `userImg-${id}`);
+    }
   }
 });
 

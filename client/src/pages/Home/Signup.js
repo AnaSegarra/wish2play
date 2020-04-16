@@ -16,12 +16,12 @@ import { ThemeContext } from 'styled-components';
 import { signup } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { Form } from '../../components/CredentialsForm';
-import { ErrorMsg } from '../../components/ErrorMsg';
+import { ErrorMsg } from '../../components/AlertMsg';
 
 // styled components
 import { ModalOpener } from '../../styledComponents/Home.styled';
 
-const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(theme => ({
   title: theme => ({
     padding: '1em 3.6em',
     backgroundColor: theme.main.button,

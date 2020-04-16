@@ -6,6 +6,7 @@ const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
 const getOptions = require('../utils/getOptions');
+const uploader = require('../configs/cloudinary.config');
 
 // GET route - retrieve all games from database
 router.get('/', async (req, res, next) => {
@@ -83,6 +84,23 @@ router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (re
   } catch (error) {
     console.log('Error in game creation failed', error);
     return res.status(500).json({ message: 'Internal server error adding a game from database' });
+  }
+});
+
+// upload a game image
+router.post('/upload/:game', uploader.single('image'), async (req, res, next) => {
+  const { file } = req;
+  console.log('aquí!!!', file);
+  try {
+    if (!file) {
+      return res.status(400).json({ message: 'No file uploaded!' });
+    }
+    return res.status(200).json({
+      message: 'File successfully uploaded',
+      image: req.file.url
+    });
+  } catch (error) {
+    return res.status(500).json({ message: 'Image upload failed' });
   }
 });
 

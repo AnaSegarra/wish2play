@@ -8,6 +8,7 @@ const checkUserRole = () => (req, res, next) => {
     });
 
   if (req.user.isAdmin) {
+    console.log('es admin, así que puede hacer esto 🌈');
     return next();
   } else {
     return res.status(403).json({

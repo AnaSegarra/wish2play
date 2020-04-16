@@ -10,14 +10,14 @@ export const ErrorMsg = ({ isError, handleClose, position, errorMsg }) => {
   );
 };
 
-export const SuccessMsg = () => {
+export const SuccessMsg = ({ msg, handleClose }) => {
   return (
-    <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+    <Snackbar open={msg ? true : false} autoHideDuration={4000} onClose={handleClose}>
       <Alert
         onClose={handleClose}
         severity="success"
-        position={{ vertical: 'bottom', horizontal: 'left' }}>
-        This is a success message!
+        position={{ vertical: 'bottom', horizontal: 'center' }}>
+        {msg}
       </Alert>
     </Snackbar>
   );
