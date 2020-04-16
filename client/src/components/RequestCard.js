@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { Edit } from '@styled-icons/typicons';
 import { RequestContent } from '../styledComponents/Admin.styled';
-import { Button, Input } from '../styledComponents/Form';
+import { GameForm } from '../components/GameForm';
 
 export const Request = ({ request }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -15,7 +15,7 @@ export const Request = ({ request }) => {
           Game requested: {request.content.name} <Edit size="25" onClick={showEditForm} />
         </p>
         {isEditing ? (
-          <DataEdit request={request} setIsEditing={setIsEditing} />
+          <GameForm request={request} setIsEditing={setIsEditing} />
         ) : (
           <div className="paper-content">
             {request.content.image ? (
@@ -58,6 +58,7 @@ export const Request = ({ request }) => {
                 <p>No link provided</p>
               )}
             </>
+            <p>Status: {request.status}</p>
           </div>
         )}
       </RequestContent>

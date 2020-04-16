@@ -5,16 +5,14 @@ import { Request } from '../../components/RequestCard';
 
 export const RequestsPanel = () => {
   const [requests, setRequests] = useState([]);
-  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     (async () => {
+      console.log('useEffect de las requests');
       const response = await fetchRequests();
       setRequests(response);
     })();
   }, []);
-
-  const showEditForm = () => setIsEditing(!isEditing);
 
   return (
     <Container>

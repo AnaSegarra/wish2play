@@ -16,3 +16,10 @@ export const makeRequest = async game => {
   console.log(data);
   return data.message;
 };
+
+export const updateRequestStatus = async (id, status) => {
+  console.log('actualizando', id, 'a ', status);
+  const { data } = await requestsService.put(`/${id}`, { status });
+  console.log('response al update', data);
+  return data.request;
+};

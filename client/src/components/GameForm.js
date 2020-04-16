@@ -5,17 +5,30 @@ import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesS
 import { formatOptions, groupFilters } from '../helpers/filters';
 import { SuccessMsg, ErrorMsg } from './AlertMsg';
 import { GameFormStyled } from '../styledComponents/Admin.styled';
-import { Grid, Paper } from '@material-ui/core';
 import { Button, Input } from '../styledComponents/Form';
 import { ThemeContext } from 'styled-components';
-import { StyledPaper } from '../styledComponents/Home.styled';
+import { updateRequestStatus } from '../services/requestsService';
 
-export const GameForm = ({ handleAction = addGame }) => {
+export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
   const theme = useContext(ThemeContext);
   const ESRBOptions = formatOptions(['E', 'E 10+', 'T', 'M', 'A', 'RP'], 'ESRB');
   const [genresAvailable, setGenresAvailable] = useState([]);
   const [platformsAvailable, setPlatformsAvailable] = useState([]);
-  const [newGame, setNewGame] = useState();
+  const [newGame, setNewGame] = useState(
+    request
+      ? { ...request.content }
+      : {
+          name: '',
+          image: '',
+          description: '',
+          releaseYear: '',
+          ESRB: '',
+          platforms: [],
+          genres: [],
+          company: '',
+          linkToBuy: ''
+        }
+  );
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -51,7 +64,27 @@ export const GameForm = ({ handleAction = addGame }) => {
     e.preventDefault();
 
     const response = await handleAction(newGame);
-    setSuccessMsg(response);
+    if (!request) {
+      setSuccessMsg(response);
+
+      setNewGame({
+        name: '',
+        image: '',
+        description: '',
+        releaseYear: '',
+        ESRB: '',
+        platforms: [],
+        genres: [],
+        company: '',
+        linkToBuy: ''
+      });
+      setSelectedFile(null);
+    }
+
+    if (request) {
+      const response = await updateRequestStatus(request._id, 'Approved');
+      setIsEditing();
+    }
   };
 
   const handleImgEdit = async e => {
@@ -72,54 +105,68 @@ export const GameForm = ({ handleAction = addGame }) => {
 
   return (
     <>
-      <Paper>
-        <GameFormStyled onSubmit={handleSubmit} theme={theme}>
-          <label htmlFor="name">Name</label>
-          <Input type="text" name="name" onChange={handleChange} />
-          <label htmlFor="image">Game's image</label>
-          {selectedFile && (
-            <img src={selectedFile} alt="game img preview" width="auto" height="300" />
+      <GameFormStyled onSubmit={handleSubmit} theme={theme}>
+        <label htmlFor="image">Game's image</label>
+        <div>
+          {request ? (
+            <img src={newGame.image} alt="game img preview" width="auto" height="200" />
+          ) : selectedFile ? (
+            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
+          ) : (
+            <></>
           )}
-          <input type="file" name="image" onChange={handleImgEdit} />
-          <label htmlFor="description">Description</label>
-          <textarea name="description" onChange={handleChange}></textarea>
-          <label htmlFor="releaseYear">Released on</label>
-          <Input type="number" name="releaseYear" onChange={handleChange} />
-          <label htmlFor="ESRB">ESRB rating</label>
-          <Select
-            isClearable
-            options={ESRBOptions}
-            name="ESRB"
-            onChange={selected =>
-              selected
-                ? setNewGame({ ...newGame, ESRB: selected.value })
-                : setNewGame({ ...newGame, ESRB: '' })
-            }
-            className="react-select__control"
-          />
-          <label htmlFor="platforms">Playable on</label>
-          <CreatableSelect
-            isClearable
-            isMulti
-            options={platformsAvailable}
-            name="platforms"
-            onChange={handleMultiSelect}
-          />
-          <label htmlFor="genres">Genres</label>
-          <CreatableSelect
-            isClearable
-            isMulti
-            options={genresAvailable}
-            name="genres"
-            onChange={handleMultiSelect}
-          />
-          <label htmlFor="company">Developed by</label>
-          <Input type="text" name="company" onChange={handleChange} />
-          <label htmlFor="linkToBuy">Available</label>
-          <input type="text" name="linkToBuy" onChange={handleChange} />
-          <button type="submit">Add game</button>
-        </GameFormStyled>
-      </Paper>
+        </div>
+        <input type="file" name="image" onChange={handleImgEdit} />
+        <label htmlFor="name">Name</label>
+        <Input type="text" name="name" onChange={handleChange} value={newGame.name} />
+        <label htmlFor="description">Description</label>
+        <textarea name="description" onChange={handleChange} value={newGame.description}></textarea>
+        <label htmlFor="releaseYear">Released on</label>
+        <Input
+          type="number"
+          name="releaseYear"
+          onChange={handleChange}
+          value={newGame.releaseYear}
+        />
+        <label htmlFor="ESRB">ESRB rating</label>
+        <Select
+          isClearable
+          options={ESRBOptions}
+          name="ESRB"
+          onChange={selected =>
+            selected
+              ? setNewGame({ ...newGame, ESRB: selected.value })
+              : setNewGame({ ...newGame, ESRB: '' })
+          }
+          className="react-select__control"
+          defaultValue={
+            request && ESRBOptions.filter(({ value }) => value === request.content.ESRB)
+          }
+        />
+        <label htmlFor="platforms">Playable on</label>
+        <CreatableSelect
+          isClearable
+          isMulti
+          options={platformsAvailable}
+          name="platforms"
+          onChange={handleMultiSelect}
+          defaultValue={request && formatOptions(newGame.platforms, 'platforms')}
+        />
+        <label htmlFor="genres">Genres</label>
+        <CreatableSelect
+          isClearable
+          isMulti
+          options={genresAvailable}
+          name="genres"
+          onChange={handleMultiSelect}
+          defaultValue={request && formatOptions(newGame.genres, 'genres')}
+        />
+        <label htmlFor="company">Developed by</label>
+        <Input type="text" name="company" onChange={handleChange} value={newGame.company} />
+        <label htmlFor="linkToBuy">Available</label>
+        <Input type="text" name="linkToBuy" onChange={handleChange} value={newGame.linkToBuy} />
+        <button type="submit">Add game</button>
+      </GameFormStyled>
       {successMsg && <SuccessMsg msg={successMsg} handleClose={() => setSuccessMsg('')} />}
       {errorMsg && <ErrorMsg msg={errorMsg} handleClose={() => setErrorMsg('')} />}
     </>
