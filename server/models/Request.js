@@ -9,7 +9,7 @@ const requestSchema = new mongoose.Schema(
       image: String,
       releaseYear: Number,
       platforms: [String],
-      linkToBuy: [String],
+      linkToBuy: String,
       genres: [String],
       ESRB: { type: String, enum: ['E', 'E 10+', 'T', 'M', 'A', 'RP'], default: 'RP' },
       company: String
