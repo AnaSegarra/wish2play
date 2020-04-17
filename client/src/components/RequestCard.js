@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { Edit } from '@styled-icons/typicons';
-import { RequestContent } from '../styledComponents/Admin.styled';
+import { RequestContent } from '../styles/Admin.styled';
 import { GameForm } from '../components/GameForm';
 
 export const Request = ({ request }) => {

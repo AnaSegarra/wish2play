@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core';
 import ScrollAnimation from 'react-animate-on-scroll';
 import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
 // styled components
-import { ReviewsContainer, Review } from '../../styledComponents/GameDetail.styled';
+import { ReviewsContainer, Review } from '../../styles/GameDetail.styled';
 import { AuthContext } from '../../contexts/authContext';
 import { deleteReview } from '../../services/gamesService';
 

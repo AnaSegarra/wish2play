@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledPaper } from '../styledComponents/Home.styled';
+import { StyledPaper } from '../styles/Home.styled';
 
 export const GameFormStyled = styled.form`
   display: flex;

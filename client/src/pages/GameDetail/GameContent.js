@@ -10,7 +10,7 @@ import { useStyles } from '../../components/GameCard';
 import { UserButtons } from './UserInteraction';
 
 // styled components
-import { Container, ImageContainer, Content } from '../../styledComponents/GameDetail.styled';
+import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);

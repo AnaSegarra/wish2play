@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { ThemeContext } from 'styled-components';
 
 // styled components
-import { StyledForm, Input, Button } from '../styledComponents/Form';
+import { StyledForm, Input, Button } from '../styles/Form';
 
 export const Form = ({ handleAction, id }) => {
   const theme = useContext(ThemeContext);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, makeStyles, Menu, MenuItem } from '@material-ui/core';
-import { UsersContainer } from '../styledComponents/Profile.styled';
+import { UsersContainer } from '../styles/Profile.styled';
 import { Link } from 'react-router-dom';
 import { RemoveUser } from 'styled-icons/entypo';
 import { AddUser } from 'styled-icons/entypo';

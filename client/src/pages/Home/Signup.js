@@ -19,7 +19,7 @@ import { Form } from '../../components/CredentialsForm';
 import { ErrorMsg } from '../../components/AlertMsg';
 
 // styled components
-import { ModalOpener } from '../../styledComponents/Home.styled';
+import { ModalOpener } from '../../styles/Home.styled';
 
 export const useStyles = makeStyles(theme => ({
   title: theme => ({
