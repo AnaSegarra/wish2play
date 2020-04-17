@@ -44,7 +44,6 @@ export const GameList = () => {
   }, []);
 
   const paginate = async (e, page) => {
-    console.log('go to page', page);
     const { results } = await fetchGames(numOfResults, fields, sortBy, page, searchTerm, filters);
     setGames(results);
     setCurrentPage(page);

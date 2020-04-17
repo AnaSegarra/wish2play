@@ -25,8 +25,8 @@ export const UserButtons = ({ gameID }) => {
       if (user) {
         const response = user && (await fetchWishlist(user._id));
         console.log(response);
-        setWishlist(response);
-        const arrGames = arrMapped(response);
+        setWishlist(response.wishlist);
+        const arrGames = arrMapped(response.wishlist);
         setGamesWished(arrGames);
       }
     })();

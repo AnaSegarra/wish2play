@@ -8,8 +8,8 @@ const wishesService = axios.create({
 export const fetchWishlist = async user_id => {
   try {
     const { data } = await wishesService.get(`${user_id}/wishlist`);
-    // console.log(data);
-    return data.wishlist;
+    console.log(data);
+    return data;
   } catch (error) {
     throw new Error('No user logged');
   }
@@ -23,4 +23,10 @@ export const addGameWished = async game_id => {
 export const removeGameWished = async id => {
   const { data } = await wishesService.delete(`/wishlist/${id}`);
   return data.userUpdated;
+};
+
+export const updateWish = async (id, update) => {
+  const { data } = await wishesService.put(`/wishlist/${id}`, update);
+  console.log(data);
+  return data.wishUpdated;
 };

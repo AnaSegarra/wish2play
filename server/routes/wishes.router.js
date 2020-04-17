@@ -9,15 +9,16 @@ const { isLoggedIn, isFriend, checkOwnership } = require('../lib/authMW');
 router.get('/:user_id/wishlist', async (req, res, next) => {
   const { user_id } = req.params;
   try {
-    const { wishlist } = await User.findById(user_id).populate({
+    const user = await User.findById(user_id, { wishlist: 1, username: 1 }).populate({
       path: 'wishlist',
-      populate: { path: 'game', select: 'name image totalRating' }
+      populate: [{ path: 'game', select: 'name image' }]
     });
 
     return res.json({
       message: 'Wishlist retrieved',
-      results: wishlist.length,
-      wishlist
+      results: user.wishlist.length,
+      wishlist: user.wishlist,
+      username: user.username
     });
   } catch (error) {
     console.log('Error retrieving wishlist', error);
@@ -57,7 +58,11 @@ router.post('/wishlist', isLoggedIn(), async (req, res, next) => {
 router.put('/wishlist/:id', isLoggedIn(), checkOwnership(Wish, 'owner'), async (req, res, next) => {
   const { id } = req.params;
   try {
-    const wishUpdated = await Wish.findByIdAndUpdate(id, req.body, { new: true });
+    console.log('🌈 body', req.body);
+    const wishUpdated = await Wish.findByIdAndUpdate(id, req.body, { new: true }).populate({
+      path: 'game',
+      select: 'name image'
+    });
     return res.json({ message: 'Wish status updated', wishUpdated });
   } catch (error) {
     console.log('Error editing wish status', error);

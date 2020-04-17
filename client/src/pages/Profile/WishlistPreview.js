@@ -8,7 +8,7 @@ export const WishlistPreview = ({ userID }) => {
   useEffect(() => {
     (async () => {
       const response = await fetchWishlist(userID);
-      const wishlistMapped = response.map(({ game }) => {
+      const wishlistMapped = response.wishlist.map(({ game }) => {
         return { totalRating: game.totalRating, name: game.name, _id: game._id, image: game.image };
       });
 

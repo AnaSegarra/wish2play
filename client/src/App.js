@@ -8,11 +8,11 @@ import { Home as HomePage } from './pages/Home';
 import { GameList as GamesPage } from './pages/GamesList';
 import { Game as DetailPage } from './pages/GameDetail';
 import { ProtectedProfile as ProfilePage } from './pages/Profile';
-import { RequestPage } from './pages/UserLists/RequestPage';
+import { RequestPage } from './pages/Lists/RequestPage';
 import { AdminPage } from './pages/Admin';
 import { RequestAdminPage } from './pages/Admin/RequestsPanel';
-import { Wishlist } from './pages/UserLists/Wishlist';
-import { GamesPlayed } from './pages/UserLists/GamesPlayed';
+import { ProtectedWishlist as WishlistPage } from './pages/Lists/Wishlist';
+import { GamesPlayed } from './pages/Lists/GamesPlayed';
 
 const App = () => (
   <Router>
@@ -23,7 +23,7 @@ const App = () => (
         <Route path="/games/request" exact component={RequestPage} />
         <Route path="/games/:id" exact component={DetailPage} />
         <Route path="/wish2play/profile" exact component={ProfilePage} />
-        <Route path="/wishlist/:id" exact component={Wishlist} />
+        <Route path="/wishlist/:id" exact component={WishlistPage} />
         <Route path="/games-played/:id" exact component={GamesPlayed} />
         <Route path="/admin" exact component={AdminPage} />
         <Route path="/admin/request" exact component={RequestAdminPage} />
