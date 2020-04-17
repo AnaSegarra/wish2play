@@ -1,0 +1,36 @@
+const mongoose = require('mongoose');
+
+const { ObjectId } = mongoose.Schema.Types;
+
+const userSchema = new mongoose.Schema(
+  {
+    username: { type: String, unique: true, index: true, required: true },
+    password: { type: String, required: true },
+    image: String,
+    name: String,
+    isAdmin: { type: Boolean, default: false },
+    gamesPlayed: [{ type: ObjectId, ref: 'Game' }],
+    wishlist: [{ type: ObjectId, ref: 'Wish' }],
+    friends: [{ type: ObjectId, ref: 'User' }],
+    reservedWishes: [{ type: ObjectId, ref: 'Wish' }]
+  },
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
+  }
+);
+
+userSchema.statics.findUsers = function (filter, page, limit, fields) {
+  const query = this.find(filter).limit(limit).skip(page).select(fields);
+  return query;
+};
+
+module.exports = mongoose.model('User', userSchema);
