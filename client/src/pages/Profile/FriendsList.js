@@ -22,6 +22,7 @@ export const FriendsList = () => {
   const handleSearch = async e => {
     const searchTerm = e.target.value;
     setSearch(searchTerm);
+
     const response = await fetchUsers(searchTerm);
     setUsers(response);
   };

@@ -1,77 +1,43 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { fetchWishlist, updateWish } from '../../services/wishesService';
+import { fetchWishlist, reserveFriendWish } from '../../services/wishesService';
 import { AuthContext } from '../../contexts/authContext';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { useParams } from 'react-router-dom';
-import { sortByName } from '../../helpers/listsHelpers';
-import { Checkbox } from '@material-ui/core';
+import { sortByName, isIncluded } from '../../helpers/listsHelpers';
+import { ListOwner } from './ListOwner';
+import { Tooltip } from '@material-ui/core';
+import { SubmitBtn } from '../GameDetail/ReviewForm';
 
 const Wishlist = () => {
   const { id } = useParams();
-  const { user, isLoading } = useContext(AuthContext);
+  const { user, isLoading, setUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
-  const [owner, setOwner] = useState('');
+  const [owner, setOwner] = useState({});
 
   useEffect(() => {
     (async () => {
       const response = await fetchWishlist(id);
       setWishlist(sortByName(response.wishlist));
-      setOwner(response.username);
+      setOwner(response.user);
     })();
   }, []);
 
-  const handleUpdate = async (wishID, update) => {
-    const updatedWish = await updateWish(wishID, update);
-    const updatedWishlist = wishlist.filter(wish => wish._id !== updatedWish._id); // remove wish with previous status
-    const newList = sortByName([...updatedWishlist, updatedWish]); // include wish updated
-    setWishlist(newList);
-  };
+  const makeReserved = async wishID => {
+    const response = await reserveFriendWish(wishID);
+    setUser(response.userUpdated);
 
-  const handleCheck = async wishID => {
-    const updatedWish = await updateWish(wishID, { status: 'Fulfilled' });
-    const updatedWishlist = wishlist.filter(wish => wish._id !== updatedWish._id); // remove wish with previous status
-    const newList = sortByName([...updatedWishlist, updatedWish]); // include wish updated
+    const updatedWishlist = wishlist.filter(wish => wish._id !== response.wishUpdated._id); // remove wish with previous status
+    const newList = sortByName([...updatedWishlist, response.wishUpdated]); // include wish updated
     setWishlist(newList);
   };
 
   if (isLoading) return <></>;
 
-  if (user._id === id)
-    return (
-      <div>
-        <h2>Your wishlist</h2>
-        {wishlist.length > 0 &&
-          wishlist.map((wish, i) => {
-            return (
-              <div key={i}>
-                <p>{wish.game.name}</p>
-                <img src={wish.game.image} height="300" />
-                <p>{wish.status}</p>
-                <Checkbox
-                  checked={wish.status === 'Fulfilled' ? true : false}
-                  disabled={wish.status === 'Fulfilled' ? true : false}
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
-                  onChange={() => handleCheck(wish._id)}
-                  size="small"
-                />
-                {wish.isPublic ? (
-                  <button onClick={() => handleUpdate(wish._id, { isPublic: false })}>
-                    Make private
-                  </button>
-                ) : (
-                  <button onClick={() => handleUpdate(wish._id, { isPublic: true })}>
-                    Make public
-                  </button>
-                )}
-              </div>
-            );
-          })}
-      </div>
-    );
+  if (user._id === id) return <ListOwner wishlist={wishlist} setWishlist={setWishlist} />;
 
   return (
     <div>
-      <h2>{`${owner}'s wishlist`}</h2>
+      <h2>{`${owner.username}'s wishlist`}</h2>
       {wishlist.length > 0 &&
         wishlist.map((wish, i) => {
           return wish.isPublic ? (
@@ -79,7 +45,27 @@ const Wishlist = () => {
               <p>{wish.game.name}</p>
               <img src={wish.game.image} height="300" />
               <p>{wish.status}</p>
-              {wish.status === 'Free' && <button>Reserve</button>}
+
+              {wish.status === 'Free' && (
+                <Tooltip
+                  title={
+                    !isIncluded(owner._id, user.friends)
+                      ? 'Has to be a friend to reserve their wish'
+                      : ''
+                  }>
+                  <span>
+                    <SubmitBtn
+                      disabled={!isIncluded(owner._id, user.friends)}
+                      onClick={() => makeReserved(wish._id)}
+                      style={!isIncluded(owner._id, user.friends) ? { pointerEvents: 'none' } : {}}>
+                      Reserve
+                    </SubmitBtn>
+                  </span>
+                </Tooltip>
+              )}
+              {wish.status === 'Reserved' && isIncluded(wish._id, user.reservedWishes) && (
+                <p>Reservao</p>
+              )}
             </div>
           ) : (
             ''

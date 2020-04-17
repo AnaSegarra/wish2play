@@ -8,7 +8,7 @@ import { Home as HomePage } from './pages/Home';
 import { GameList as GamesPage } from './pages/GamesList';
 import { Game as DetailPage } from './pages/GameDetail';
 import { ProtectedProfile as ProfilePage } from './pages/Profile';
-import { RequestPage } from './pages/Lists/RequestPage';
+import { RequestPage } from './pages/Profile/RequestPage';
 import { AdminPage } from './pages/Admin';
 import { RequestAdminPage } from './pages/Admin/RequestsPanel';
 import { ProtectedWishlist as WishlistPage } from './pages/Lists/Wishlist';

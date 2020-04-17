@@ -52,7 +52,10 @@ export const ReviewForm = ({ gameID, updateGame }) => {
                   : ''
               }>
               <span>
-                <SubmitBtn type="submit" disabled={!isIncluded(gameID, user.gamesPlayed)}>
+                <SubmitBtn
+                  type="submit"
+                  disabled={!isIncluded(gameID, user.gamesPlayed)}
+                  style={!isIncluded(gameID, user.gamesPlayed) ? { pointerEvents: 'none' } : {}}>
                   Publish
                 </SubmitBtn>
               </span>
