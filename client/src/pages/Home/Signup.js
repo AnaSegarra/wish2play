@@ -54,7 +54,7 @@ export const Signup = () => {
     const response = await signup(newUser);
     if (response.user) {
       setUser(response.user);
-      history.push(`/wish2play/${response.user.username}`);
+      history.push('/wish2play/profile');
     } else {
       setError({ ...error, isError: true, errorMsg: response });
     }

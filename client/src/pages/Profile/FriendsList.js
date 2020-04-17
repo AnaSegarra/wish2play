@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { fetchFriends, searchFriends, addFriend, removeFriend } from '../../services/usersService';
-import { UsersList } from '../../components/UsersList';
+import { fetchFriends, fetchUsers } from '../../services/usersService';
+import { User } from '../../components/UserItem';
 import { AuthContext } from '../../contexts/authContext';
 
 export const FriendsList = () => {
@@ -11,11 +11,10 @@ export const FriendsList = () => {
 
   useEffect(() => {
     (async () => {
-      // console.log(user);
       const friendsRetrieved = await fetchFriends();
       setFriends(friendsRetrieved);
 
-      const usersRetrieved = await searchFriends();
+      const usersRetrieved = await fetchUsers();
       setUsers(usersRetrieved);
     })();
   }, [user]);
@@ -23,19 +22,9 @@ export const FriendsList = () => {
   const handleSearch = async e => {
     const searchTerm = e.target.value;
     setSearch(searchTerm);
-    const response = await searchFriends(searchTerm);
-    setUsers(response);
-  };
-  const handleNewFriend = async userID => {
-    const userUpdated = await addFriend(userID);
-    setUser(userUpdated);
-    setSearch('');
-  };
 
-  const handleRemoveFriend = async userID => {
-    const userUpdated = await removeFriend(userID);
-    setUser(userUpdated);
-    setSearch('');
+    const response = await fetchUsers(searchTerm);
+    setUsers(response);
   };
 
   return (
@@ -44,7 +33,9 @@ export const FriendsList = () => {
       {friends.length === 0 ? (
         <p>You don't have any friends yet</p>
       ) : (
-        <UsersList list={friends} handleRemoveFriend={handleRemoveFriend} />
+        friends.map(friend => {
+          return <User key={friend._id} user={friend} setUser={setUser} type="friends" />;
+        })
       )}
 
       <p>Find more</p>
@@ -52,14 +43,9 @@ export const FriendsList = () => {
       {users.length === 0 ? (
         <p>No results found</p>
       ) : (
-        <>
-          <UsersList
-            list={users}
-            type="users"
-            handleNewFriend={handleNewFriend}
-            friends={friends}
-          />
-        </>
+        users.map(user => {
+          return <User key={user._id} user={user} setUser={setUser} />;
+        })
       )}
     </div>
   );

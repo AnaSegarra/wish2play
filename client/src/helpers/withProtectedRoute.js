@@ -11,7 +11,7 @@ export const withProtectedRoute = (Component, restricted = false) => props => {
   const { user, isLoading } = useContext(AuthContext);
   if (user) {
     // redirect to profile if page is restricted and user is not admin
-    if (restricted && !user.isAdmin) return <Redirect to={`/wish2play/${user.username}`} />;
+    if (restricted && !user.isAdmin) return <Redirect to={'/wish2play/profile'} />;
 
     // redirect to admin panel if page is not restricted and user is admin
     if (!restricted && user.isAdmin) return <Redirect to="/admin" />;

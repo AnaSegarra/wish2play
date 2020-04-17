@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const usersService = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/users',
+  baseURL: `${process.env.API_URL}/users`,
   withCredentials: true
 });
 
@@ -24,20 +24,18 @@ export const fetchGamesPlayedList = async user_id => {
 };
 
 // friends related endpoints
-export const searchFriends = async (searchTerm, page, numOfResults) => {
+export const fetchUsers = async (searchTerm, page, numOfResults) => {
   const params = {
     searchTerm,
     page,
     limit: numOfResults
   };
   const { data } = await usersService.get('/', { params });
-  // console.log(data);
   return data.users;
 };
 
 export const fetchFriends = async () => {
   const { data } = await usersService.get('/friends');
-  // console.log(data);
   return data.friends;
 };
 

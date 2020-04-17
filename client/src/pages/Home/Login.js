@@ -17,7 +17,7 @@ export const Login = () => {
     const response = await login(loggedUser);
     if (response.user) {
       setUser(response.user);
-      history.push(`/wish2play/${response.user.username}`);
+      history.push('/wish2play/profile');
     } else {
       setError({ isError: true, errorMsg: response });
     }

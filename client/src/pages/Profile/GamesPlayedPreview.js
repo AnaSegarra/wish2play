@@ -17,5 +17,11 @@ export const GamesPlayedPreview = ({ userID }) => {
       setGamesPlayed(games);
     })();
   }, []);
-  return <>{gamesPlayed.length > 0 && <GamesGrid gamesArr={firstFive} />}</>;
+  return (
+    <>
+      {gamesPlayed.length > 0 && (
+        <GamesGrid gamesArr={firstFive} userID={userID} type="games-played" />
+      )}
+    </>
+  );
 };

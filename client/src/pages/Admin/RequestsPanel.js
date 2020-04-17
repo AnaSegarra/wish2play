@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { fetchRequests } from '../../services/requestsService';
 import { Container, Grid } from '@material-ui/core';
 import { Request } from '../../components/RequestCard';
+import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 
-export const RequestsPanel = () => {
+const RequestsPanel = () => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -23,3 +24,5 @@ export const RequestsPanel = () => {
     </Container>
   );
 };
+
+export const RequestAdminPage = withProtectedRoute(RequestsPanel, true);

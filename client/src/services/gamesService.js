@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const gamesService = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/games',
+  baseURL: `${process.env.API_URL}/games`,
   withCredentials: true
 });
 

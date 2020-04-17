@@ -4,27 +4,27 @@ const http = require('http');
 
 let app = require('../app');
 
-// catch 404 and render a not-found.hbs template
+// catch 404
 app.use((req, res, next) => {
-  res.status(404);
-  res.render('not-found');
+  res.status(404).json({ status: 'Page not Found' });
 });
 
 app.use((err, req, res, next) => {
   // always log the error
   console.error('ERROR', req.method, req.path, err);
 
-  // only render if the error ocurred before sending the response
+  // error ocurred before sending the response
   if (!res.headersSent) {
-    res.status(500);
-    res.render('error');
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
 let server = http.createServer(app);
 
 server.on('error', error => {
-  if (error.syscall !== 'listen') { throw error }
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
