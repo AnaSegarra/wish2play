@@ -20,7 +20,12 @@ router.get('/', isLoggedIn(), async (req, res, next) => {
     }
 
     // retrieve only user's requests otherwise
-    const requests = await query.where('requestedBy').equals(req.user.id);
+    const requests = await query
+      .where('requestedBy')
+      .equals(req.user.id)
+      .sort({ createdAt: -1 })
+      .limit(6);
+
     return res.json({
       message: `User's requests fetched successfully`,
       results: requests.length,

@@ -17,9 +17,9 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 const app = express();
 
 // Cross Domain CORS setup
-const whitelist = ['http://localhost:3000', 'http://localhost:1234'];
+const whitelist = [process.env.CLIENT_URL];
 const corsOptions = {
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     console.log(`Origin: ${origin}`);
     if (!origin) return callback(null, true);
     if (whitelist.indexOf(origin) !== -1) {

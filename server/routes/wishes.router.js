@@ -18,7 +18,7 @@ router.get('/:user_id/wishlist', async (req, res, next) => {
       message: 'Wishlist retrieved',
       results: user.wishlist.length,
       wishlist: user.wishlist,
-      username: user.username
+      user: { username: user.username, _id: user._id }
     });
   } catch (error) {
     console.log('Error retrieving wishlist', error);
@@ -58,7 +58,6 @@ router.post('/wishlist', isLoggedIn(), async (req, res, next) => {
 router.put('/wishlist/:id', isLoggedIn(), checkOwnership(Wish, 'owner'), async (req, res, next) => {
   const { id } = req.params;
   try {
-    console.log('🌈 body', req.body);
     const wishUpdated = await Wish.findByIdAndUpdate(id, req.body, { new: true }).populate({
       path: 'game',
       select: 'name image'
@@ -72,10 +71,10 @@ router.put('/wishlist/:id', isLoggedIn(), checkOwnership(Wish, 'owner'), async (
 
 // POST route - add friend's wish to reservedWishes
 router.post('/reserved-wishes', isFriend(), async (req, res, next) => {
-  const { wish } = req.body;
   try {
+    const { wish } = req.body; // wish id
     const isReserved = req.user.reservedWishes.includes(wish);
-    console.log(isReserved);
+
     if (!isReserved) {
       // update user's reserved wishes list
       const userUpdated = await User.findByIdAndUpdate(
@@ -85,8 +84,15 @@ router.post('/reserved-wishes', isFriend(), async (req, res, next) => {
       );
 
       // update wish status
-      await Wish.findByIdAndUpdate(wish, { status: 'Reserved' }, { new: true });
-      return res.json({ message: 'Wish successfully reserved', userUpdated });
+      const wishUpdated = await Wish.findByIdAndUpdate(
+        wish,
+        { status: 'Reserved' },
+        { new: true }
+      ).populate({
+        path: 'game',
+        select: 'name image'
+      });
+      return res.json({ message: 'Wish successfully reserved', userUpdated, wishUpdated });
     }
 
     return res.status(400).json({ message: 'Already reserved' });
