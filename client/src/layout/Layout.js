@@ -9,7 +9,7 @@ import { AuthContextProvider } from '../contexts/authContext';
 import { lightTheme, darkTheme } from '../contexts/themes';
 
 // styled components
-import { GlobalStyle } from '../styledComponents/Global';
+import { GlobalStyle } from '../styles/Global';
 
 // makes available both theme and user to the whole app
 export const Layout = ({ children }) => {

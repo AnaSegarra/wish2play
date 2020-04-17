@@ -3,7 +3,7 @@ import React from 'react';
 import Select from 'react-select';
 
 // styled components
-import { Input } from '../../styledComponents/Form';
+import { Input } from '../../styles/Form';
 
 export const Filters = ({ search, options, handleSelect }) => {
   return (

@@ -10,7 +10,7 @@ import { GamesCarousel } from '../../components/Carousel';
 import { AuthContext } from '../../contexts/authContext';
 
 // styled components
-import { StyledPaper } from '../../styledComponents/Home.styled';
+import { StyledPaper } from '../../styles/Home.styled';
 
 export const Home = () => {
   const theme = useContext(ThemeContext);
