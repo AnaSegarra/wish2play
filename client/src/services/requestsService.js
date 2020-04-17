@@ -12,8 +12,10 @@ export const fetchRequests = async () => {
 };
 
 export const makeRequest = async game => {
+  if (game.ESRB === '') {
+    game.ESRB = 'RP';
+  }
   const { data } = await requestsService.post('/', game);
-  console.log(data);
   return data.message;
 };
 

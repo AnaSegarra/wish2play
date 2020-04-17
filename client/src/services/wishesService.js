@@ -1,14 +1,13 @@
 import axios from 'axios';
 
 const wishesService = axios.create({
-  baseURL: 'http://localhost:3000/api/v1/wishes',
+  baseURL: `${process.env.API_URL}/wishes`,
   withCredentials: true
 });
 
 export const fetchWishlist = async user_id => {
   try {
     const { data } = await wishesService.get(`${user_id}/wishlist`);
-    console.log(data);
     return data;
   } catch (error) {
     throw new Error('No user logged');
@@ -27,6 +26,11 @@ export const removeGameWished = async id => {
 
 export const updateWish = async (id, update) => {
   const { data } = await wishesService.put(`/wishlist/${id}`, update);
-  console.log(data);
   return data.wishUpdated;
+};
+
+export const reserveFriendWish = async wish => {
+  const { data } = await wishesService.post('/reserved-wishes', { wish });
+  console.log('success response', data);
+  return data;
 };
