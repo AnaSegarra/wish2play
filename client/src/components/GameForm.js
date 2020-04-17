@@ -4,8 +4,8 @@ import CreatableSelect from 'react-select/creatable';
 import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
 import { formatOptions, groupFilters } from '../helpers/filters';
 import { SuccessMsg, ErrorMsg } from './AlertMsg';
-import { GameFormStyled } from '../styledComponents/Admin.styled';
-import { Button, Input } from '../styledComponents/Form';
+import { GameFormStyled } from '../styles/Admin.styled';
+import { Button, Input } from '../styles/Form';
 import { ThemeContext } from 'styled-components';
 import { updateRequestStatus } from '../services/requestsService';
 

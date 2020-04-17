@@ -12,7 +12,7 @@ import { AuthContext } from '../contexts/authContext';
 import { logout } from '../services/authService';
 
 // styled components
-import { Navbar, SubBar } from '../styledComponents/Navbar';
+import { Navbar, SubBar } from '../styles/Navbar';
 
 const useStyles = makeStyles(theme => ({
   small: {

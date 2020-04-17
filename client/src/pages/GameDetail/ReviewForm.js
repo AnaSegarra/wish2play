@@ -3,7 +3,7 @@ import { AuthContext } from '../../contexts/authContext';
 import { isIncluded } from '../../helpers/listsHelpers';
 import styled from 'styled-components';
 import { Tooltip } from '@material-ui/core';
-import { ReviewsContainer } from '../../styledComponents/GameDetail.styled';
+import { ReviewsContainer } from '../../styles/GameDetail.styled';
 import { Rating } from '@material-ui/lab';
 import { addReview } from '../../services/gamesService';
 

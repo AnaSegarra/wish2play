@@ -12,7 +12,7 @@ import { addGameWished, removeGameWished, fetchWishlist } from '../../services/w
 import { isIncluded, arrMapped } from '../../helpers/listsHelpers';
 
 // styled components
-import { ButtonsContainer } from '../../styledComponents/GameDetail.styled';
+import { ButtonsContainer } from '../../styles/GameDetail.styled';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
