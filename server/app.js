@@ -21,6 +21,7 @@ const whitelist = [process.env.CLIENT_URL];
 const corsOptions = {
   origin: function (origin, callback) {
     console.log(`Origin: ${origin}`);
+    console.log(whitelist);
     if (!origin) return callback(null, true);
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);

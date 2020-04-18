@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel --max-old-space-size=4096 index.html",
-    "build": "parcel build --max-old-space-size=4096 index.html "
+    "start": "serve dist",
+    "build": "parcel build index.html "
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-select": "^3.1.0",
+    "serve": "^11.3.0",
     "styled-components": "^5.0.1",
     "styled-icons": "^10.2.1"
   },
