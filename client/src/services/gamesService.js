@@ -59,6 +59,11 @@ export const addReview = async (game_id, { content, rating }) => {
   return data.game;
 };
 
+export const editReview = async (game_id, id, { content, rating }) => {
+  const { data } = await gamesService.put(`/${game_id}/reviews/${id}`, { content, rating });
+  return data.game;
+};
+
 export const deleteReview = async (game_id, id) => {
   const response = await gamesService.delete(`/${game_id}/reviews/${id}`);
   console.log('respuesta', response);

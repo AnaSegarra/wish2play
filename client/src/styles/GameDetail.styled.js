@@ -77,8 +77,8 @@ export const Content = styled.div`
 // buttons
 export const ButtonsContainer = styled.div`
   display: flex;
-  padding: 0em 2em 0;
-  justify-content: flex-end;
+  padding: 2em 2em 0;
+  justify-content: space-between;
 
   svg {
     color: ${({ theme }) => theme.main.tertiary};

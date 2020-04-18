@@ -59,7 +59,7 @@ export const UserButtons = ({ gameID }) => {
   if (user && user.isAdmin) return <p>pero que eres admin!</p>;
 
   return user && wishlist ? (
-    <ButtonsContainer theme={theme}>
+    <div theme={theme}>
       {isIncluded(gameID, user.gamesPlayed) ? (
         <button onClick={() => removeGame(gameID)}>
           Played it!
@@ -79,7 +79,7 @@ export const UserButtons = ({ gameID }) => {
           <HeartOutlined size="25" />
         </button>
       )}
-    </ButtonsContainer>
+    </div>
   ) : (
     <></>
   );

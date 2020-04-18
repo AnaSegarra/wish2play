@@ -185,12 +185,17 @@ router.put(
       );
 
       // if rating is changed, game average rate needs to be updated
-      const updatedGame = await Game.findById(game_id).populate('reviews');
+      const updatedGame = await Game.findById(game_id).populate({
+        path: 'reviews',
+        populate: { path: 'author', select: 'username' }
+      });
       const average = calcAverage(updatedGame.reviews);
       updatedGame.totalRating = average;
       await updatedGame.save();
 
-      return res.status(200).json({ message: 'Review successfully edited', review: updatedReview });
+      return res
+        .status(200)
+        .json({ message: 'Review successfully edited', review: updatedReview, game: updatedGame });
     } catch (error) {
       console.log('Error updating a review', error);
       return res.status(500).json({ message: 'Internal server error updating a review' });

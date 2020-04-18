@@ -13,6 +13,7 @@ import { UserButtons } from './UserInteraction';
 
 // styled components
 import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
+import { ButtonsContainer } from '../../styles/GameDetail.styled';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);
@@ -33,12 +34,12 @@ export const GameContent = props => {
   } = props;
   return (
     <Paper elevation={3}>
-      <div>
+      <ButtonsContainer theme={theme}>
         <Link to="/games">
-          <ArrowGoBack size="15" />
+          <ArrowGoBack size="25" />
         </Link>
         <UserButtons gameID={_id} />
-      </div>
+      </ButtonsContainer>
       <Container>
         <ImageContainer>
           <img src={image} />

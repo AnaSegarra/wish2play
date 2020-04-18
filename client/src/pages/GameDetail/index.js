@@ -31,7 +31,7 @@ export const Game = props => {
         </Grid>
       </Grid>
       <ReviewForm gameID={game._id} updateGame={setGame} />
-      <GameReviews gameID={game._id} reviews={game.reviews} />
+      <GameReviews gameID={game._id} reviews={game.reviews} updateGame={setGame} />
     </Container>
   ) : (
     <div></div>
