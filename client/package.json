@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html --max-old-space-size=4096"
+    "start": "parcel --max-old-space-size=4096 index.html",
+    "build": "parcel build --max-old-space-size=4096 index.html "
   },
   "keywords": [],
   "author": "",
