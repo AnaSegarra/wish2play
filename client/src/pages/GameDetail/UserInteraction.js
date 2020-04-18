@@ -56,6 +56,8 @@ export const UserButtons = ({ gameID }) => {
     setUser(updatedUser);
   };
 
+  if (user && user.isAdmin) return <p>pero que eres admin!</p>;
+
   return user && wishlist ? (
     <ButtonsContainer theme={theme}>
       {isIncluded(gameID, user.gamesPlayed) ? (

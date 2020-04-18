@@ -13,6 +13,15 @@ export const GameFormStyled = styled.form`
   input {
     margin: 0;
   }
+
+  .img-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    input {
+      margin-top: 1em;
+    }
+  }
 `;
 
 export const RequestContent = styled(StyledPaper)`
@@ -31,6 +40,9 @@ export const RequestContent = styled(StyledPaper)`
       color: ${({ theme }) => theme.main.tertiary};
     }
   }
+  .img-container {
+    text-align: center;
+  }
   .no-img {
     height: 200px;
     width: 200px;
@@ -40,4 +52,14 @@ export const RequestContent = styled(StyledPaper)`
     align-items: center;
     margin: 0 auto;
   }
+`;
+
+export const ImgPlaceholder = styled.div`
+  height: 200px;
+  width: 200px;
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
 `;

@@ -7,7 +7,6 @@ const requestsService = axios.create({
 
 export const fetchRequests = async () => {
   const { data } = await requestsService.get('/');
-  console.log('response', data);
   return data.requests;
 };
 
@@ -20,8 +19,6 @@ export const makeRequest = async game => {
 };
 
 export const updateRequestStatus = async (id, status) => {
-  console.log('actualizando', id, 'a ', status);
   const { data } = await requestsService.put(`/${id}`, { status });
-  console.log('response al update', data);
   return data.request;
 };

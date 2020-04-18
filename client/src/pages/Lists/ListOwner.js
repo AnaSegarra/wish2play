@@ -1,7 +1,8 @@
 import React from 'react';
 import { sortByName } from '../../helpers/listsHelpers';
-import { Checkbox } from '@material-ui/core';
+import { Checkbox, Grid } from '@material-ui/core';
 import { updateWish } from '../../services/wishesService';
+import { Link } from 'react-router-dom';
 
 export const ListOwner = ({ wishlist, setWishlist }) => {
   const handleUpdate = async (wishID, update) => {
@@ -19,34 +20,39 @@ export const ListOwner = ({ wishlist, setWishlist }) => {
   };
 
   return (
-    <div>
-      <h2>Your wishlist</h2>
+    <>
       {wishlist.length > 0 &&
         wishlist.map((wish, i) => {
           return (
-            <div key={i}>
-              <p>{wish.game.name}</p>
+            <Grid item lg={3} key={i}>
+              <Link to={`/games/${wish.game._id}`}>{wish.game.name}</Link>
               <img src={wish.game.image} height="300" />
-              <p>{wish.status}</p>
-              <Checkbox
-                checked={wish.status === 'Fulfilled' ? true : false}
-                disabled={wish.status === 'Fulfilled' ? true : false}
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-                onChange={() => handleCheck(wish._id)}
-                size="small"
-              />
-              {wish.isPublic ? (
-                <button onClick={() => handleUpdate(wish._id, { isPublic: false })}>
-                  Make private
-                </button>
+              <div>
+                <p>{wish.status}</p>
+                <Checkbox
+                  checked={wish.status === 'Fulfilled' ? true : false}
+                  disabled={wish.status === 'Fulfilled' ? true : false}
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                  onChange={() => handleCheck(wish._id)}
+                  size="small"
+                />
+              </div>
+              {wish.status === 'Free' ? (
+                wish.isPublic ? (
+                  <button onClick={() => handleUpdate(wish._id, { isPublic: false })}>
+                    Make private
+                  </button>
+                ) : (
+                  <button onClick={() => handleUpdate(wish._id, { isPublic: true })}>
+                    Make public
+                  </button>
+                )
               ) : (
-                <button onClick={() => handleUpdate(wish._id, { isPublic: true })}>
-                  Make public
-                </button>
+                <></>
               )}
-            </div>
+            </Grid>
           );
         })}
-    </div>
+    </>
   );
 };

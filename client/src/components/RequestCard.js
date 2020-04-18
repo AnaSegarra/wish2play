@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { Edit } from '@styled-icons/typicons';
-import { RequestContent } from '../styles/Admin.styled';
+import { RequestContent, ImgPlaceholder } from '../styles/Admin.styled';
 import { GameForm } from '../components/GameForm';
 
 export const Request = ({ request }) => {
@@ -19,11 +19,13 @@ export const Request = ({ request }) => {
         ) : (
           <div className="paper-content">
             {request.content.image ? (
-              <img height="200" width="auto" src={request.content.image} />
-            ) : (
-              <div className="no-img">
-                <p>No image provided</p>
+              <div className="img-container">
+                <img height="200" width="auto" src={request.content.image} />
               </div>
+            ) : (
+              <ImgPlaceholder>
+                <p>No image provided</p>
+              </ImgPlaceholder>
             )}
             <p>
               <span>Name:</span> {request.content.name}

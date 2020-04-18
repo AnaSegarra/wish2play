@@ -77,7 +77,7 @@ export const Content = styled.div`
 // buttons
 export const ButtonsContainer = styled.div`
   display: flex;
-  padding: 2em 2em 0;
+  padding: 0em 2em 0;
   justify-content: flex-end;
 
   svg {

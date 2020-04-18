@@ -4,6 +4,8 @@ import { Paper, Chip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
 import { ThemeContext } from 'styled-components';
+import { Link } from 'react-router-dom';
+import { ArrowGoBack } from 'styled-icons/remix-line';
 
 // local modules
 import { useStyles } from '../../components/GameCard';
@@ -31,7 +33,12 @@ export const GameContent = props => {
   } = props;
   return (
     <Paper elevation={3}>
-      <UserButtons gameID={_id} />
+      <div>
+        <Link to="/games">
+          <ArrowGoBack size="15" />
+        </Link>
+        <UserButtons gameID={_id} />
+      </div>
       <Container>
         <ImageContainer>
           <img src={image} />
