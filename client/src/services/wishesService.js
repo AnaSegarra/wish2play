@@ -31,6 +31,11 @@ export const updateWish = async (id, update) => {
 
 export const reserveFriendWish = async wish => {
   const { data } = await wishesService.post('/reserved-wishes', { wish });
-  console.log('success response', data);
   return data;
+};
+
+export const fetchReservedWishes = async () => {
+  const { data } = await wishesService.get('/reserved-wishes');
+  console.log('success', data);
+  return data.results;
 };
