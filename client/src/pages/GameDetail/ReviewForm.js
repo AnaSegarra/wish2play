@@ -24,7 +24,7 @@ export const ReviewForm = ({ gameID, updateGame }) => {
 
   return (
     <>
-      {user && (
+      {user && !user.isAdmin && (
         <ReviewsContainer>
           <p>Share your thoughts with other players</p>
           <form onSubmit={handleSubmit}>
