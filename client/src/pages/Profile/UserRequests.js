@@ -14,7 +14,6 @@ export const UserRequests = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchRequests();
-      console.log(response);
       setRequests(response);
       setIsLoading(false);
     })();

@@ -22,7 +22,24 @@ router.get('/:user_id/wishlist', async (req, res, next) => {
     });
   } catch (error) {
     console.log('Error retrieving wishlist', error);
-    return res.status(500).json({ message: 'Internal server error fetching wishlist' });
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// GET route - retrieve reserved wishes
+router.get('/reserved-wishes', async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id, { reservedWishes: 1 }).populate({
+      path: 'reservedWishes',
+      populate: [
+        { path: 'owner', select: '-_id username' },
+        { path: 'game', select: '-_id name' }
+      ]
+    });
+    return res.json({ message: 'Reserved wishes from friends', results: user.reservedWishes });
+  } catch (error) {
+    console.log('Error retrieving reserved wishes', error);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 

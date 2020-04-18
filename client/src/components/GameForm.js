@@ -4,7 +4,7 @@ import CreatableSelect from 'react-select/creatable';
 import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
 import { formatOptions, groupFilters } from '../helpers/filters';
 import { SuccessMsg, ErrorMsg } from './AlertMsg';
-import { GameFormStyled } from '../styles/Admin.styled';
+import { GameFormStyled, ImgPlaceholder } from '../styles/Admin.styled';
 import { Button, Input } from '../styles/Form';
 import { ThemeContext } from 'styled-components';
 import { updateRequestStatus } from '../services/requestsService';
@@ -16,7 +16,7 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
   const [platformsAvailable, setPlatformsAvailable] = useState([]);
   const [newGame, setNewGame] = useState(
     request
-      ? { ...request.content }
+      ? { ...request.content, releaseYear: request.releaseYear || '' }
       : {
           name: '',
           image: '',
@@ -28,7 +28,7 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
           company: '',
           linkToBuy: ''
         }
-  );
+  ); // sets request data or empty object otherwise
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
@@ -106,17 +106,19 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
   return (
     <>
       <GameFormStyled onSubmit={handleSubmit} theme={theme}>
-        <label htmlFor="image">Game's image</label>
-        <div>
-          {request ? (
+        <div className="img-input">
+          {request && request.image ? (
             <img src={newGame.image} alt="game img preview" width="auto" height="200" />
-          ) : selectedFile ? (
-            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
           ) : (
-            <></>
+            <ImgPlaceholder>
+              <p>No image provided</p>
+            </ImgPlaceholder>
           )}
+          {selectedFile && (
+            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
+          )}
+          <input type="file" name="image" onChange={handleImgEdit} />
         </div>
-        <input type="file" name="image" onChange={handleImgEdit} />
         <label htmlFor="name">Name</label>
         <Input type="text" name="name" onChange={handleChange} value={newGame.name} />
         <label htmlFor="description">Description</label>
