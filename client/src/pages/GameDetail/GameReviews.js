@@ -4,11 +4,7 @@ import { Rating } from '@material-ui/lab';
 import { Grid } from '@material-ui/core';
 import ScrollAnimation from 'react-animate-on-scroll';
 import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core';
 import { editReview } from '../../services/gamesService';
 
 // styled components

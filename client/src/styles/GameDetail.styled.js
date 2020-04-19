@@ -17,7 +17,6 @@ export const Container = styled.div`
 export const ImageContainer = styled.div`
   display: flex;
   padding: 2em;
-  width: 100%;
   img {
     border-radius: 0.5em;
     box-shadow: 0.2em 0.2em 0.5em #333;
@@ -39,7 +38,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  flex-grow: 2;
   .title {
     font-size: 1.4rem;
     text-align: center;

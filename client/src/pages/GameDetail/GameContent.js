@@ -1,5 +1,5 @@
 // dependencies
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Paper, Chip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
