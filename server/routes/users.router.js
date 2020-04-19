@@ -22,13 +22,12 @@ router.get('/', async (req, res, next) => {
         $or: [{ username: queryCondition }, { name: queryCondition }]
       };
     }
-    const numOfUsers = await User.findUsers(filter); // total num of users that are not friends
+    const numOfUsers = await User.find(filter); // total num of users that are not friends
 
-    const limit = Number(req.query.limit) || 4;
     const page = Number(req.query.page) || 1;
-    const skip = (page - 1) * limit;
+    const skip = (page - 1) * 4;
 
-    const users = await User.findUsers(filter).skip(skip).limit(limit);
+    const users = await User.find(filter).skip(skip).limit(4).select('username _id');
 
     return res.json({
       message: 'Users successfully retrieved from database',
@@ -45,15 +44,17 @@ router.get('/', async (req, res, next) => {
 router.get('/friends', isLoggedIn(), async (req, res, next) => {
   try {
     const page = Number(req.query.page) || 1;
+    const { friends } = await User.findById(req.user.id);
     const user = await User.findById(req.user.id).populate({
       path: 'friends',
       select: 'name username _id',
-      skip: (page - 1) * 4
+      skip: (page - 1) * 4,
+      limit: 4
     });
 
     return res.json({
       message: 'Friends retrieved successfully',
-      total: user.friends.length,
+      total: friends.length,
       friends: user.friends
     });
   } catch (error) {

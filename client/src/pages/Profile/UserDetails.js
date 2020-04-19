@@ -6,7 +6,7 @@ import { Tooltip } from '@material-ui/core';
 // local modules
 import { AuthContext } from '../../contexts/authContext';
 import { DataForm, ImageForm } from './EditForm';
-import { FriendsList } from './FriendsList';
+import { FriendsList, UsersList } from './PeopleLists';
 
 export const UserData = () => {
   const { username, image, name } = useContext(AuthContext).user;
@@ -47,6 +47,7 @@ export const UserData = () => {
         <DataForm setEditStatus={showEditForm} />
       )}
       <FriendsList />
+      <UsersList />
     </div>
   );
 };

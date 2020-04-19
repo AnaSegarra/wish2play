@@ -24,19 +24,19 @@ export const fetchGamesPlayedList = async user_id => {
 };
 
 // friends related endpoints
-export const fetchUsers = async (searchTerm, page, numOfResults) => {
+export const fetchUsers = async (searchTerm, page) => {
   const params = {
     searchTerm,
-    page,
-    limit: numOfResults
+    page
   };
   const { data } = await usersService.get('/', { params });
-  return data.users;
+  console.log('response', data);
+  return { users: data.users, totalUsers: data.total };
 };
 
-export const fetchFriends = async () => {
-  const { data } = await usersService.get('/friends');
-  return data.friends;
+export const fetchFriends = async page => {
+  const { data } = await usersService.get('/friends', { params: { page } });
+  return { friends: data.friends, totalFriends: data.total };
 };
 
 export const addFriend = async user_id => {

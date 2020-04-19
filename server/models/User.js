@@ -28,9 +28,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.statics.findUsers = function (filter, page, limit, fields) {
-  const query = this.find(filter).limit(limit).skip(page).select(fields);
-  return query;
-};
-
 module.exports = mongoose.model('User', userSchema);
