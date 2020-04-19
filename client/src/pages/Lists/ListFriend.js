@@ -5,7 +5,7 @@ import { fetchWishlist, reserveFriendWish } from '../../services/wishesService';
 
 import { sortByName, isIncluded } from '../../helpers/listsHelpers';
 
-export const ListFriend = ({ wishlist, setWishlist, owner, user }) => {
+export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
   const makeReserved = async wishID => {
     const response = await reserveFriendWish(wishID);
     setUser(response.userUpdated);

@@ -39,7 +39,13 @@ const Wishlist = () => {
     <Container>
       <h2>{`${owner.username}'s wishlist`}</h2>
       <Grid container spacing={3}>
-        <ListFriend wishlist={wishlist} setWishlist={setWishlist} owner={owner} user={user} />{' '}
+        <ListFriend
+          wishlist={wishlist}
+          setWishlist={setWishlist}
+          owner={owner}
+          user={user}
+          setUser={setUser}
+        />
       </Grid>
     </Container>
   );
