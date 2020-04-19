@@ -12,7 +12,7 @@ import { RequestPage } from './pages/Profile/RequestPage';
 import { AdminPage } from './pages/Admin';
 import { RequestAdminPage } from './pages/Admin/RequestsPanel';
 import { ProtectedWishlist as WishlistPage } from './pages/Lists/Wishlist';
-import { GamesPlayed } from './pages/Lists/GamesPlayed';
+import { ProtectedGamesPlayed as GamesPlayedPage } from './pages/Lists/GamesPlayed';
 
 const App = () => (
   <Router>
@@ -24,7 +24,7 @@ const App = () => (
         <Route path="/games/:id" exact component={DetailPage} />
         <Route path="/wish2play/profile" exact component={ProfilePage} />
         <Route path="/wishlist/:id" exact component={WishlistPage} />
-        <Route path="/games-played/:id" exact component={GamesPlayed} />
+        <Route path="/games-played/:id" exact component={GamesPlayedPage} />
         <Route path="/admin" exact component={AdminPage} />
         <Route path="/admin/request" exact component={RequestAdminPage} />
       </Switch>

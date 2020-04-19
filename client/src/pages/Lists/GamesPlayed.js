@@ -4,8 +4,9 @@ import { Container, Grid } from '@material-ui/core';
 import { AuthContext } from '../../contexts/authContext';
 
 import { useParams, Link } from 'react-router-dom';
+import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 
-export const GamesPlayed = () => {
+const GamesPlayed = () => {
   const { id } = useParams();
   const { user, isLoading } = useContext(AuthContext);
   const [playedList, setPlayedList] = useState([]);
@@ -41,3 +42,5 @@ export const GamesPlayed = () => {
     </Container>
   );
 };
+
+export const ProtectedGamesPlayed = withProtectedRoute(GamesPlayed);
