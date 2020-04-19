@@ -13,8 +13,8 @@ router.get('/', async (req, res, next) => {
 
     let filter = {
       _id: { $not: { $in: req.user.friends } },
-      $and: [{ _id: { $ne: req.user.id } }]
-    }; // removes users friends and current user
+      $and: [{ _id: { $ne: req.user.id } }, { isAdmin: { $ne: true } }]
+    }; // removes users friends, current user and user's who are admin
 
     // finds users by username or name but excludes current user
     if (searchTerm) {
