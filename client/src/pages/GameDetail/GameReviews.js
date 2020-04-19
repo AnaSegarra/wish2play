@@ -11,18 +11,24 @@ import { editReview } from '../../services/gamesService';
 import { ReviewsContainer, Review } from '../../styles/GameDetail.styled';
 import { AuthContext } from '../../contexts/authContext';
 import { deleteReview } from '../../services/gamesService';
+import { ConfirmationDelete } from './GameContent';
 
 export const GameReviews = ({ reviews, gameID, updateGame }) => {
   const { user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const handleDelete = async id => {
     console.log('deleting!', gameID, id);
-    await deleteReview(gameID, id);
+    const response = await deleteReview(gameID, id);
+    updateGame(response);
   };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const openAlert = () => setAlert(true);
+  const closeAlert = () => setAlert(false);
 
   return (
     <ReviewsContainer elevation={3}>
@@ -43,7 +49,12 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
                         review={review}
                         updateGame={updateGame}
                       />
-                      <TrashAlt size="25" onClick={() => handleDelete(review._id)} />
+                      <TrashAlt size="25" onClick={openAlert} />
+                      <ConfirmationDelete
+                        open={alert}
+                        handleClose={closeAlert}
+                        handleDelete={() => handleDelete(review._id)}
+                      />
                     </div>
                   )}
                   <div className="stats">

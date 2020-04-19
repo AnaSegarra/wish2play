@@ -134,7 +134,7 @@ export const GameContent = props => {
   );
 };
 
-const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
+export const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogContent>
@@ -144,7 +144,12 @@ const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
         <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleDelete} color="primary">
+        <Button
+          onClick={() => {
+            handleDelete();
+            handleClose();
+          }}
+          color="primary">
           Yes
         </Button>
       </DialogActions>

@@ -264,16 +264,21 @@ router.delete('/:game_id/reviews/:id', checkOwnership(Review, 'author'), async (
       game_id,
       { $pull: { reviews: id } },
       { new: true }
-    ).populate('reviews');
-
+    ).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
     // update game's rating after deleting a review
     const average = calcAverage(updatedGame.reviews);
     updatedGame.totalRating = average;
     await updatedGame.save();
 
-    return res.status(202).json({ message: 'Review successfully deleted from database' });
+    return res
+      .status(202)
+      .json({ message: 'Review successfully deleted from database', game: updatedGame });
   } catch (error) {
     console.log('Error deleting a review', error);
+    return res.status(500).json({ message: 'Internal server error deleting a review' });
   }
 });
 

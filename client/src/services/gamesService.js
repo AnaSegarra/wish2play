@@ -53,9 +53,7 @@ export const uploadGameImage = async (image, game) => {
 };
 
 export const updateGame = async (gameUpdated, id) => {
-  console.log(gameUpdated, id);
   const { data } = await gamesService.put(`/${id}`, gameUpdated);
-  console.log(data);
   return data.game;
 };
 
@@ -75,6 +73,6 @@ export const editReview = async (game_id, id, { content, rating }) => {
 };
 
 export const deleteReview = async (game_id, id) => {
-  const response = await gamesService.delete(`/${game_id}/reviews/${id}`);
-  console.log('respuesta', response);
+  const { data } = await gamesService.delete(`/${game_id}/reviews/${id}`);
+  return data.game;
 };
