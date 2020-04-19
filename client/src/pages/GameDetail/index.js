@@ -24,7 +24,7 @@ export const Game = props => {
     <Container>
       <Grid container>
         <Grid item xs={12} lg={9}>
-          <GameContent {...game} />
+          <GameContent {...game} setUpdatedGame={setGame} />
         </Grid>
         <Grid item xs={12} lg={3}>
           <BSO name={game.name} />

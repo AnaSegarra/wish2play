@@ -14,10 +14,26 @@ import { UserButtons } from './UserInteraction';
 // styled components
 import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
 import { ButtonsContainer } from '../../styles/GameDetail.styled';
+import { AuthContext } from '../../contexts/authContext';
+
+import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
+import { Dialog, DialogActions, DialogContent, Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { deleteGameDB, updateGame } from '../../services/gamesService';
+import { GameForm } from '../../components/GameForm';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);
   const classes = useStyles(theme);
+  const { user } = useContext(AuthContext);
+  const history = useHistory();
+  const [open, setOpen] = useState(false);
+  const [editForm, setEditForm] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const showEditForm = () => setEditForm(true);
+  const closeEditForm = () => setEditForm(false);
 
   const {
     image,
@@ -30,15 +46,44 @@ export const GameContent = props => {
     linkToBuy,
     description,
     genres,
-    _id
+    _id,
+    setUpdatedGame
   } = props;
+
+  // remove game from db
+  const removeGameDB = async () => {
+    await deleteGameDB(_id);
+    history.push('/games');
+  };
+
   return (
     <Paper elevation={3}>
       <ButtonsContainer theme={theme}>
         <Link to="/games">
           <ArrowGoBack size="25" />
         </Link>
-        <UserButtons gameID={_id} />
+        {user && user.isAdmin && (
+          <div>
+            <button>
+              <EditAlt size="25" onClick={showEditForm} />
+              <GameEditForm
+                open={editForm}
+                closeEditForm={closeEditForm}
+                game={props}
+                setUpdatedGame={setUpdatedGame}
+              />
+            </button>
+            <button>
+              <TrashAlt size="25" onClick={handleOpen} />
+              <ConfirmationDelete
+                open={open}
+                handleClose={handleClose}
+                handleDelete={removeGameDB}
+              />
+            </button>
+          </div>
+        )}
+        {user && !user.isAdmin && <UserButtons gameID={_id} />}
       </ButtonsContainer>
       <Container>
         <ImageContainer>
@@ -86,5 +131,42 @@ export const GameContent = props => {
         </Content>
       </Container>
     </Paper>
+  );
+};
+
+const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
+  return (
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <DialogContent>
+        <p>This action will have irreversible consequences. Do you confirm?</p>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleDelete} color="primary">
+          Yes
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const GameEditForm = ({ open, closeEditForm, game, setUpdatedGame }) => {
+  return (
+    <Dialog open={open} onClose={closeEditForm} aria-labelledby="form-dialog-title">
+      <DialogContent>
+        <p>Game edit</p>
+        <GameForm gameToEdit={game} handleAction={updateGame} setUpdatedGame={setUpdatedGame} />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeEditForm} color="primary">
+          Cancel
+        </Button>
+        <Button color="primary" type="submit" form="edit-form" onClick={closeEditForm}>
+          Confirm
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

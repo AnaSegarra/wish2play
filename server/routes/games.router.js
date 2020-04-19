@@ -149,7 +149,10 @@ router.post(
 router.put('/:id', checkUserRole(), isEmptyField('name', 'description'), async (req, res, next) => {
   const { id } = req.params;
   try {
-    const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true }).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
 
     if (!updatedGame) {
       console.log(`Couldn't find a game with an id of ${id}`);
