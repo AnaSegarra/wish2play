@@ -45,12 +45,20 @@ export const addGame = async game => {
 export const uploadGameImage = async (image, game) => {
   try {
     const { data } = await gamesService.post(`/upload/${game}`, image);
-    // console.log(data);
     return data;
   } catch (error) {
     console.log(error);
     return error.response.data.message;
   }
+};
+
+export const updateGame = async (gameUpdated, id) => {
+  const response = await gamesService.put(`/${id}`, gameUpdated);
+  return response.message;
+};
+
+export const deleteGameDB = async id => {
+  const response = await gamesService.delete(`${id}`);
 };
 
 // reviews utilities

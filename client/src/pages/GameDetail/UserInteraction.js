@@ -4,21 +4,27 @@ import { Gamepad } from 'styled-icons/remix-fill';
 import { Gamepad as GamepadOutlined } from 'styled-icons/remix-line';
 import { ThemeContext } from 'styled-components';
 import { Heart, HeartOutlined } from 'styled-icons/entypo';
+import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
+import { Dialog, DialogActions, DialogContent, Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 // local modules
 import { AuthContext } from '../../contexts/authContext';
 import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
 import { addGameWished, removeGameWished, fetchWishlist } from '../../services/wishesService';
+import { deleteGameDB } from '../../services/gamesService';
 import { isIncluded, arrMapped } from '../../helpers/listsHelpers';
-
-// styled components
-import { ButtonsContainer } from '../../styles/GameDetail.styled';
 
 export const UserButtons = ({ gameID }) => {
   const { user, setUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
   const [gamesWished, setGamesWished] = useState([]);
+  const [open, setOpen] = useState(false);
   const theme = useContext(ThemeContext);
+  const history = useHistory();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     (async () => {
@@ -56,7 +62,24 @@ export const UserButtons = ({ gameID }) => {
     setUser(updatedUser);
   };
 
-  if (user && user.isAdmin) return <p>pero que eres admin!</p>;
+  // remove game from db
+  const removeGameDB = async () => {
+    await deleteGameDB(gameID);
+    history.push('/games');
+  };
+
+  if (user && user.isAdmin)
+    return (
+      <div>
+        <button>
+          <EditAlt size="25" />
+        </button>
+        <button>
+          <TrashAlt size="25" onClick={handleOpen} />
+          <ConfirmationDelete open={open} handleClose={handleClose} handleDelete={removeGameDB} />
+        </button>
+      </div>
+    );
 
   return user && wishlist ? (
     <div theme={theme}>
@@ -82,5 +105,23 @@ export const UserButtons = ({ gameID }) => {
     </div>
   ) : (
     <></>
+  );
+};
+
+const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
+  return (
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <DialogContent>
+        <p>This action will have irreversible consequences. Do you confirm?</p>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleDelete} color="primary">
+          Yes
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

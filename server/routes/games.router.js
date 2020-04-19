@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
+const User = require('../models/User');
+const Wish = require('../models/Wish');
 const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
@@ -212,9 +214,27 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
       console.log(`Couldn't find a game with an id of ${id}`);
       return res.status(404).json({ message: 'Game not found' });
     }
+    // delete reviews submitted to the game
+    await Review.deleteMany({ _id: { $in: deletedGame.reviews } });
+    const wishes = await Wish.find({ game: id }); // find wishes made for the game
 
-    console.log(`Game removed ${deletedGame}`);
-    return res.status(202).json({ message: 'Game successfully deleted from database' });
+    // remove game from user's games played lists
+    await User.updateMany({ gamesPlayed: id }, { $pull: { gamesPlayed: id } });
+
+    // remove game from wishlist
+    await User.updateMany({ wishlist: { $in: wishes } }, { $pull: { wishlist: { $in: wishes } } });
+
+    // remove game from reserved wishes
+    await User.updateMany(
+      { reservedWishes: { $in: wishes } },
+      { $pull: { reservedWishes: { $in: wishes } } }
+    );
+
+    // delete those wishes
+    await Wish.deleteMany({ _id: { $in: wishes } });
+
+    // console.log(`Game removed ${deletedGame}`);
+    return res.status(202).json({ message: 'Game successfully deleted' });
   } catch (error) {
     console.log('Error deleting a game from db', error);
     return res.status(500).json({ message: 'Internal server error removing a game from database' });
