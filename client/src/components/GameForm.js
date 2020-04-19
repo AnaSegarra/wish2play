@@ -83,6 +83,7 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
 
     if (request) {
       const response = await updateRequestStatus(request._id, 'Approved');
+      request.status = response.status;
       setIsEditing();
     }
   };
@@ -107,16 +108,16 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
     <>
       <GameFormStyled onSubmit={handleSubmit} theme={theme}>
         <div className="img-input">
-          {request && request.image ? (
+          {request && newGame.image ? (
             <img src={newGame.image} alt="game img preview" width="auto" height="200" />
+          ) : selectedFile ? (
+            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
           ) : (
             <ImgPlaceholder>
               <p>No image provided</p>
             </ImgPlaceholder>
           )}
-          {selectedFile && (
-            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
-          )}
+
           <input type="file" name="image" onChange={handleImgEdit} />
         </div>
         <label htmlFor="name">Name</label>

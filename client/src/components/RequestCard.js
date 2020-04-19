@@ -3,6 +3,8 @@ import { Grid } from '@material-ui/core';
 import { Edit } from '@styled-icons/typicons';
 import { RequestContent, ImgPlaceholder } from '../styles/Admin.styled';
 import { GameForm } from '../components/GameForm';
+import { BadgeCheck } from 'styled-icons/boxicons-solid';
+import { CircleWithCross } from 'styled-icons/entypo';
 
 export const Request = ({ request }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -12,7 +14,14 @@ export const Request = ({ request }) => {
     <Grid item lg={4}>
       <RequestContent>
         <p className="paper-title">
-          Game requested: {request.content.name} <Edit size="25" onClick={showEditForm} />
+          Game requested: {request.content.name}
+          {request.status === 'Pending' ? (
+            <Edit size="25" onClick={showEditForm} />
+          ) : request.status === 'Approved' ? (
+            <BadgeCheck size="25" />
+          ) : (
+            <CircleWithCross />
+          )}
         </p>
         {isEditing ? (
           <GameForm request={request} setIsEditing={setIsEditing} />
