@@ -16,6 +16,10 @@ export const WishlistPreview = ({ userID }) => {
     })();
   }, []);
   return (
-    <>{wishlist.length > 0 && <GamesGrid gamesArr={wishlist} type="wishlist" userID={userID} />}</>
+    <>
+      {wishlist.length > 0 && (
+        <GamesGrid gamesArr={wishlist.slice(0, 5)} type="wishlist" userID={userID} />
+      )}
+    </>
   );
 };

@@ -36,7 +36,9 @@ export const FriendsList = () => {
           return <User key={friend._id} user={friend} setUser={setUser} type="friends" />;
         })
       )}
-      <Pagination count={Math.ceil(totalNumFriends / 4)} onChange={paginate} page={currentPage} />
+      {totalNumFriends > 0 && (
+        <Pagination count={Math.ceil(totalNumFriends / 4)} onChange={paginate} page={currentPage} />
+      )}
     </div>
   );
 };

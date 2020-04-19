@@ -17,10 +17,10 @@ const Profile = () => {
   return (
     <Container>
       <Grid container spacing={3}>
-        <Grid item lg={2}>
+        <Grid item lg={3}>
           <UserData />
         </Grid>
-        <Grid item lg={7}>
+        <Grid item lg={6}>
           <Paper>
             <h3>Games you played</h3>
             <GamesPlayedPreview userID={_id} />

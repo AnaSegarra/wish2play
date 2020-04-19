@@ -8,8 +8,6 @@ import { GamesGrid } from '../../components/GamesGrid';
 export const GamesPlayedPreview = ({ userID }) => {
   const [gamesPlayed, setGamesPlayed] = useState([]);
 
-  const firstFive = gamesPlayed.slice(0, 5);
-
   useEffect(() => {
     (async () => {
       const response = await fetchGamesPlayedList(userID);
@@ -20,7 +18,7 @@ export const GamesPlayedPreview = ({ userID }) => {
   return (
     <>
       {gamesPlayed.length > 0 && (
-        <GamesGrid gamesArr={firstFive} userID={userID} type="games-played" />
+        <GamesGrid gamesArr={gamesPlayed.slice(0, 5)} userID={userID} type="games-played" />
       )}
     </>
   );

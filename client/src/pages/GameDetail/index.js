@@ -8,6 +8,7 @@ import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
 import { ReviewForm } from './ReviewForm';
 import { BSO } from './GameBSO';
+import { getToken } from '../../services/spotifyService';
 
 export const Game = props => {
   const { id } = props.match.params;

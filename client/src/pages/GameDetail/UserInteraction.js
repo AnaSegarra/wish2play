@@ -68,19 +68,6 @@ export const UserButtons = ({ gameID, showEditForm }) => {
     history.push('/games');
   };
 
-  // if (user && user.isAdmin)
-  //   return (
-  //     <div>
-  //       <button>
-  //         <EditAlt size="25" onClick={showEditForm} />
-  //       </button>
-  //       <button>
-  //         <TrashAlt size="25" onClick={handleOpen} />
-  //         <ConfirmationDelete open={open} handleClose={handleClose} handleDelete={removeGameDB} />
-  //       </button>
-  //     </div>
-  //   );
-
   return wishlist ? (
     <div theme={theme}>
       {isIncluded(gameID, user.gamesPlayed) ? (
@@ -107,21 +94,3 @@ export const UserButtons = ({ gameID, showEditForm }) => {
     <></>
   );
 };
-
-// const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
-//   return (
-//     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-//       <DialogContent>
-//         <p>This action will have irreversible consequences. Do you confirm?</p>
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={handleClose} color="primary">
-//           Cancel
-//         </Button>
-//         <Button onClick={handleDelete} color="primary">
-//           Yes
-//         </Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
-// };
