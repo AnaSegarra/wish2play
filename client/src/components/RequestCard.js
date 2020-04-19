@@ -6,7 +6,7 @@ import { GameForm } from '../components/GameForm';
 import { BadgeCheck } from 'styled-icons/boxicons-solid';
 import { CircleWithCross } from 'styled-icons/entypo';
 
-export const Request = ({ request }) => {
+export const Request = ({ request, updatePending, updateApproved, pending, approved }) => {
   const [isEditing, setIsEditing] = useState(false);
   const showEditForm = () => setIsEditing(!isEditing);
 
@@ -24,7 +24,14 @@ export const Request = ({ request }) => {
           )}
         </p>
         {isEditing ? (
-          <GameForm request={request} setIsEditing={setIsEditing} />
+          <GameForm
+            request={request}
+            setIsEditing={setIsEditing}
+            updatePending={updatePending}
+            updateApproved={updateApproved}
+            pending={pending}
+            approved={approved}
+          />
         ) : (
           <div className="paper-content">
             {request.content.image ? (

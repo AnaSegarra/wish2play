@@ -1,26 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import { fetchRequests } from '../../services/requestsService';
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Tabs, Tab } from '@material-ui/core';
 import { Request } from '../../components/RequestCard';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 
 const RequestsPanel = () => {
-  const [requests, setRequests] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [approvedRequests, setApprovedRequests] = useState([]);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     (async () => {
       console.log('useEffect de las requests');
       const response = await fetchRequests();
-      setRequests(response);
+      const pending = response.filter(request => request.status === 'Pending');
+      const approved = response.filter(request => request.status === 'Approved');
+      setPendingRequests(pending);
+      setApprovedRequests(approved);
     })();
   }, []);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Container>
-      <p>Pending requests</p>
-      <Grid container spacing={3}>
-        {requests.length > 0 && requests.map((request, i) => <Request request={request} key={i} />)}
-      </Grid>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="fullWidth"
+        aria-label="full width tabs example">
+        <Tab label="Pending requests" id="simple-tab-1" aria-controls="simple-tabpanel-0" />
+        <Tab label="Approved requests" id="simple-tab-2" aria-controls="simple-tabpanel-1" />
+      </Tabs>
+
+      <div value={value} index={0} role="tabpanel" hidden={value !== 0} id="wrapped-tabpanel-0">
+        <Grid container spacing={3}>
+          {pendingRequests.length > 0 &&
+            pendingRequests.map((request, i) => (
+              <Request
+                request={request}
+                key={i}
+                updatePending={setPendingRequests}
+                updateApproved={setApprovedRequests}
+                pending={pendingRequests}
+                approved={approvedRequests}
+              />
+            ))}
+        </Grid>
+      </div>
+      <div value={value} index={1} role="tabpanel" hidden={value !== 1} id="wrapped-tabpanel-1">
+        <Grid container spacing={3}>
+          {approvedRequests.length > 0 &&
+            approvedRequests.map((request, i) => <Request request={request} key={i} />)}
+        </Grid>
+      </div>
     </Container>
   );
 };

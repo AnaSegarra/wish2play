@@ -9,7 +9,15 @@ import { Button, Input } from '../styles/Form';
 import { ThemeContext } from 'styled-components';
 import { updateRequestStatus } from '../services/requestsService';
 
-export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
+export const GameForm = ({
+  request,
+  setIsEditing,
+  updatePending,
+  updateApproved,
+  pending,
+  approved,
+  handleAction = addGame
+}) => {
   const theme = useContext(ThemeContext);
   const ESRBOptions = formatOptions(['E', 'E 10+', 'T', 'M', 'A', 'RP'], 'ESRB');
   const [genresAvailable, setGenresAvailable] = useState([]);
@@ -83,7 +91,9 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
 
     if (request) {
       const response = await updateRequestStatus(request._id, 'Approved');
-      request.status = response.status;
+      updateApproved([...approved, response]);
+      const newPending = pending.filter(req => req._id !== request._id);
+      updatePending(newPending);
       setIsEditing();
     }
   };
@@ -168,7 +178,7 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
         <Input type="text" name="company" onChange={handleChange} value={newGame.company} />
         <label htmlFor="linkToBuy">Available</label>
         <Input type="text" name="linkToBuy" onChange={handleChange} value={newGame.linkToBuy} />
-        <button type="submit">Add game</button>
+        <button type="submit">{request ? 'Accept game request' : 'Add game'}</button>
       </GameFormStyled>
       {successMsg && <SuccessMsg msg={successMsg} handleClose={() => setSuccessMsg('')} />}
       {errorMsg && <ErrorMsg msg={errorMsg} handleClose={() => setErrorMsg('')} />}
