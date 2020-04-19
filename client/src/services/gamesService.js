@@ -53,8 +53,10 @@ export const uploadGameImage = async (image, game) => {
 };
 
 export const updateGame = async (gameUpdated, id) => {
-  const response = await gamesService.put(`/${id}`, gameUpdated);
-  return response.message;
+  console.log(gameUpdated, id);
+  const { data } = await gamesService.put(`/${id}`, gameUpdated);
+  console.log(data);
+  return data.game;
 };
 
 export const deleteGameDB = async id => {

@@ -12,9 +12,9 @@ export const GamesPlayedPreview = ({ userID }) => {
 
   useEffect(() => {
     (async () => {
-      const games = await fetchGamesPlayedList(userID);
+      const response = await fetchGamesPlayedList(userID);
 
-      setGamesPlayed(games);
+      setGamesPlayed(response.games);
     })();
   }, []);
   return (

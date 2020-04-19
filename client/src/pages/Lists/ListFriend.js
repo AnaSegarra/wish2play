@@ -1,7 +1,7 @@
 import React from 'react';
 import { SubmitBtn } from '../GameDetail/ReviewForm';
-import { Tooltip, Container, Grid } from '@material-ui/core';
-import { fetchWishlist, reserveFriendWish } from '../../services/wishesService';
+import { Tooltip, Grid } from '@material-ui/core';
+import { reserveFriendWish } from '../../services/wishesService';
 
 import { sortByName, isIncluded } from '../../helpers/listsHelpers';
 
@@ -17,7 +17,8 @@ export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
 
   return (
     <>
-      {wishlist.length > 0 &&
+      {owner &&
+        wishlist.length > 0 &&
         wishlist.map((wish, i) => {
           return wish.isPublic ? (
             <Grid item lg={3} key={i}>

@@ -79,7 +79,7 @@ export const GameForm = ({
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const response = await handleAction(newGame, gameToEdit._id);
+    const response = await handleAction(newGame, gameToEdit && gameToEdit._id);
     if (!request && !gameToEdit) {
       setSuccessMsg(response);
 

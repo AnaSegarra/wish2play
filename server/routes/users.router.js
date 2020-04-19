@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Wish = require('../models/Wish');
+const Game = require('../models/Game');
 const { isLoggedIn } = require('../lib/authMW');
 
 // GET route - retrieve all users from database
@@ -67,10 +68,12 @@ router.get('/friends', isLoggedIn(), async (req, res, next) => {
 router.get('/:user_id/games-played', async (req, res, next) => {
   const { user_id } = req.params;
   try {
-    const { gamesPlayed } = await User.findById(user_id).populate('gamesPlayed');
-    return res
-      .status(200)
-      .json({ message: 'Games played retrieved', results: gamesPlayed.length, gamesPlayed });
+    const user = await User.findById(user_id).populate('gamesPlayed');
+    return res.status(200).json({
+      message: 'Games played retrieved',
+      gamesPlayed: user.gamesPlayed,
+      user: user.username
+    });
   } catch (error) {
     console.log('Error retrieving games played', error);
     return res.status(500).json({ message: 'Internal server error fetching played games' });

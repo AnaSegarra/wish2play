@@ -90,6 +90,7 @@ export const GameList = () => {
     setCurrentPage(1);
   };
 
+  // check wether user is searching by name or filtering
   const isSearching = () => {
     const setFilters = Object.values(filters).some(group => group.length !== 0);
     return searchTerm || setFilters;
