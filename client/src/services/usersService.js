@@ -29,9 +29,10 @@ export const fetchUsers = async (searchTerm, page) => {
     searchTerm,
     page
   };
+  console.log(searchTerm);
   const { data } = await usersService.get('/', { params });
   console.log('response', data);
-  return { users: data.users, totalUsers: data.total };
+  return { users: data.users, total: data.total };
 };
 
 export const fetchFriends = async page => {

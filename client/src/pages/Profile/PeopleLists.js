@@ -60,14 +60,14 @@ export const UsersList = () => {
     const searchTerm = e.target.value;
     setSearch(searchTerm);
 
-    const response = await fetchUsers(searchTerm);
-    setUsers(response);
+    const { users, total } = await fetchUsers(searchTerm);
+    setUsers(users);
+    setTotalUsers(total);
   };
 
   const paginate = async (e, page) => {
-    const response = await fetchUsers(search, page);
-    console.log('change to page', page);
-    setUsers(response.users);
+    const { users } = await fetchUsers(search, page);
+    setUsers(users);
     setCurrentPage(page);
   };
   return (
