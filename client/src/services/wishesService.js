@@ -36,6 +36,5 @@ export const reserveFriendWish = async wish => {
 
 export const fetchReservedWishes = async () => {
   const { data } = await wishesService.get('/reserved-wishes');
-  console.log('success', data);
   return data.results;
 };

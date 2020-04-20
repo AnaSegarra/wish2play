@@ -13,8 +13,7 @@ export const addGamePlayed = async game_id => {
 
 export const removeGamePlayed = async game_id => {
   const { data } = await usersService.delete(`/games-played/${game_id}`);
-  console.log(data);
-  return data.userUpdated;
+  return { user: data.userUpdated, game: data.game };
 };
 
 export const fetchGamesPlayedList = async user_id => {
@@ -28,9 +27,7 @@ export const fetchUsers = async (searchTerm, page) => {
     searchTerm,
     page
   };
-  console.log(searchTerm);
   const { data } = await usersService.get('/', { params });
-  console.log('response', data);
   return { users: data.users, total: data.total };
 };
 

@@ -28,14 +28,12 @@ export const fetchFilterOptions = async () => {
 
 export const fetchSingleGame = async endpoint => {
   const { data } = await gamesService.get(`/${endpoint}`);
-
   return data;
 };
 
 export const addGame = async game => {
   try {
     const { data } = await gamesService.post('/', game);
-    console.log('respuesta', data);
     return data.message;
   } catch (error) {
     throw new Error('Error creating a game');
@@ -47,7 +45,6 @@ export const uploadGameImage = async (image, game) => {
     const { data } = await gamesService.post(`/upload/${game}`, image);
     return data;
   } catch (error) {
-    console.log(error);
     return error.response.data.message;
   }
 };
@@ -57,9 +54,7 @@ export const updateGame = async (gameUpdated, id) => {
   return data.game;
 };
 
-export const deleteGameDB = async id => {
-  const response = await gamesService.delete(`${id}`);
-};
+export const deleteGameDB = async id => await gamesService.delete(`${id}`);
 
 // reviews utilities
 export const addReview = async (game_id, { content, rating }) => {
