@@ -12,6 +12,7 @@ import { ReviewsContainer, Review } from '../../styles/GameDetail.styled';
 import { AuthContext } from '../../contexts/authContext';
 import { deleteReview } from '../../services/gamesService';
 import { ConfirmationDelete } from './GameContent';
+import { reorderReviews } from '../../helpers/listsHelpers';
 
 export const GameReviews = ({ reviews, gameID, updateGame }) => {
   const { user } = useContext(AuthContext);
@@ -39,6 +40,17 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
             <Grid item lg={3} md={4} sm={6} xs={12} key={review._id}>
               <ScrollAnimation animateIn="fadeIn">
                 <Review>
+                  <div className="stats">
+                    <p>{review.author.username}</p>
+                    <Rating
+                      name="half-rating-read"
+                      value={review.rating}
+                      readOnly
+                      precision={0.5}
+                      size="small"
+                    />
+                  </div>
+                  <p>{review.content}</p>
                   {user && user.username === review.author.username && (
                     <div className="btns">
                       <EditAlt size="25" onClick={handleOpen} />
@@ -57,17 +69,6 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
                       />
                     </div>
                   )}
-                  <div className="stats">
-                    <p>{review.author.username}</p>
-                    <Rating
-                      name="half-rating-read"
-                      value={review.rating}
-                      readOnly
-                      precision={0.5}
-                      size="small"
-                    />
-                  </div>
-                  <p>{review.content}</p>
                 </Review>
               </ScrollAnimation>
             </Grid>

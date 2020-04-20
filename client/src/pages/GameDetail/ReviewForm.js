@@ -11,7 +11,7 @@ export const SubmitBtn = styled.button`
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 `;
 
-export const ReviewForm = ({ gameID, updateGame }) => {
+export const ReviewForm = ({ gameID, updateGame, reviews }) => {
   const { user } = useContext(AuthContext);
   const [review, setReview] = useState({ content: '', rating: 0 });
 
@@ -22,6 +22,12 @@ export const ReviewForm = ({ gameID, updateGame }) => {
     setReview({ content: '', rating: 0 });
   };
 
+  const alreadyPosted = () => {
+    const hasPosted = reviews.some(review => review.author.username === user.username);
+    console.log(hasPosted);
+  };
+
+  // alreadyPosted();
   return (
     <>
       {user && !user.isAdmin && (
@@ -51,13 +57,23 @@ export const ReviewForm = ({ gameID, updateGame }) => {
               title={
                 !isIncluded(gameID, user.gamesPlayed)
                   ? 'You have to play it before making a review'
+                  : reviews.some(review => review.author.username === user.username)
+                  ? 'You should edit or delete your review before posting again'
                   : ''
               }>
               <span>
                 <SubmitBtn
                   type="submit"
-                  disabled={!isIncluded(gameID, user.gamesPlayed)}
-                  style={!isIncluded(gameID, user.gamesPlayed) ? { pointerEvents: 'none' } : {}}>
+                  disabled={
+                    !isIncluded(gameID, user.gamesPlayed) ||
+                    reviews.some(review => review.author.username === user.username)
+                  }
+                  style={
+                    !isIncluded(gameID, user.gamesPlayed) ||
+                    reviews.some(review => review.author.username === user.username)
+                      ? { pointerEvents: 'none' }
+                      : {}
+                  }>
                   Publish
                 </SubmitBtn>
               </span>

@@ -8,7 +8,6 @@ import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
 import { ReviewForm } from './ReviewForm';
 import { BSO } from './GameBSO';
-import { getToken } from '../../services/spotifyService';
 
 export const Game = props => {
   const { id } = props.match.params;
@@ -31,7 +30,7 @@ export const Game = props => {
           <BSO name={game.name} />
         </Grid>
       </Grid>
-      <ReviewForm gameID={game._id} updateGame={setGame} />
+      <ReviewForm gameID={game._id} updateGame={setGame} reviews={game.reviews} />
       <GameReviews gameID={game._id} reviews={game.reviews} updateGame={setGame} />
     </Container>
   ) : (
