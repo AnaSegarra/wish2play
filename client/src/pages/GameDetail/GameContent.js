@@ -1,6 +1,6 @@
 // dependencies
 import React, { useContext, useState } from 'react';
-import { Paper, Chip } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
 import { ThemeContext } from 'styled-components';
@@ -21,6 +21,8 @@ import { Dialog, DialogActions, DialogContent, Button } from '@material-ui/core'
 import { useHistory } from 'react-router-dom';
 import { deleteGameDB, updateGame } from '../../services/gamesService';
 import { GameForm } from '../../components/GameForm';
+
+import { StyledPaper } from '../../styles/Home.styled';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);
@@ -57,7 +59,7 @@ export const GameContent = props => {
   };
 
   return (
-    <Paper elevation={3}>
+    <StyledPaper elevation={3}>
       <ButtonsContainer theme={theme}>
         <Link to="/games">
           <ArrowGoBack size="25" />
@@ -95,7 +97,7 @@ export const GameContent = props => {
             <p className="title">{name}</p>
             <p className="subtitle">by {company}</p>
           </div>
-          <p>{description}</p>
+          <p className="description">{description}</p>
           <div className="stats">
             <div className="data">
               <p>
@@ -113,7 +115,7 @@ export const GameContent = props => {
             </div>
           </div>
           <div className="bottom">
-            <div>
+            <div className="chips">
               {genres.map((genre, i) => (
                 <Chip key={i} label={genre} className={classes.chip} />
               ))}
@@ -130,7 +132,7 @@ export const GameContent = props => {
           </div>
         </Content>
       </Container>
-    </Paper>
+    </StyledPaper>
   );
 };
 

@@ -6,7 +6,7 @@ import { Container, Grid } from '@material-ui/core';
 import { fetchSingleGame } from '../../services/gamesService';
 import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
-import { ReviewForm } from './ReviewForm';
+import { NewReview } from './NewReview';
 import { BSO } from './GameBSO';
 
 export const Game = props => {
@@ -30,7 +30,7 @@ export const Game = props => {
           <BSO name={game.name} />
         </Grid>
       </Grid>
-      <ReviewForm gameID={game._id} updateGame={setGame} reviews={game.reviews} />
+      <NewReview gameID={game._id} updateGame={setGame} reviews={game.reviews} />
       <GameReviews gameID={game._id} reviews={game.reviews} updateGame={setGame} />
     </Container>
   ) : (
