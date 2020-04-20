@@ -7,7 +7,7 @@ export const Navbar = styled.nav`
   background-color: ${({ theme }) => theme.main.button};
   padding: 1em;
   box-shadow: ${({ theme }) => theme.nav.shadow};
-
+  font-size: 0.9rem;
   div {
     display: flex;
     align-items: center;
@@ -21,7 +21,7 @@ export const Navbar = styled.nav`
   a {
     text-decoration: none;
     color: #fffffe;
-    margin-left: 0.3em;
+    margin-left: 1em;
   }
   a.selected {
     font-weight: 700;
@@ -36,7 +36,7 @@ export const SubBar = styled.div`
   padding: 1.5em 1em;
   visibility: ${props => (!props.user ? 'hidden' : 'visible')};
   color: ${({ theme }) => theme.main.paragraph};
-
+  font-size: 0.9rem;
   a {
     text-decoration: none;
     color: ${({ theme }) => theme.main.paragraph};

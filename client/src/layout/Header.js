@@ -47,14 +47,11 @@ export const Header = ({ toggleTheme }) => {
           <NavLink to="/games" exact activeClassName="selected">
             Games
           </NavLink>
-          {user && !user.isAdmin && (
-            <NavLink to="/games/request" exact activeClassName="selected">
-              Request a game
-            </NavLink>
-          )}
-          {user && user.isAdmin && (
-            <NavLink to="/admin/request" activeClassName="selected">
-              User requests
+          {user && (
+            <NavLink
+              to={!user.isAdmin ? '/games/request' : '/admin/request'}
+              activeClassName="selected">
+              Request
             </NavLink>
           )}
           {isLight ? (
