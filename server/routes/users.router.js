@@ -3,7 +3,9 @@ const router = express.Router();
 const User = require('../models/User');
 const Wish = require('../models/Wish');
 const Game = require('../models/Game');
+const Review = require('../models/Review');
 const { isLoggedIn } = require('../lib/authMW');
+const calcAverage = require('../utils/avgCalculator');
 
 // GET route - retrieve all users from database
 router.get('/', async (req, res, next) => {
@@ -186,7 +188,32 @@ router.delete('/games-played/:game_id', isLoggedIn(), async (req, res, next) => 
         { new: true }
       );
 
-      return res.json({ message: 'Game removed successfully from games played list', userUpdated });
+      // find game a populate it
+      const game = await Game.findById(game_id).populate({
+        path: 'reviews',
+        populate: { path: 'author', select: 'username' }
+      });
+
+      // delete reviews posted by user from db
+      await Review.deleteMany({
+        $and: [{ _id: { $in: game.reviews } }, { author: req.user.id }]
+      });
+
+      // filter out reviews from game
+      const reviewsUpdated = game.reviews.filter(
+        review => review.author.username !== req.user.username
+      );
+
+      // update game with new reviews array and avg
+      game.reviews = reviewsUpdated;
+      game.totalRating = calcAverage(game.reviews);
+      await game.save();
+
+      return res.json({
+        message: 'Game removed successfully from games played list',
+        userUpdated,
+        game
+      });
     }
 
     return res.status(400).json({ message: 'Already not included in games played' });

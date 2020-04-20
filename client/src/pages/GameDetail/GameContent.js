@@ -83,7 +83,7 @@ export const GameContent = props => {
             </button>
           </div>
         )}
-        {user && !user.isAdmin && <UserButtons gameID={_id} />}
+        {user && !user.isAdmin && <UserButtons gameID={_id} setUpdatedGame={setUpdatedGame} />}
       </ButtonsContainer>
       <Container>
         <ImageContainer>

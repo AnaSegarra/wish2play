@@ -44,7 +44,9 @@ export const ReviewForm = ({ gameID, updateGame }) => {
               style={{ width: '100%', resize: 'none' }}
               onChange={e => setReview({ ...review, content: e.target.value })}
               placeholder="Did you like it? Would you recommend it?"
-              disabled={!isIncluded(gameID, user.gamesPlayed)}></textarea>
+              disabled={!isIncluded(gameID, user.gamesPlayed)}
+              required
+            />
             <Tooltip
               title={
                 !isIncluded(gameID, user.gamesPlayed)
