@@ -1,12 +1,12 @@
 // dependencies
 import React, { useState, useEffect } from 'react';
-import { Grid, Container, FormControlLabel, Checkbox, FormGroup } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { Link } from 'react-router-dom';
 
 // local modules
 import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
-import { formatOptions, groupFilters } from '../../helpers/filters';
+import { formatOptions } from '../../helpers/filters';
 import { GameCard } from '../../components/GameCard';
 import { Filters } from './Filters';
 
@@ -49,47 +49,6 @@ export const GameList = () => {
     setCurrentPage(page);
   };
 
-  const search = async term => {
-    const { results, total } = await fetchGames(numOfResults, fields, '', '', term, filters);
-    setGames(results);
-    setSearchTerm(term);
-    setTotalGames(total);
-    setCurrentPage(1);
-  };
-
-  const handleSelect = async filters => {
-    const genres = groupFilters(filters, 'genres');
-    const platforms = groupFilters(filters, 'platforms');
-    const ESRB = groupFilters(filters, 'ESRB');
-
-    const { results, total } = await fetchGames(numOfResults, fields, sortBy, '', searchTerm, {
-      genres,
-      platforms,
-      ESRB
-    });
-    setGames(results);
-    setTotalGames(total);
-    setFilters({ genres, platforms, ESRB });
-    setCurrentPage(1);
-  };
-
-  const handleSort = async e => {
-    const { name, checked } = e.target;
-    const sortCondition = checked ? [...sortBy, name] : sortBy.filter(el => el !== name);
-
-    const { results } = await fetchGames(
-      numOfResults,
-      fields,
-      sortCondition,
-      '',
-      searchTerm,
-      filters
-    );
-    setSortBy(sortCondition);
-    setGames(results);
-    setCurrentPage(1);
-  };
-
   // check wether user is searching by name or filtering
   const isSearching = () => {
     const setFilters = Object.values(filters).some(group => group.length !== 0);
@@ -98,21 +57,19 @@ export const GameList = () => {
 
   return (
     <Container>
-      <Filters search={search} options={groupedOptions} handleSelect={handleSelect} />
-      <FormGroup row>
-        <FormControlLabel
-          control={
-            <Checkbox name="-releaseYear" checked={sortBy.releaseYear} onChange={handleSort} />
-          }
-          label="What's new"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox name="-totalRating" checked={sortBy.totalRating} onChange={handleSort} />
-          }
-          label="Highest rating to lowest"
-        />
-      </FormGroup>
+      <Filters
+        setGames={setGames}
+        setTotalGames={setTotalGames}
+        setCurrentPage={setCurrentPage}
+        setSearchTerm={setSearchTerm}
+        filters={filters}
+        setFilters={setFilters}
+        options={groupedOptions}
+        sortBy={sortBy}
+        searchTerm={searchTerm}
+        setSortBy={setSortBy}
+      />
+
       <Grid container spacing={4}>
         {games.length > 0 ? (
           games.map((game, i) => {
