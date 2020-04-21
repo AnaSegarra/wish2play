@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     image: String,
     name: String,
+    biography: { type: String, maxlength: 200 },
     isAdmin: { type: Boolean, default: false },
     gamesPlayed: [{ type: ObjectId, ref: 'Game' }],
     wishlist: [{ type: ObjectId, ref: 'Wish' }],
