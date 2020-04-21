@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
-import { Chip, Dialog, DialogActions, DialogContent, Button } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
 import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
@@ -11,9 +11,10 @@ import { ArrowGoBack } from 'styled-icons/remix-line';
 // local modules
 import { AuthContext } from '../../contexts/authContext';
 import { deleteGameDB, updateGame } from '../../services/gamesService';
-import { GameForm } from '../../components/GameForm';
 import { useStyles } from '../../components/GameCard';
 import { UserButtons } from './UserInteraction';
+import { ConfirmationDelete } from '../../components/alertMsg';
+import { GameEditForm } from '../../components/GameEdit';
 
 // styled components
 import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
@@ -69,6 +70,8 @@ export const GameContent = props => {
                 closeEditForm={closeEditForm}
                 game={props}
                 setUpdatedGame={setUpdatedGame}
+                isEditing={true}
+                handleAction={updateGame}
               />
             </button>
             <button>
@@ -129,47 +132,5 @@ export const GameContent = props => {
         </Content>
       </Container>
     </StyledPaper>
-  );
-};
-
-export const ConfirmationDelete = ({ open, handleClose, handleDelete }) => {
-  return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <DialogContent>
-        <p>This action will have irreversible consequences. Do you confirm?</p>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button
-          onClick={() => {
-            handleDelete();
-            handleClose();
-          }}
-          color="primary">
-          Yes
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
-
-const GameEditForm = ({ open, closeEditForm, game, setUpdatedGame }) => {
-  return (
-    <Dialog open={open} onClose={closeEditForm} aria-labelledby="form-dialog-title">
-      <DialogContent>
-        <p>Game edit</p>
-        <GameForm gameToEdit={game} handleAction={updateGame} setUpdatedGame={setUpdatedGame} />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeEditForm} color="primary">
-          Cancel
-        </Button>
-        <Button color="primary" type="submit" form="edit-form" onClick={closeEditForm}>
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 };

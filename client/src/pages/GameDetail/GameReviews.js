@@ -8,7 +8,7 @@ import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
 // local modules
 import { AuthContext } from '../../contexts/authContext';
 import { deleteReview } from '../../services/gamesService';
-import { ConfirmationDelete } from './GameContent';
+import { ConfirmationDelete } from '../../components/AlertMsg';
 import { EditReviewForm } from './EditReview';
 
 // styled components

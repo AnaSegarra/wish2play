@@ -2,13 +2,13 @@
 import React, { useState, useContext } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
+import { ThemeContext } from 'styled-components';
 
 // local modules
 import { editReview } from '../../services/gamesService';
 import { useStyles } from '../Home/Signup';
 
 // styled components
-import { ThemeContext } from 'styled-components';
 import { Textarea } from '../../styles/GameDetail.styled';
 
 export const EditReviewForm = ({ open, handleClose, gameID, review, updateGame }) => {

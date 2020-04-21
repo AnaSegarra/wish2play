@@ -51,7 +51,7 @@ export const Header = ({ toggleTheme }) => {
             <NavLink
               to={!user.isAdmin ? '/games/request' : '/admin/request'}
               activeClassName="selected">
-              Request
+              Requests
             </NavLink>
           )}
           {isLight ? (
