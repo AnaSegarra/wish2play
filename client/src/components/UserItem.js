@@ -60,9 +60,9 @@ export const User = ({ user, setUser, type }) => {
         </MenuItem>
       </Menu>
       {type === 'friends' ? (
-        <RemoveUser size="15" onClick={() => handleRemoveFriend(user._id)} />
+        <RemoveUser size="15" onClick={() => handleRemoveFriend(user._id)} className="remove-friend"/>
       ) : (
-        <AddUser size="15" onClick={() => handleNewFriend(user._id)} />
+        <AddUser size="15" onClick={() => handleNewFriend(user._id)} className="add-friend"/>
       )}
     </UsersContainer>
   );

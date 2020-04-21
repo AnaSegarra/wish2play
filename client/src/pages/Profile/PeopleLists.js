@@ -7,6 +7,10 @@ import { fetchFriends, fetchUsers } from '../../services/usersService';
 import { User } from '../../components/UserItem';
 import { AuthContext } from '../../contexts/authContext';
 
+// styled components
+import { Input } from '../../styles/Form';
+import {PeopleContainer} from '../../styles/Profile.styled'
+
 export const FriendsList = () => {
   const { user, setUser } = useContext(AuthContext);
   const [friends, setFriends] = useState('');
@@ -28,8 +32,8 @@ export const FriendsList = () => {
   };
 
   return (
-    <div>
-      <p>Friends</p>
+    <PeopleContainer >
+      <p className="friends">Friends</p>
       {friends.length === 0 ? (
         <p>You don't have any friends yet</p>
       ) : (
@@ -38,9 +42,14 @@ export const FriendsList = () => {
         })
       )}
       {totalNumFriends > 0 && (
-        <Pagination count={Math.ceil(totalNumFriends / 4)} onChange={paginate} page={currentPage} />
+        <Pagination
+          count={Math.ceil(totalNumFriends / 4)}
+          onChange={paginate}
+          page={currentPage}
+          size="small"
+        />
       )}
-    </div>
+    </PeopleContainer>
   );
 };
 
@@ -74,9 +83,8 @@ export const UsersList = () => {
     setCurrentPage(page);
   };
   return (
-    <div>
-      <p>Find more</p>
-      <input type="text" onChange={handleSearch} value={search} />
+    <PeopleContainer>
+      <Input type="text" onChange={handleSearch} value={search} placeholder="Find friends..." />
       {users.length === 0 ? (
         <p>No results found</p>
       ) : (
@@ -84,7 +92,12 @@ export const UsersList = () => {
           return <User key={user._id} user={user} setUser={setUser} />;
         })
       )}
-      <Pagination count={Math.ceil(totalNumUsers / 4)} onChange={paginate} page={currentPage} />
-    </div>
+      <Pagination
+        count={Math.ceil(totalNumUsers / 4)}
+        onChange={paginate}
+        page={currentPage}
+        size="small"
+      />
+    </PeopleContainer>
   );
 };

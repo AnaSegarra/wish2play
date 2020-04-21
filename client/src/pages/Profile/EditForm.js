@@ -6,9 +6,13 @@ import { updateProfile, uploadImage } from '../../services/authService';
 import { AuthContext } from '../../contexts/authContext';
 import { ErrorMsg } from '../../components/AlertMsg';
 
+// styled components
+import { Input, Button, CancelBtn } from '../../styles/Form';
+import { Textarea } from '../../styles/GameDetail.styled';
+
 export const DataForm = ({ setEditStatus }) => {
   const { user, setUser } = useContext(AuthContext);
-  const [updatedUser, setUpdatedUser] = useState(user);
+  const [updatedUser, setUpdatedUser] = useState({ ...user, name: user.name || '' });
   const [error, setError] = useState({ isError: false, errorMsg: '' });
 
   const handleChange = e => {
@@ -28,17 +32,29 @@ export const DataForm = ({ setEditStatus }) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
-        <input type="text" name="name" value={updatedUser.name} onChange={handleChange} />
+    <div className="data">
+      <form onSubmit={handleSubmit} id="edit-form">
+        <label htmlFor="name">Name:</label>
+        <Input type="text" name="name" value={updatedUser.name} onChange={handleChange} />
 
-        <label htmlFor="username">Username</label>
-        <input type="text" name="username" value={updatedUser.username} onChange={handleChange} />
+        <label htmlFor="username">Username:</label>
+        <Input type="text" name="username" value={updatedUser.username} onChange={handleChange} />
 
-        <button type="submit">Save changes</button>
+        <Textarea
+          rows="7"
+          name="biography"
+          maxLength="200"
+          value={updatedUser.biography}
+          onChange={handleChange}
+          placeholder="Add a bio"
+        />
       </form>
-      <button onClick={setEditStatus}>Cancel</button>
+      <div className="btn-container">
+        <Button type="submit" form="edit-form">
+          Save changes
+        </Button>
+        <CancelBtn onClick={setEditStatus}>Cancel</CancelBtn>
+      </div>
       {error.isError && (
         <ErrorMsg
           isError={error.isError}
@@ -47,7 +63,7 @@ export const DataForm = ({ setEditStatus }) => {
           errorMsg={error.errorMsg}
         />
       )}
-    </>
+    </div>
   );
 };
 
@@ -79,9 +95,13 @@ export const ImageForm = ({ setFile, showImgForm }) => {
     <>
       <form onSubmit={handleSubmit} id="upload-form">
         <input type="file" onChange={handleImgEdit} />
-        <button type="submit">Save changes</button>
       </form>
-      <button onClick={showImgForm}>Cancel</button>
+      <div className="btn-container">
+        <Button type="submit" form="upload-form">
+          Save changes
+        </Button>
+        <CancelBtn onClick={showImgForm}>Cancel</CancelBtn>
+      </div>
       {error.isError && (
         <ErrorMsg
           isError={error.isError}
