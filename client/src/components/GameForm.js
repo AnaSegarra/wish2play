@@ -152,31 +152,9 @@ export const GameForm = ({
           onChange={handleChange}
           value={newGame.description}
           rows="7"
-          style={{ width: '100%', resize: 'none' }}
+          style={{ width: '100%' }}
         />
-        <label htmlFor="releaseYear">Released on</label>
-        <Input
-          type="number"
-          name="releaseYear"
-          onChange={handleChange}
-          value={newGame.releaseYear}
-        />
-        <label htmlFor="ESRB">ESRB rating</label>
-        <Select
-          isClearable
-          options={ESRBOptions}
-          name="ESRB"
-          onChange={selected =>
-            selected
-              ? setNewGame({ ...newGame, ESRB: selected.value })
-              : setNewGame({ ...newGame, ESRB: '' })
-          }
-          className="react-select__control"
-          defaultValue={
-            (gameToEdit && ESRBOptions.filter(({ value }) => value === gameToEdit.ESRB)) ||
-            newGame.ESRB
-          }
-        />
+
         <label htmlFor="platforms">Playable on</label>
         <CreatableSelect
           isClearable
@@ -195,8 +173,31 @@ export const GameForm = ({
           onChange={handleGenres}
           defaultValue={gameToEdit && formatOptions(newGame.genres, 'genres')}
         />
+        <label htmlFor="ESRB">ESRB rating</label>
+        <Select
+          isClearable
+          options={ESRBOptions}
+          name="ESRB"
+          onChange={selected =>
+            selected
+              ? setNewGame({ ...newGame, ESRB: selected.value })
+              : setNewGame({ ...newGame, ESRB: '' })
+          }
+          className="react-select__control"
+          defaultValue={
+            (gameToEdit && ESRBOptions.filter(({ value }) => value === gameToEdit.ESRB)) ||
+            newGame.ESRB
+          }
+        />
         <label htmlFor="company">Developed by</label>
         <Input type="text" name="company" onChange={handleChange} value={newGame.company} />
+        <label htmlFor="releaseYear">Released on</label>
+        <Input
+          type="number"
+          name="releaseYear"
+          onChange={handleChange}
+          value={newGame.releaseYear}
+        />
         <label htmlFor="linkToBuy">Available</label>
         <Input type="text" name="linkToBuy" onChange={handleChange} value={newGame.linkToBuy} />
         <div className="btn-container">

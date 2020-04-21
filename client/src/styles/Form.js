@@ -42,3 +42,14 @@ export const Button = styled.button`
     box-shadow: ${({ theme }) => theme.button.focus};
   }
 `;
+
+export const CancelBtn = styled(Button)`
+  background: linear-gradient(-180deg, #990000, #cc0000 90%);
+  border: 0.1em solid #992600;
+  &:hover {
+    background: linear-gradient(-180deg, #992600, #b30000 90%);
+  }
+  &:focus {
+    box-shadow: 0 0 0.3em 0.2em #cc0000;
+  }
+`;

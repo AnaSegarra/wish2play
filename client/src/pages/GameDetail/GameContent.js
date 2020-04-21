@@ -1,5 +1,5 @@
 // dependencies
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
 import { Chip } from '@material-ui/core';

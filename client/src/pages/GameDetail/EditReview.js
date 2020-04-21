@@ -42,7 +42,7 @@ export const EditReviewForm = ({ open, handleClose, gameID, review, updateGame }
             name="content"
             value={edittedReview.content}
             rows="7"
-            style={{ width: '100%', resize: 'none' }}
+            style={{ width: '100%' }}
             onChange={e => setEdittedReview({ ...edittedReview, content: e.target.value })}
           />
         </form>

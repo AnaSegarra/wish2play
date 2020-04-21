@@ -128,7 +128,8 @@ export const Textarea = styled.textarea`
   border: 0.1em solid ${({ theme }) => theme.main.secondary};
   border-radius: 0.5em;
   outline: none;
-
+  resize: none;
+  color: ${({ theme }) => theme.input.color};
   &:focus {
     color: #6246ea;
     border: 0.1em solid ${({ theme }) => theme.input.focus};

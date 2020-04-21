@@ -48,7 +48,7 @@ export const NewReview = ({ gameID, updateGame, reviews }) => {
                 name="content"
                 value={review.content}
                 rows="7"
-                style={{ width: '100%', resize: 'none' }}
+                style={{ width: '100%' }}
                 onChange={e => setReview({ ...review, content: e.target.value })}
                 placeholder="Did you like it? Would you recommend it?"
                 disabled={
