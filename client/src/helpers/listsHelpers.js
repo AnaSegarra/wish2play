@@ -9,3 +9,6 @@ export const sortByName = list => list.sort((a, b) => a.game.name.localeCompare(
 
 // sort by status
 export const sortByStatus = list => list.sort((a, b) => a.status.localeCompare(b.status));
+
+// shorten game names
+export const shortenStr = (str, num) => (str.length <= num ? str : `${str.slice(0, num)}...`);

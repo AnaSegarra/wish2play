@@ -27,7 +27,7 @@ export const UserData = () => {
   };
 
   return (
-    <UserDetailsContainer theme={theme}>
+    <UserDetailsContainer elevation={3} theme={theme}>
       <Tooltip title="Change your avatar" arrow onClick={showImgForm}>
         <div className="img-container">
           <img

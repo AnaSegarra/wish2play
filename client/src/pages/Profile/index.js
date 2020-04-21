@@ -1,6 +1,6 @@
 // dependencies
 import React, { useContext } from 'react';
-import { Grid, Container, Paper } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 
 // local modules
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
@@ -23,19 +23,19 @@ const Profile = () => {
         <Grid item lg={3}>
           <UserData />
         </Grid>
-        <Grid item lg={7}>
-          <StyledPaper>
+        <Grid item lg={6}>
+          <StyledPaper elevation={3}>
             <p className="paper-title">Games you played</p>
             <GamesPlayedPreview userID={_id} />
           </StyledPaper>
-          <StyledPaper>
+          <StyledPaper elevation={3}>
             <p className="paper-title">Your wishlist</p>
             <WishlistPreview userID={_id} />
           </StyledPaper>
         </Grid>
-        <Grid item lg={2}>
-          <UserRequests />
+        <Grid item lg={3}>
           <ReservedWishes />
+          <UserRequests />
         </Grid>
       </Grid>
     </Container>
