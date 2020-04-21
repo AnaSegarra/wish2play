@@ -33,7 +33,7 @@ router.get('/reserved-wishes', async (req, res, next) => {
       path: 'reservedWishes',
       populate: [
         { path: 'owner', select: '-_id username' },
-        { path: 'game', select: '-_id name' }
+        { path: 'game', select: 'name' }
       ]
     });
     return res.json({ message: 'Reserved wishes from friends', results: user.reservedWishes });
