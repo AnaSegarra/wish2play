@@ -31,7 +31,6 @@ export const UserButtons = ({ gameID, setUpdatedGame }) => {
   // delete game from user's list
   const removeGame = async gameID => {
     const response = await removeGamePlayed(gameID);
-    console.log('la respuesta!!', response);
     setUser(response.user);
     setUpdatedGame(response.game);
   };

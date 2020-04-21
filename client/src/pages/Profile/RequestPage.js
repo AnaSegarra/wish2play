@@ -1,8 +1,11 @@
+// dependencies
 import React from 'react';
+import { Container } from '@material-ui/core';
+
+// local modules
+import { makeRequest } from '../../services/requestsService';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { GameForm } from '../../components/GameForm';
-import { makeRequest } from '../../services/requestsService';
-import { Container } from '@material-ui/core';
 
 const Request = () => {
   return (

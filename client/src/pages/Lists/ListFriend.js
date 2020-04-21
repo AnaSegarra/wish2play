@@ -1,5 +1,4 @@
 import React from 'react';
-import { SubmitBtn } from '../GameDetail/ReviewForm';
 import { Tooltip, Grid } from '@material-ui/core';
 import { reserveFriendWish } from '../../services/wishesService';
 
@@ -34,12 +33,12 @@ export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
                       : ''
                   }>
                   <span>
-                    <SubmitBtn
+                    <button
                       disabled={!isIncluded(owner._id, user.friends)}
                       onClick={() => makeReserved(wish._id)}
                       style={!isIncluded(owner._id, user.friends) ? { pointerEvents: 'none' } : {}}>
                       Reserve
-                    </SubmitBtn>
+                    </button>
                   </span>
                 </Tooltip>
               )}

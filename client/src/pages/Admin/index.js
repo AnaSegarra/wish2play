@@ -1,6 +1,9 @@
+// dependencies
 import React from 'react';
-import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { Container, Grid, Paper } from '@material-ui/core';
+
+// local modules
+import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { GameForm } from '../../components/GameForm';
 
 const Admin = () => {

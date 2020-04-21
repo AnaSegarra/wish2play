@@ -1,7 +1,10 @@
+// dependencies
 import React, { useEffect, useState } from 'react';
-import { fetchRequests } from '../../services/requestsService';
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+
+// local modules
+import { fetchRequests } from '../../services/requestsService';
 
 export const UserRequests = () => {
   const [requests, setRequests] = useState();

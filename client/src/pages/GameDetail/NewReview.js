@@ -1,11 +1,16 @@
+// dependencies
 import React, { useContext, useState } from 'react';
-import { AuthContext } from '../../contexts/authContext';
-import { isIncluded } from '../../helpers/listsHelpers';
 import { ThemeContext } from 'styled-components';
 import { Tooltip } from '@material-ui/core';
-import { ReviewsContainer, BtnSpan, Textarea } from '../../styles/GameDetail.styled';
 import { Rating } from '@material-ui/lab';
+
+// local modules
 import { addReview } from '../../services/gamesService';
+import { AuthContext } from '../../contexts/authContext';
+import { isIncluded } from '../../helpers/listsHelpers';
+
+// styled components
+import { ReviewsContainer, BtnSpan, Textarea } from '../../styles/GameDetail.styled';
 import { Button } from '../../styles/Form';
 
 export const NewReview = ({ gameID, updateGame, reviews }) => {

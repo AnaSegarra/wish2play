@@ -4,13 +4,15 @@ import { Rating } from '@material-ui/lab';
 import { Grid } from '@material-ui/core';
 import ScrollAnimation from 'react-animate-on-scroll';
 import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
+
+// local modules
+import { AuthContext } from '../../contexts/authContext';
+import { deleteReview } from '../../services/gamesService';
+import { ConfirmationDelete } from './GameContent';
 import { EditReviewForm } from './EditReview';
 
 // styled components
 import { Review } from '../../styles/GameDetail.styled';
-import { AuthContext } from '../../contexts/authContext';
-import { deleteReview } from '../../services/gamesService';
-import { ConfirmationDelete } from './GameContent';
 import { StyledPaper } from '../../styles/Home.styled';
 
 export const GameReviews = ({ reviews, gameID, updateGame }) => {

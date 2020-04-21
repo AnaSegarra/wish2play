@@ -1,8 +1,11 @@
+// dependencies
 import React, { useEffect, useState } from 'react';
-import { fetchRequests } from '../../services/requestsService';
 import { Container, Grid, Tabs, Tab } from '@material-ui/core';
-import { Request } from '../../components/RequestCard';
+
+// local modules
+import { fetchRequests } from '../../services/requestsService';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
+import { Request } from '../../components/RequestCard';
 
 const RequestsPanel = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -11,7 +14,6 @@ const RequestsPanel = () => {
 
   useEffect(() => {
     (async () => {
-      console.log('useEffect de las requests');
       const response = await fetchRequests();
       const pending = response.filter(request => request.status === 'Pending');
       const approved = response.filter(request => request.status === 'Approved');

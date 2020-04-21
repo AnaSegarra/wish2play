@@ -1,9 +1,11 @@
+// dependencies
 import React, { useState, useEffect, useContext } from 'react';
-import { fetchGamesPlayedList } from '../../services/usersService';
-import { Container, Grid } from '@material-ui/core';
-import { AuthContext } from '../../contexts/authContext';
-
 import { useParams, Link } from 'react-router-dom';
+import { Container, Grid } from '@material-ui/core';
+
+// local modules
+import { fetchGamesPlayedList } from '../../services/usersService';
+import { AuthContext } from '../../contexts/authContext';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 
 const GamesPlayed = () => {

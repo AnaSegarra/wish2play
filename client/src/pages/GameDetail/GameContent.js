@@ -1,27 +1,23 @@
 // dependencies
 import React, { useContext, useState } from 'react';
-import { Chip } from '@material-ui/core';
+import { Link, useHistory } from 'react-router-dom';
+import { ThemeContext } from 'styled-components';
+import { Chip, Dialog, DialogActions, DialogContent, Button } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import { ShoppingCart } from 'styled-icons/typicons';
-import { ThemeContext } from 'styled-components';
-import { Link } from 'react-router-dom';
+import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
 import { ArrowGoBack } from 'styled-icons/remix-line';
 
 // local modules
+import { AuthContext } from '../../contexts/authContext';
+import { deleteGameDB, updateGame } from '../../services/gamesService';
+import { GameForm } from '../../components/GameForm';
 import { useStyles } from '../../components/GameCard';
 import { UserButtons } from './UserInteraction';
 
 // styled components
 import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
 import { ButtonsContainer } from '../../styles/GameDetail.styled';
-import { AuthContext } from '../../contexts/authContext';
-
-import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
-import { Dialog, DialogActions, DialogContent, Button } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
-import { deleteGameDB, updateGame } from '../../services/gamesService';
-import { GameForm } from '../../components/GameForm';
-
 import { StyledPaper } from '../../styles/Home.styled';
 
 export const GameContent = props => {

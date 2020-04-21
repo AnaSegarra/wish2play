@@ -1,4 +1,7 @@
+// dependencies
 import React, { useState, useEffect } from 'react';
+
+// local modules
 import { fetchWishlist } from '../../services/wishesService';
 import { GamesGrid } from '../../components/GamesGrid';
 

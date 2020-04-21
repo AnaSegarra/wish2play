@@ -1,8 +1,11 @@
+// dependencies
 import React, { useState, useEffect, useContext } from 'react';
+import Pagination from '@material-ui/lab/Pagination';
+
+// local modules
 import { fetchFriends, fetchUsers } from '../../services/usersService';
 import { User } from '../../components/UserItem';
 import { AuthContext } from '../../contexts/authContext';
-import Pagination from '@material-ui/lab/Pagination';
 
 export const FriendsList = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -13,7 +16,6 @@ export const FriendsList = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchFriends();
-      console.log(response);
       setFriends(response.friends);
       setTotalFriends(response.totalFriends);
     })();
@@ -21,7 +23,6 @@ export const FriendsList = () => {
 
   const paginate = async (e, page) => {
     const { friends } = await fetchFriends(page);
-    console.log('change to page', page);
     setFriends(friends);
     setCurrentPage(page);
   };

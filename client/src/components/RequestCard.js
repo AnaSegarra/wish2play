@@ -1,10 +1,15 @@
+// dependencies
 import React, { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { Edit } from '@styled-icons/typicons';
-import { RequestContent, ImgPlaceholder } from '../styles/Admin.styled';
-import { GameForm } from '../components/GameForm';
 import { BadgeCheck } from 'styled-icons/boxicons-solid';
 import { CircleWithCross } from 'styled-icons/entypo';
+
+// local modules
+import { GameForm } from '../components/GameForm';
+
+// styled components
+import { RequestContent, ImgPlaceholder } from '../styles/Admin.styled';
 
 export const Request = ({ request, updatePending, updateApproved, pending, approved }) => {
   const [isEditing, setIsEditing] = useState(false);

@@ -1,11 +1,14 @@
+// dependencies
 import React, { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { Container, Grid } from '@material-ui/core';
+
+// local modules
 import { fetchWishlist } from '../../services/wishesService';
 import { AuthContext } from '../../contexts/authContext';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
-import { useParams } from 'react-router-dom';
 import { sortByName } from '../../helpers/listsHelpers';
 import { ListOwner } from './ListOwner';
-import { Container, Grid } from '@material-ui/core';
 import { ListFriend } from './ListFriend';
 
 const Wishlist = () => {

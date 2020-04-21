@@ -1,8 +1,11 @@
+// dependencies
 import React from 'react';
-import { sortByName } from '../../helpers/listsHelpers';
 import { Checkbox, Grid } from '@material-ui/core';
-import { updateWish } from '../../services/wishesService';
 import { Link } from 'react-router-dom';
+
+// local modules
+import { sortByName } from '../../helpers/listsHelpers';
+import { updateWish } from '../../services/wishesService';
 
 export const ListOwner = ({ wishlist, setWishlist }) => {
   const handleUpdate = async (wishID, update) => {

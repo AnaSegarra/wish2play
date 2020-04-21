@@ -1,13 +1,18 @@
+// dependencies
 import React, { useEffect, useState, useContext } from 'react';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
-import { formatOptions, groupFilters } from '../helpers/filters';
-import { SuccessMsg, ErrorMsg } from './AlertMsg';
-import { GameFormStyled, ImgPlaceholder } from '../styles/Admin.styled';
-import { Button, Input } from '../styles/Form';
 import { ThemeContext } from 'styled-components';
+
+// local modules
+import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
 import { updateRequestStatus } from '../services/requestsService';
+import { formatOptions } from '../helpers/filters';
+import { SuccessMsg, ErrorMsg } from './AlertMsg';
+
+// styled componentes
+import { GameFormStyled, ImgPlaceholder } from '../styles/Admin.styled';
+import { Input } from '../styles/Form';
 
 export const GameForm = ({
   request,

@@ -1,5 +1,5 @@
+// dependencies
 import React, { useEffect, useState } from 'react';
-import { fetchReservedWishes } from '../../services/wishesService';
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
@@ -8,6 +8,9 @@ import {
   makeStyles
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+
+// local modules
+import { fetchReservedWishes } from '../../services/wishesService';
 
 const useStyles = makeStyles(theme => ({
   root: {

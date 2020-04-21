@@ -25,6 +25,7 @@ export const lightTheme = {
     focus: '0 0 0.3em 0.2em #6246ea'
   }
 };
+
 export const darkTheme = {
   main: {
     background: '#232946',
@@ -34,7 +35,7 @@ export const darkTheme = {
     tertiary: '#2cb67d'
   },
   nav: {
-    shadow: '0em 0.2em 0.2em #e6e6e6',
+    shadow: '0em 0.2em 0.2em rgba(0,0,0,0.14)',
     hover: '#9ac6ff'
   },
   chip: {
