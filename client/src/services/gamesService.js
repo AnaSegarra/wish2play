@@ -36,7 +36,7 @@ export const addGame = async game => {
     const { data } = await gamesService.post('/', game);
     return data.message;
   } catch (error) {
-    throw new Error('Error creating a game');
+    return error.response.data.message;
   }
 };
 

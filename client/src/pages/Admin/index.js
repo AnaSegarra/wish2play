@@ -1,18 +1,19 @@
 // dependencies
 import React from 'react';
-import { Container, Grid, Paper } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 
 // local modules
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 import { GameForm } from '../../components/GameForm';
+import { StyledPaper } from '../../styles/Home.styled';
 
 const Admin = () => {
   return (
     <Container>
-      <Paper elevation={3}>
-        <h3>Create a new game</h3>
+      <StyledPaper elevation={3}>
+        <p className="paper-title">Create a new game</p>
         <GameForm />
-      </Paper>
+      </StyledPaper>
     </Container>
   );
 };

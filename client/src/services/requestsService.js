@@ -11,14 +11,16 @@ export const fetchRequests = async () => {
 };
 
 export const makeRequest = async game => {
-  if (game.ESRB === '') {
-    game.ESRB = 'RP';
+  try {
+    const { data } = await requestsService.post('/', game);
+    return data;
+  } catch (error) {
+    return error.response.data.message;
   }
-  const { data } = await requestsService.post('/', game);
-  return data.message;
 };
 
 export const updateRequestStatus = async (id, status) => {
+  console.log('el id de la request', id);
   const { data } = await requestsService.put(`/${id}`, { status });
   return data.request;
 };
