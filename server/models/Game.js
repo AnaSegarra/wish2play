@@ -15,7 +15,14 @@ const gameSchema = new mongoose.Schema(
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
   },
   {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.createdAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
   }
 );
 
