@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) => {
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * 4;
 
-    const users = await User.find(filter).skip(skip).limit(4).select('username _id');
+    const users = await User.find(filter).skip(skip).limit(4).select('username _id image');
 
     return res.json({
       message: 'Users successfully retrieved from database',
@@ -50,7 +50,7 @@ router.get('/friends', isLoggedIn(), async (req, res, next) => {
     const { friends } = await User.findById(req.user.id);
     const user = await User.findById(req.user.id).populate({
       path: 'friends',
-      select: 'name username _id',
+      select: 'name username _id image',
       skip: (page - 1) * 4,
       limit: 4
     });

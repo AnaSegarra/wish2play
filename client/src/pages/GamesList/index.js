@@ -89,7 +89,7 @@ export const GameList = () => {
             </div>
           </EmptyList>
         ) : (
-          <p>Loading...</p>
+          <></>
         )}
       </Grid>
       {totalGames > 0 && (
