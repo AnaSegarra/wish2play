@@ -55,3 +55,29 @@ export const FiltersContainer = styled.div`
     }
   }
 `;
+
+export const Card = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2em;
+  div {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+  }
+  img {
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.5em #333;
+    height: 200px;
+  }
+  a {
+    color: ${({ theme }) => theme.main.tertiary};
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 1.2rem;
+  }
+  .btn-container {
+    text-align: center;
+  }
+`;
