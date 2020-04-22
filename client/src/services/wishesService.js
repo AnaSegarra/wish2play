@@ -38,3 +38,8 @@ export const fetchReservedWishes = async () => {
   const { data } = await wishesService.get('/reserved-wishes');
   return data.results;
 };
+
+export const deleteFriendWish = async id => {
+  const { data } = await wishesService.delete(`/reserved-wishes/${id}`);
+  return { user: data.userUpdated, wish: data.wishUpdated };
+};
