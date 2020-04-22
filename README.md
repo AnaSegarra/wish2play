@@ -42,6 +42,7 @@ To run this project locally do the following after cloning the project:
 - User can navigate to their games played and wishlist pages as well as the corresponding pages from other users
 - User can manage their own wishlist making public their wishes so that friends can reserve them and marke them as fulfilled once they have been completed
 - User can visit friend's wishlist and reserve their wishes
+- User can make a request to include a game in the platform
 
 **To do:**
 
