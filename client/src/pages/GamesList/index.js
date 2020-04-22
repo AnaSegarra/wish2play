@@ -1,7 +1,6 @@
 // dependencies
 import React, { useState, useEffect } from 'react';
 import { Grid, Container } from '@material-ui/core';
-import Pagination from '@material-ui/lab/Pagination';
 import { Link } from 'react-router-dom';
 
 // local modules
@@ -9,6 +8,9 @@ import { fetchGames, fetchFilterOptions } from '../../services/gamesService';
 import { formatOptions } from '../../helpers/filters';
 import { GameCard } from '../../components/GameCard';
 import { Filters } from './Filters';
+
+// styled components
+import { StyledPagination, EmptyList } from '../../styles/Games.styled';
 
 export const GameList = () => {
   // recurrent variables
@@ -47,6 +49,8 @@ export const GameList = () => {
     const { results } = await fetchGames(numOfResults, fields, sortBy, page, searchTerm, filters);
     setGames(results);
     setCurrentPage(page);
+
+    window.scrollTo(0, 0); // scrolls back to top after changing page
   };
 
   // check wether user is searching by name or filtering
@@ -76,21 +80,25 @@ export const GameList = () => {
             return <GameCard {...game} key={i} />;
           })
         ) : games.length === 0 && isSearching() ? (
-          <>
-            <p>No results found</p>
-            <p>
-              You can fill in a request for this game <Link to="/games/request">here</Link>
-            </p>
-          </>
+          <EmptyList>
+            <div>
+              <p>No results found</p>
+              <p>
+                You can fill in a request for this game <Link to="/games/request">here</Link>
+              </p>
+            </div>
+          </EmptyList>
         ) : (
           <p>Loading...</p>
         )}
       </Grid>
-      <Pagination
-        count={Math.ceil(totalGames / numOfResults)}
-        onChange={paginate}
-        page={currentPage}
-      />
+      {totalGames > 0 && (
+        <StyledPagination
+          count={Math.ceil(totalGames / numOfResults)}
+          onChange={paginate}
+          page={currentPage}
+        />
+      )}
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Pagination from '@material-ui/lab/Pagination';
 
 export const TopCard = styled.div`
   display: flex;
@@ -79,5 +80,29 @@ export const Card = styled.div`
   }
   .btn-container {
     text-align: center;
+  }
+`;
+
+export const StyledPagination = styled(Pagination)`
+  display: flex;
+  justify-content: center;
+  margin: 2em 0;
+`;
+
+export const EmptyList = styled.div`
+  margin: 0 auto;
+  font-size: 1.3rem;
+  div {
+    border: 0.1em solid ${({ theme }) => theme.main.secondary};
+    border-radius: 0.5em;
+    padding: 1em;
+    text-align: center;
+    background: #fffffe;
+    box-shadow: ${({ theme }) => theme.nav.shadow};
+  }
+  a {
+    color: ${({ theme }) => theme.main.tertiary};
+    font-weight: 500;
+    text-decoration: none;
   }
 `;
