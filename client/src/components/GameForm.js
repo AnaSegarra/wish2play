@@ -86,7 +86,6 @@ export const GameForm = ({
       if (response.message) {
         setSuccessMsg(response.message);
       } else {
-        console.log(response);
         setError({ isError: true, errorMsg: response });
       }
 
@@ -106,7 +105,6 @@ export const GameForm = ({
     }
 
     if (request) {
-      console.log('es una petición');
       const response = await updateRequestStatus(requestID, 'Approved');
       const updatedRequests = allRequests.filter(request => request._id !== requestID);
       updateRequest([...updatedRequests, response]);

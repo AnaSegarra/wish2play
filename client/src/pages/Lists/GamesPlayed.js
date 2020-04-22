@@ -23,7 +23,6 @@ const GamesPlayed = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchGamesPlayedList(id);
-      console.log(response);
       setPlayedList(response.games);
       setOwner(response.user);
     })();

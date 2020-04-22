@@ -20,6 +20,9 @@ export const StyledPaper = styled(Paper)`
     background-color: ${({ theme }) => theme.main.button};
     color: #fffffe;
   }
+  p.center {
+    text-align: center;
+  }
 `;
 
 export const ModalOpener = styled.span`

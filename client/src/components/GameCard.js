@@ -21,7 +21,7 @@ export const useStyles = makeStyles(theme => ({
   })
 }));
 
-export const GameCard = ({ name, image, _id, genres, totalRating, reduced }) => {
+export const GameCard = ({ name, image, _id, genres, totalRating }) => {
   const theme = useContext(ThemeContext);
   const classes = useStyles(theme);
 

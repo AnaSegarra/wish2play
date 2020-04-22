@@ -21,7 +21,6 @@ export const ReservedWishes = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchReservedWishes();
-      console.log(response);
       setReservedWishes(response);
       setIsLoading(false);
     })();
@@ -32,7 +31,7 @@ export const ReservedWishes = () => {
       {isLoading ? (
         <></>
       ) : reservedWishes.length === 0 ? (
-        <p>No wishes reserved yet</p>
+        <p className="center">No wishes reserved yet</p>
       ) : (
         <>
           <p className="paper-title">Your friend's wishes</p>

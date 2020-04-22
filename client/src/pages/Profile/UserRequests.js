@@ -19,7 +19,6 @@ export const UserRequests = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchRequests();
-      console.log('requests', response);
       setRequests(response);
       setIsLoading(false);
     })();
@@ -30,7 +29,7 @@ export const UserRequests = () => {
       {isLoading ? (
         <></>
       ) : requests.length === 0 ? (
-        <p>You haven't made any requests yet</p>
+        <p className="center">You haven't made any requests yet</p>
       ) : (
         <>
           <p className="paper-title">Your latest requests</p>

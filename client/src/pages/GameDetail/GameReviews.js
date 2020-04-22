@@ -21,7 +21,6 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
   const [alert, setAlert] = useState(false);
 
   const handleDelete = async id => {
-    console.log('deleting!', gameID, id);
     const response = await deleteReview(gameID, id);
     updateGame(response);
   };
