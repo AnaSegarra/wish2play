@@ -17,4 +17,7 @@ router.use('/users', users);
 const wishes = require('./wishes.router');
 router.use('/wishes', wishes);
 
+const spotify = require('./spotify.router');
+router.use('/spotify', spotify);
+
 module.exports = router;
