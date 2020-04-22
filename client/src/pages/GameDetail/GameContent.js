@@ -13,7 +13,7 @@ import { AuthContext } from '../../contexts/authContext';
 import { deleteGameDB, updateGame } from '../../services/gamesService';
 import { useStyles } from '../../components/GameCard';
 import { UserButtons } from './UserInteraction';
-import { ConfirmationDelete } from '../../components/alertMsg';
+import { ConfirmationDelete } from '../../components/AlertMsg';
 import { GameEditForm } from '../../components/GameEdit';
 
 // styled components

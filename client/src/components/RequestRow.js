@@ -1,8 +1,10 @@
+// dependencies
 import React, { useState } from 'react';
 import { BadgeCheck } from 'styled-icons/boxicons-solid';
 import { CircleWithCross } from 'styled-icons/entypo';
 import { TrashAlt, EditAlt } from '@styled-icons/boxicons-solid';
 
+// local modules
 import { GameEditForm } from './GameEdit';
 import { updateRequestStatus } from '../services/requestsService';
 import { sortByStatus } from '../helpers/listsHelpers';
