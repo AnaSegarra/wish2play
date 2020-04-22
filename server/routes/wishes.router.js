@@ -33,7 +33,7 @@ router.get('/reserved-wishes', async (req, res, next) => {
       path: 'reservedWishes',
       populate: [
         { path: 'owner', select: '-_id username' },
-        { path: 'game', select: '-_id name' }
+        { path: 'game', select: 'name' }
       ]
     });
     return res.json({ message: 'Reserved wishes from friends', results: user.reservedWishes });
@@ -170,9 +170,16 @@ router.delete('/reserved-wishes/:id', isLoggedIn(), async (req, res, next) => {
         { new: true }
       );
 
-      await Wish.findByIdAndUpdate(id, { status: 'Free' }, { new: true });
+      const wishUpdated = await Wish.findByIdAndUpdate(
+        id,
+        { status: 'Free' },
+        { new: true }
+      ).populate({
+        path: 'game',
+        select: 'name image'
+      });
 
-      return res.json({ message: 'Wish successfully deleted', userUpdated });
+      return res.json({ message: 'Wish successfully deleted', userUpdated, wishUpdated });
     }
 
     return res.status(400).json({ message: 'Wish is not reserved' });

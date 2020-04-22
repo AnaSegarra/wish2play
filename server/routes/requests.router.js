@@ -8,7 +8,9 @@ const { isEmptyField } = require('../lib/validatorMW');
 // GET route - retrieve requests from db
 router.get('/', isLoggedIn(), async (req, res, next) => {
   try {
-    const query = Request.find();
+    const query = Request.find()
+      .populate({ path: 'requestedBy', select: 'username -_id' })
+      .sort({ status: 1 });
     // retrieve every request from db if admin
     if (req.user.isAdmin) {
       const requests = await query;
@@ -24,7 +26,7 @@ router.get('/', isLoggedIn(), async (req, res, next) => {
       .where('requestedBy')
       .equals(req.user.id)
       .sort({ createdAt: -1 })
-      .limit(6);
+      .limit(6).select('-_id status content.name')
 
     return res.json({
       message: `User's requests fetched successfully`,
@@ -73,7 +75,10 @@ router.put('/:id', checkUserRole(), async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const request = await Request.findByIdAndUpdate(id, req.body, { new: true });
+    const request = await Request.findByIdAndUpdate(id, req.body, { new: true }).populate({
+      path: 'requestedBy',
+      select: 'username -_id'
+    });
 
     if (!request) return res.status(404).json({ message: 'Request not found' });
 

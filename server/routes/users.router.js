@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Wish = require('../models/Wish');
+const Game = require('../models/Game');
+const Review = require('../models/Review');
 const { isLoggedIn } = require('../lib/authMW');
+const calcAverage = require('../utils/avgCalculator');
 
 // GET route - retrieve all users from database
 router.get('/', async (req, res, next) => {
@@ -12,8 +15,8 @@ router.get('/', async (req, res, next) => {
 
     let filter = {
       _id: { $not: { $in: req.user.friends } },
-      $and: [{ _id: { $ne: req.user.id } }]
-    }; // removes users friends and current user
+      $and: [{ _id: { $ne: req.user.id } }, { isAdmin: { $ne: true } }]
+    }; // removes users friends, current user and user's who are admin
 
     // finds users by username or name but excludes current user
     if (searchTerm) {
@@ -22,13 +25,12 @@ router.get('/', async (req, res, next) => {
         $or: [{ username: queryCondition }, { name: queryCondition }]
       };
     }
-    const numOfUsers = await User.findUsers(filter); // total num of users that are not friends
+    const numOfUsers = await User.find(filter); // total num of users that are not friends
 
-    const limit = Number(req.query.limit) || 4;
     const page = Number(req.query.page) || 1;
-    const skip = (page - 1) * limit;
+    const skip = (page - 1) * 4;
 
-    const users = await User.findUsers(filter).skip(skip).limit(limit);
+    const users = await User.find(filter).skip(skip).limit(4).select('username _id');
 
     return res.json({
       message: 'Users successfully retrieved from database',
@@ -45,15 +47,17 @@ router.get('/', async (req, res, next) => {
 router.get('/friends', isLoggedIn(), async (req, res, next) => {
   try {
     const page = Number(req.query.page) || 1;
+    const { friends } = await User.findById(req.user.id);
     const user = await User.findById(req.user.id).populate({
       path: 'friends',
       select: 'name username _id',
-      skip: (page - 1) * 4
+      skip: (page - 1) * 4,
+      limit: 4
     });
 
     return res.json({
       message: 'Friends retrieved successfully',
-      total: user.friends.length,
+      total: friends.length,
       friends: user.friends
     });
   } catch (error) {
@@ -66,10 +70,12 @@ router.get('/friends', isLoggedIn(), async (req, res, next) => {
 router.get('/:user_id/games-played', async (req, res, next) => {
   const { user_id } = req.params;
   try {
-    const { gamesPlayed } = await User.findById(user_id).populate('gamesPlayed');
-    return res
-      .status(200)
-      .json({ message: 'Games played retrieved', results: gamesPlayed.length, gamesPlayed });
+    const user = await User.findById(user_id).populate('gamesPlayed');
+    return res.status(200).json({
+      message: 'Games played retrieved',
+      gamesPlayed: user.gamesPlayed,
+      user: user.username
+    });
   } catch (error) {
     console.log('Error retrieving games played', error);
     return res.status(500).json({ message: 'Internal server error fetching played games' });
@@ -140,9 +146,9 @@ router.delete('/friends/:user_id', isLoggedIn(), async (req, res, next) => {
       await Wish.updateMany(
         {
           $and: [
-            { _id: { $in: req.user.reservedWishes } },
-            { owner: user_id },
-            { status: 'Reserved' }
+            { _id: { $in: req.user.reservedWishes } }, // id included in user's reservedWishes
+            { owner: user_id }, // whose owner is the friend to be deleted
+            { status: 'Reserved' } // with status of reserved
           ]
         },
         { status: 'Free' }
@@ -182,7 +188,32 @@ router.delete('/games-played/:game_id', isLoggedIn(), async (req, res, next) => 
         { new: true }
       );
 
-      return res.json({ message: 'Game removed successfully from games played list', userUpdated });
+      // find game a populate it
+      const game = await Game.findById(game_id).populate({
+        path: 'reviews',
+        populate: { path: 'author', select: 'username' }
+      });
+
+      // delete reviews posted by user from db
+      await Review.deleteMany({
+        $and: [{ _id: { $in: game.reviews } }, { author: req.user.id }]
+      });
+
+      // filter out reviews from game
+      const reviewsUpdated = game.reviews.filter(
+        review => review.author.username !== req.user.username
+      );
+
+      // update game with new reviews array and avg
+      game.reviews = reviewsUpdated;
+      game.totalRating = calcAverage(game.reviews);
+      await game.save();
+
+      return res.json({
+        message: 'Game removed successfully from games played list',
+        userUpdated,
+        game
+      });
     }
 
     return res.status(400).json({ message: 'Already not included in games played' });

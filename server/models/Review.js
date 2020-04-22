@@ -6,7 +6,17 @@ const reviewSchema = new mongoose.Schema(
     content: String,
     rating: { type: Number, default: 0, max: 5, min: 0 }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
+  }
 );
 
 module.exports = mongoose.model('Review', reviewSchema);

@@ -3,6 +3,8 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { GridList, GridListTile, GridListTileBar, makeStyles } from '@material-ui/core';
 import { ThemeContext } from 'styled-components';
+
+// styled components
 import { StyledGridListTile } from '../styles/Profile.styled';
 
 const useStyles = makeStyles(theme => ({
@@ -12,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
-    marginBottom: '1em'
+    margin: '2em 0'
   },
   gridList: {
     flexWrap: 'nowrap'

@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     image: String,
     name: String,
+    biography: { type: String, maxlength: 200 },
     isAdmin: { type: Boolean, default: false },
     gamesPlayed: [{ type: ObjectId, ref: 'Game' }],
     wishlist: [{ type: ObjectId, ref: 'Wish' }],
@@ -27,10 +28,5 @@ const userSchema = new mongoose.Schema(
     }
   }
 );
-
-userSchema.statics.findUsers = function (filter, page, limit, fields) {
-  const query = this.find(filter).limit(limit).skip(page).select(fields);
-  return query;
-};
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,36 +1,52 @@
+// dependencies
 import React, { useEffect, useState, useContext } from 'react';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
-import { formatOptions, groupFilters } from '../helpers/filters';
-import { SuccessMsg, ErrorMsg } from './AlertMsg';
-import { GameFormStyled, ImgPlaceholder } from '../styles/Admin.styled';
-import { Button, Input } from '../styles/Form';
 import { ThemeContext } from 'styled-components';
-import { updateRequestStatus } from '../services/requestsService';
 
-export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
+// local modules
+import { fetchFilterOptions, addGame, uploadGameImage } from '../services/gamesService';
+import { updateRequestStatus } from '../services/requestsService';
+import { formatOptions } from '../helpers/filters';
+import { SuccessMsg, ErrorMsg } from './AlertMsg';
+
+// styled componentes
+import { GameFormStyled, ImgPlaceholder } from '../styles/Admin.styled';
+import { Input, Button } from '../styles/Form';
+import { Textarea } from '../styles/GameDetail.styled';
+
+export const GameForm = ({
+  request,
+  user,
+  gameToEdit,
+  setUpdatedGame,
+  requestID,
+  allRequests,
+  updateRequest,
+  isEditing,
+  handleAction = addGame
+}) => {
   const theme = useContext(ThemeContext);
   const ESRBOptions = formatOptions(['E', 'E 10+', 'T', 'M', 'A', 'RP'], 'ESRB');
   const [genresAvailable, setGenresAvailable] = useState([]);
   const [platformsAvailable, setPlatformsAvailable] = useState([]);
   const [newGame, setNewGame] = useState(
-    request
-      ? { ...request.content, releaseYear: request.releaseYear || '' }
+    gameToEdit
+      ? { ...gameToEdit, releaseYear: gameToEdit.releaseYear || '' }
       : {
           name: '',
           image: '',
           description: '',
           releaseYear: '',
-          ESRB: '',
+          ESRB: 'RP',
           platforms: [],
           genres: [],
           company: '',
           linkToBuy: ''
         }
-  ); // sets request data or empty object otherwise
+  ); // sets request/edit data or empty object otherwise
   const [successMsg, setSuccessMsg] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [error, setError] = useState({ isError: false, errorMsg: '' });
   const [selectedFile, setSelectedFile] = useState(null);
 
   // fill select with options already in db
@@ -50,23 +66,30 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
     setNewGame({ ...newGame, [name]: value });
   };
 
-  const handleMultiSelect = (selected, { name }) => {
-    if (name === 'platforms') {
-      const platforms = groupFilters(selected, 'platforms');
-      setNewGame({ ...newGame, platforms: platforms || [] });
-    } else {
-      const genres = groupFilters(selected, 'genres');
-      setNewGame({ ...newGame, genres: genres || [] });
-    }
+  const handlePlatforms = selected => {
+    const platforms = selected && selected.map(i => i.value);
+    setNewGame({ ...newGame, platforms: platforms || [] });
+  };
+
+  const handleGenres = selected => {
+    const genres = selected && selected.map(i => i.value);
+    setNewGame({ ...newGame, genres: genres || [] });
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (isEditing && !request) {
+      const response = await handleAction(newGame, gameToEdit._id);
+      setUpdatedGame(response);
+    } else {
+      const response = await handleAction(newGame);
+      if (response.message) {
+        setSuccessMsg(response.message);
+      } else {
+        setError({ isError: true, errorMsg: response });
+      }
 
-    const response = await handleAction(newGame);
-    if (!request) {
-      setSuccessMsg(response);
-
+      // clear inputs
       setNewGame({
         name: '',
         image: '',
@@ -82,8 +105,9 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
     }
 
     if (request) {
-      const response = await updateRequestStatus(request._id, 'Approved');
-      setIsEditing();
+      const response = await updateRequestStatus(requestID, 'Approved');
+      const updatedRequests = allRequests.filter(request => request._id !== requestID);
+      updateRequest([...updatedRequests, response]);
     }
   };
 
@@ -94,41 +118,58 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
     img.append('image', imgSelected);
 
     const response = await uploadGameImage(img, 'game');
-    console.log(response);
 
     if (response.image) {
       setNewGame({ ...newGame, image: response.image });
     } else {
-      setError(response);
+      setErrorMsg(response);
     }
   };
 
   return (
     <>
-      <GameFormStyled onSubmit={handleSubmit} theme={theme}>
+      <GameFormStyled onSubmit={handleSubmit} theme={theme} id={gameToEdit && 'edit-form'}>
         <div className="img-input">
-          {request && request.image ? (
+          {gameToEdit && newGame.image ? (
             <img src={newGame.image} alt="game img preview" width="auto" height="200" />
+          ) : selectedFile ? (
+            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
           ) : (
             <ImgPlaceholder>
               <p>No image provided</p>
             </ImgPlaceholder>
           )}
-          {selectedFile && (
-            <img src={selectedFile} alt="game img preview" width="auto" height="200" />
-          )}
+
           <input type="file" name="image" onChange={handleImgEdit} />
         </div>
         <label htmlFor="name">Name</label>
         <Input type="text" name="name" onChange={handleChange} value={newGame.name} />
         <label htmlFor="description">Description</label>
-        <textarea name="description" onChange={handleChange} value={newGame.description}></textarea>
-        <label htmlFor="releaseYear">Released on</label>
-        <Input
-          type="number"
-          name="releaseYear"
+        <Textarea
+          name="description"
           onChange={handleChange}
-          value={newGame.releaseYear}
+          value={newGame.description}
+          rows="7"
+          style={{ width: '100%' }}
+        />
+
+        <label htmlFor="platforms">Playable on</label>
+        <CreatableSelect
+          isClearable
+          isMulti
+          options={platformsAvailable}
+          name="platforms"
+          onChange={handlePlatforms}
+          defaultValue={gameToEdit && formatOptions(newGame.platforms, 'platforms')}
+        />
+        <label htmlFor="genres">Genres</label>
+        <CreatableSelect
+          isClearable
+          isMulti
+          options={genresAvailable}
+          name="genres"
+          onChange={handleGenres}
+          defaultValue={gameToEdit && formatOptions(newGame.genres, 'genres')}
         />
         <label htmlFor="ESRB">ESRB rating</label>
         <Select
@@ -142,35 +183,38 @@ export const GameForm = ({ request, setIsEditing, handleAction = addGame }) => {
           }
           className="react-select__control"
           defaultValue={
-            request && ESRBOptions.filter(({ value }) => value === request.content.ESRB)
+            (gameToEdit && ESRBOptions.filter(({ value }) => value === gameToEdit.ESRB)) ||
+            newGame.ESRB
           }
-        />
-        <label htmlFor="platforms">Playable on</label>
-        <CreatableSelect
-          isClearable
-          isMulti
-          options={platformsAvailable}
-          name="platforms"
-          onChange={handleMultiSelect}
-          defaultValue={request && formatOptions(newGame.platforms, 'platforms')}
-        />
-        <label htmlFor="genres">Genres</label>
-        <CreatableSelect
-          isClearable
-          isMulti
-          options={genresAvailable}
-          name="genres"
-          onChange={handleMultiSelect}
-          defaultValue={request && formatOptions(newGame.genres, 'genres')}
         />
         <label htmlFor="company">Developed by</label>
         <Input type="text" name="company" onChange={handleChange} value={newGame.company} />
+        <label htmlFor="releaseYear">Released on</label>
+        <Input
+          type="number"
+          name="releaseYear"
+          onChange={handleChange}
+          value={newGame.releaseYear}
+        />
         <label htmlFor="linkToBuy">Available</label>
         <Input type="text" name="linkToBuy" onChange={handleChange} value={newGame.linkToBuy} />
-        <button type="submit">Add game</button>
+        <div className="btn-container">
+          {!gameToEdit && !user && <Button type="submit">Add game</Button>}{' '}
+        </div>
+        <div className="btn-container">
+          {' '}
+          {user && <Button type="submit">Submit request</Button>}
+        </div>
       </GameFormStyled>
       {successMsg && <SuccessMsg msg={successMsg} handleClose={() => setSuccessMsg('')} />}
-      {errorMsg && <ErrorMsg msg={errorMsg} handleClose={() => setErrorMsg('')} />}
+      {error.isError && (
+        <ErrorMsg
+          errorMsg={error.errorMsg}
+          isError={error.isError}
+          handleClose={() => setError('')}
+          position={{ vertical: 'bottom', horizontal: 'center' }}
+        />
+      )}
     </>
   );
 };

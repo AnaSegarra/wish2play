@@ -33,8 +33,12 @@ export const logout = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const { data } = await authService.get('/current-user');
-  return data.user;
+  try {
+    const { data } = await authService.get('/current-user');
+    return data.user;
+  } catch (error) {
+    throw new Error('No current session');
+  }
 };
 
 export const updateProfile = async newData => {
