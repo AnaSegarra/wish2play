@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { GridListTile } from '@material-ui/core';
 import { StyledPaper } from './Home.styled';
+import { Link } from 'react-router-dom';
 
 export const UserDetailsContainer = styled(StyledPaper)`
   padding: 2em;
@@ -85,7 +86,17 @@ export const UsersContainer = styled.div`
   padding: 0.5em 0;
   p {
     margin: 0 0.5em;
+    cursor: pointer;
+    &:hover {
+      color: ${({ theme }) => theme.main.tertiary};
+    }
   }
+`;
+
+export const StyledLink = styled(Link)`
+  color: ${({ theme }) => theme.main.tertiary};
+  font-weight: 500;
+  text-decoration: none;
 `;
 
 export const StyledGridListTile = styled(GridListTile)`
