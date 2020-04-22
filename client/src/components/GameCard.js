@@ -14,6 +14,10 @@ export const useStyles = makeStyles(theme => ({
     backgroundColor: theme.chip.background,
     margin: '0 .5em',
     color: theme.main.tertiary
+  }),
+  root: theme => ({
+    borderColor: theme.main.secondary,
+    border: '0.1em solid'
   })
 }));
 
@@ -24,12 +28,18 @@ export const GameCard = ({ name, image, _id, genres, totalRating }) => {
   return (
     <Grid item lg={4} md={6} xs={12}>
       <ScrollAnimation animateIn="fadeIn">
-        <Card elevation={3}>
+        <Card elevation={3} className={classes.root}>
           <CardMedia style={{ height: 500 }} image={image} title={name} />
           <CardContent>
             <TopCard>
               <p>{name}</p>
-              <Rating name="half-rating-read" value={totalRating} readOnly precision={0.5} />
+              <Rating
+                name="half-rating-read"
+                value={totalRating}
+                readOnly
+                precision={0.5}
+                size="small"
+              />
             </TopCard>
           </CardContent>
           <BottomCard theme={theme}>

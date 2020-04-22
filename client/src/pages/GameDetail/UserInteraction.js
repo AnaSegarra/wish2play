@@ -11,10 +11,7 @@ import { addGamePlayed, removeGamePlayed } from '../../services/usersService';
 import { addGameWished, removeGameWished, fetchWishlist } from '../../services/wishesService';
 import { isIncluded, arrMapped } from '../../helpers/listsHelpers';
 
-// styled components
-import { ButtonsContainer } from '../../styles/GameDetail.styled';
-
-export const UserButtons = ({ gameID }) => {
+export const UserButtons = ({ gameID, setUpdatedGame }) => {
   const { user, setUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
   const [gamesWished, setGamesWished] = useState([]);
@@ -33,8 +30,9 @@ export const UserButtons = ({ gameID }) => {
 
   // delete game from user's list
   const removeGame = async gameID => {
-    const updatedUser = await removeGamePlayed(gameID);
-    setUser(updatedUser);
+    const response = await removeGamePlayed(gameID);
+    setUser(response.user);
+    setUpdatedGame(response.game);
   };
 
   // add game to user's list
@@ -56,10 +54,8 @@ export const UserButtons = ({ gameID }) => {
     setUser(updatedUser);
   };
 
-  if (user && user.isAdmin) return <p>pero que eres admin!</p>;
-
-  return user && wishlist ? (
-    <ButtonsContainer theme={theme}>
+  return wishlist ? (
+    <div theme={theme}>
       {isIncluded(gameID, user.gamesPlayed) ? (
         <button onClick={() => removeGame(gameID)}>
           Played it!
@@ -79,7 +75,7 @@ export const UserButtons = ({ gameID }) => {
           <HeartOutlined size="25" />
         </button>
       )}
-    </ButtonsContainer>
+    </div>
   ) : (
     <></>
   );

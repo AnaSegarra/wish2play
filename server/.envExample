@@ -1,0 +1,6 @@
+PORT=<selected port>
+CLIENT_URL=http://localhost:1234
+DB_URL=<database connection>
+CLOUDINARY_NAME=<cloud name>
+CLOUDINARY_KEY=<API key>
+CLOUDINARY_SECRET=<API secret>

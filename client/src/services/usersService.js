@@ -13,30 +13,27 @@ export const addGamePlayed = async game_id => {
 
 export const removeGamePlayed = async game_id => {
   const { data } = await usersService.delete(`/games-played/${game_id}`);
-
-  return data.userUpdated;
+  return { user: data.userUpdated, game: data.game };
 };
 
 export const fetchGamesPlayedList = async user_id => {
   const { data } = await usersService.get(`/${user_id}/games-played`);
-
-  return data.gamesPlayed;
+  return { games: data.gamesPlayed, user: data.user };
 };
 
 // friends related endpoints
-export const fetchUsers = async (searchTerm, page, numOfResults) => {
+export const fetchUsers = async (searchTerm, page) => {
   const params = {
     searchTerm,
-    page,
-    limit: numOfResults
+    page
   };
   const { data } = await usersService.get('/', { params });
-  return data.users;
+  return { users: data.users, total: data.total };
 };
 
-export const fetchFriends = async () => {
-  const { data } = await usersService.get('/friends');
-  return data.friends;
+export const fetchFriends = async page => {
+  const { data } = await usersService.get('/friends', { params: { page } });
+  return { friends: data.friends, totalFriends: data.total };
 };
 
 export const addFriend = async user_id => {

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Game = require('../models/Game');
 const Review = require('../models/Review');
+const User = require('../models/User');
+const Wish = require('../models/Wish');
 const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
@@ -58,7 +60,7 @@ router.get('/:id', async (req, res, next) => {
       populate: { path: 'author', select: 'username' }
     });
 
-    if (!game) res.status(404).json({ message: 'Game not found' });
+    if (!game) return res.status(404).json({ message: 'Game not found' });
 
     return res.status(200).json(game);
   } catch (error) {
@@ -83,7 +85,7 @@ router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (re
     return res.status(201).json({ message: 'Game successfully added to database', game: newGame });
   } catch (error) {
     console.log('Error in game creation failed', error);
-    return res.status(500).json({ message: 'Internal server error adding a game from database' });
+    return res.status(500).json({ message: 'Internal server error adding a game to database' });
   }
 });
 
@@ -105,49 +107,47 @@ router.post('/upload/:game', uploader.single('image'), async (req, res, next) =>
 });
 
 // POST route - add a new game review
-router.post(
-  '/:game_id/reviews',
-  hasPlayed(),
-  isEmptyField('content', 'rating'),
-  async (req, res, next) => {
-    const { game_id } = req.params;
-    try {
-      const game = await Game.findById(game_id);
-      if (!game) {
-        console.log('Unable to find a game that matches an id of ', game_id);
-        return res.status(400).json({ message: `Couldn't find that game` });
-      }
-
-      const newReview = await Review.create({ ...req.body, author: req.user.id });
-
-      // include review in game's reviews array
-      const updatedGame = await Game.findByIdAndUpdate(
-        game._id,
-        { $push: { reviews: newReview } },
-        { new: true }
-      ).populate({
-        path: 'reviews',
-        populate: { path: 'author', select: 'username' }
-      });
-
-      // update game's rating taking into account the newly created review
-      const average = calcAverage(updatedGame.reviews);
-      updatedGame.totalRating = average;
-      await updatedGame.save();
-
-      return res.status(201).json({ message: 'Review added successfully', game: updatedGame });
-    } catch (error) {
-      console.log('Error posting a review', error);
-      return res.status(500).json({ message: 'Internal server error adding a review' });
+router.post('/:game_id/reviews', hasPlayed(), isEmptyField('content'), async (req, res, next) => {
+  const { game_id } = req.params;
+  try {
+    const game = await Game.findById(game_id);
+    if (!game) {
+      console.log('Unable to find a game that matches an id of ', game_id);
+      return res.status(400).json({ message: `Couldn't find that game` });
     }
+
+    const newReview = await Review.create({ ...req.body, author: req.user.id });
+
+    // include review in game's reviews array
+    const updatedGame = await Game.findByIdAndUpdate(
+      game._id,
+      { $push: { reviews: newReview } },
+      { new: true }
+    ).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
+
+    // update game's rating taking into account the newly created review
+    const average = calcAverage(updatedGame.reviews);
+    updatedGame.totalRating = average;
+    await updatedGame.save();
+
+    return res.status(201).json({ message: 'Review added successfully', game: updatedGame });
+  } catch (error) {
+    console.log('Error posting a review', error);
+    return res.status(500).json({ message: 'Internal server error adding a review' });
   }
-);
+});
 
 // PUT route - edit a game
 router.put('/:id', checkUserRole(), isEmptyField('name', 'description'), async (req, res, next) => {
   const { id } = req.params;
   try {
-    const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedGame = await Game.findByIdAndUpdate(id, req.body, { new: true }).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
 
     if (!updatedGame) {
       console.log(`Couldn't find a game with an id of ${id}`);
@@ -185,12 +185,17 @@ router.put(
       );
 
       // if rating is changed, game average rate needs to be updated
-      const updatedGame = await Game.findById(game_id).populate('reviews');
+      const updatedGame = await Game.findById(game_id).populate({
+        path: 'reviews',
+        populate: { path: 'author', select: 'username' }
+      });
       const average = calcAverage(updatedGame.reviews);
       updatedGame.totalRating = average;
       await updatedGame.save();
 
-      return res.status(200).json({ message: 'Review successfully edited', review: updatedReview });
+      return res
+        .status(200)
+        .json({ message: 'Review successfully edited', review: updatedReview, game: updatedGame });
     } catch (error) {
       console.log('Error updating a review', error);
       return res.status(500).json({ message: 'Internal server error updating a review' });
@@ -207,9 +212,27 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
       console.log(`Couldn't find a game with an id of ${id}`);
       return res.status(404).json({ message: 'Game not found' });
     }
+    // delete reviews submitted to the game
+    await Review.deleteMany({ _id: { $in: deletedGame.reviews } });
+    const wishes = await Wish.find({ game: id }); // find wishes made for the game
 
-    console.log(`Game removed ${deletedGame}`);
-    return res.status(202).json({ message: 'Game successfully deleted from database' });
+    // remove game from user's games played lists
+    await User.updateMany({ gamesPlayed: id }, { $pull: { gamesPlayed: id } });
+
+    // remove game from wishlist
+    await User.updateMany({ wishlist: { $in: wishes } }, { $pull: { wishlist: { $in: wishes } } });
+
+    // remove game from reserved wishes
+    await User.updateMany(
+      { reservedWishes: { $in: wishes } },
+      { $pull: { reservedWishes: { $in: wishes } } }
+    );
+
+    // delete those wishes
+    await Wish.deleteMany({ _id: { $in: wishes } });
+
+    // console.log(`Game removed ${deletedGame}`);
+    return res.status(202).json({ message: 'Game successfully deleted' });
   } catch (error) {
     console.log('Error deleting a game from db', error);
     return res.status(500).json({ message: 'Internal server error removing a game from database' });
@@ -236,16 +259,21 @@ router.delete('/:game_id/reviews/:id', checkOwnership(Review, 'author'), async (
       game_id,
       { $pull: { reviews: id } },
       { new: true }
-    ).populate('reviews');
-
+    ).populate({
+      path: 'reviews',
+      populate: { path: 'author', select: 'username' }
+    });
     // update game's rating after deleting a review
     const average = calcAverage(updatedGame.reviews);
     updatedGame.totalRating = average;
     await updatedGame.save();
 
-    return res.status(202).json({ message: 'Review successfully deleted from database' });
+    return res
+      .status(202)
+      .json({ message: 'Review successfully deleted from database', game: updatedGame });
   } catch (error) {
     console.log('Error deleting a review', error);
+    return res.status(500).json({ message: 'Internal server error deleting a review' });
   }
 });
 

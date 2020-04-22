@@ -1,16 +1,21 @@
+// dependencies
 import React, { useEffect, useState } from 'react';
+import { BadgeCheck } from 'styled-icons/boxicons-solid';
+import { CircleWithCross } from 'styled-icons/entypo';
+import { LoaderCircle } from 'styled-icons/boxicons-regular';
+
+// local modules
 import { fetchRequests } from '../../services/requestsService';
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+import { shortenStr } from '../../helpers/listsHelpers';
+
+// styled components
+import { StyledPaper } from '../../styles/Home.styled';
+import { PanelRow } from '../../styles/Profile.styled';
 
 export const UserRequests = () => {
   const [requests, setRequests] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [expanded, setExpanded] = React.useState(false);
 
-  const handleChange = panel => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
   useEffect(() => {
     (async () => {
       const response = await fetchRequests();
@@ -19,33 +24,31 @@ export const UserRequests = () => {
     })();
   }, []);
 
-  if (isLoading) return <>Cargando</>;
-
   return (
-    <div>
-      {requests.length === 0 ? (
-        <p>You haven't made any requests yet</p>
+    <StyledPaper elevation={3}>
+      {isLoading ? (
+        <></>
+      ) : requests.length === 0 ? (
+        <p className="center">You haven't made any requests yet</p>
       ) : (
         <>
-          <p>Check the status of your latest requests</p>
-          {requests.map((request, i) => (
-            <ExpansionPanel
-              key={i}
-              expanded={expanded === `panel${i}`}
-              onChange={handleChange(`panel${i}`)}>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header">
-                <p>Game: {request.content.name}</p>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <p>Request status: {request.status}</p>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          ))}
+          <p className="paper-title">Your latest requests</p>
+          {requests.map((request, i) => {
+            return (
+              <PanelRow key={i}>
+                <p>{request.content.name}</p>
+                {request.status === 'Pending' ? (
+                  <LoaderCircle size="15" className="pending" />
+                ) : request.status === 'Approved' ? (
+                  <BadgeCheck size="15" className="completed" />
+                ) : (
+                  <CircleWithCross size="15" className="rejected" />
+                )}
+              </PanelRow>
+            );
+          })}
         </>
       )}
-    </div>
+    </StyledPaper>
   );
 };

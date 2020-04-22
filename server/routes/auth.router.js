@@ -91,6 +91,10 @@ router.post('/logout', (req, res, next) => {
 router.put('/edit', isLoggedIn(), async (req, res, next) => {
   const { id } = req.user;
   try {
+    // prevents users from making themselves admin
+    if (req.body.isAdmin) {
+      delete req.body.isAdmin;
+    }
     const userUpdated = await User.findByIdAndUpdate(id, req.body, { new: true });
     return res.json({ message: 'User successfully updated', user: userUpdated });
   } catch (error) {

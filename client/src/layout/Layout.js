@@ -5,7 +5,6 @@ import { ThemeProvider } from 'styled-components';
 // local modules
 import { Header } from './Header';
 import { AuthContextProvider } from '../contexts/authContext';
-
 import { lightTheme, darkTheme } from '../contexts/themes';
 
 // styled components
@@ -15,7 +14,6 @@ import { GlobalStyle } from '../styles/Global';
 export const Layout = ({ children }) => {
   const [theme, setTheme] = useState(lightTheme);
   const toggleTheme = () => {
-    console.log('changin');
     if (theme === lightTheme) {
       setTheme(darkTheme);
     } else {

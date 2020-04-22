@@ -1,18 +1,21 @@
+// dependencies
 import React, { useEffect, useState, useContext } from 'react';
-import { fetchWishlist, reserveFriendWish } from '../../services/wishesService';
+import { useParams } from 'react-router-dom';
+import { Container, Grid } from '@material-ui/core';
+
+// local modules
+import { fetchWishlist } from '../../services/wishesService';
 import { AuthContext } from '../../contexts/authContext';
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
-import { useParams } from 'react-router-dom';
-import { sortByName, isIncluded } from '../../helpers/listsHelpers';
+import { sortByName } from '../../helpers/listsHelpers';
 import { ListOwner } from './ListOwner';
-import { Tooltip, Container, Grid } from '@material-ui/core';
 import { ListFriend } from './ListFriend';
 
 const Wishlist = () => {
   const { id } = useParams();
   const { user, isLoading, setUser } = useContext(AuthContext);
   const [wishlist, setWishlist] = useState([]);
-  const [owner, setOwner] = useState({});
+  const [owner, setOwner] = useState();
 
   useEffect(() => {
     (async () => {
@@ -37,9 +40,15 @@ const Wishlist = () => {
 
   return (
     <Container>
-      <h2>{`${owner.username}'s wishlist`}</h2>
+      {owner && <h2>{`${owner.username}'s wishlist`}</h2>}
       <Grid container spacing={3}>
-        <ListFriend wishlist={wishlist} setWishlist={setWishlist} owner={owner} user={user} />{' '}
+        <ListFriend
+          wishlist={wishlist}
+          setWishlist={setWishlist}
+          owner={owner}
+          user={user}
+          setUser={setUser}
+        />
       </Grid>
     </Container>
   );

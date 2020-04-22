@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Paper } from '@material-ui/core';
+import { StyledPaper } from './Home.styled';
 
 // game content
 export const Container = styled.div`
@@ -17,7 +17,6 @@ export const Container = styled.div`
 export const ImageContainer = styled.div`
   display: flex;
   padding: 2em;
-  width: 100%;
   img {
     border-radius: 0.5em;
     box-shadow: 0.2em 0.2em 0.5em #333;
@@ -28,6 +27,7 @@ export const ImageContainer = styled.div`
   }
   @media (max-width: 425px) {
     width: auto;
+
     img {
       height: 300px;
     }
@@ -39,7 +39,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  flex-grow: 2;
   .title {
     font-size: 1.4rem;
     text-align: center;
@@ -48,6 +48,10 @@ export const Content = styled.div`
   .subtitle {
     font-size: 0.9rem;
     text-align: center;
+  }
+  .description,
+  .title,
+  .subtitle {
     margin-top: 0;
   }
   .stats {
@@ -71,14 +75,21 @@ export const Content = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 1em;
+  }
+
+  @media (max-width: 375px) {
+    .chips div:first-of-type {
+      margin-bottom: 1em;
+    }
   }
 `;
 
 // buttons
 export const ButtonsContainer = styled.div`
   display: flex;
-  padding: 0em 2em 0;
-  justify-content: flex-end;
+  padding: 2em 2em 0;
+  justify-content: space-between;
 
   svg {
     color: ${({ theme }) => theme.main.tertiary};
@@ -101,9 +112,29 @@ export const ButtonsContainer = styled.div`
 `;
 
 // reviews
-export const ReviewsContainer = styled(Paper)`
-  padding: 2em;
-  margin: 2em 0;
+export const ReviewsContainer = styled(StyledPaper)`
+  form {
+    padding: 2em 2em 1em;
+  }
+
+  .txt-container {
+    margin-right: 1.4em;
+  }
+`;
+
+export const Textarea = styled.textarea`
+  padding: 1em;
+  margin: 1em 0;
+  border: 0.1em solid ${({ theme }) => theme.main.secondary};
+  border-radius: 0.5em;
+  outline: none;
+  resize: none;
+  color: ${({ theme }) => theme.input.color};
+  &:focus {
+    color: #6246ea;
+    border: 0.1em solid ${({ theme }) => theme.input.focus};
+    box-shadow: 0 0 0.2em 0.1em ${({ theme }) => theme.input.shadow};
+  }
 `;
 
 export const Review = styled.div`
@@ -116,9 +147,30 @@ export const Review = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    p {
+      color: ${({ theme }) => theme.main.tertiary};
+      font-weight: 500;
+    }
   }
   .btns {
     display: flex;
     justify-content: flex-end;
+    .edit,
+    .delete {
+      cursor: pointer;
+    }
+    .edit {
+      margin-right: 1em;
+      &:hover {
+        color: #33cc33;
+      }
+    }
+    .delete:hover {
+      color: #cc0000;
+    }
   }
+`;
+
+export const BtnSpan = styled.span`
+  cursor: ${props => (props.allowed ? 'not-allowed' : 'pointer')};
 `;

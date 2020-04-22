@@ -16,7 +16,17 @@ const requestSchema = new mongoose.Schema(
     },
     status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' }
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.createdAt;
+        delete ret.updatedAt;
+        delete ret.__v;
+        return ret;
+      }
+    }
+  }
 );
 
 module.exports = mongoose.model('Request', requestSchema);

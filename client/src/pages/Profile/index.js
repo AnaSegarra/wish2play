@@ -1,6 +1,6 @@
 // dependencies
 import React, { useContext } from 'react';
-import { Grid, Container, Paper } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 
 // local modules
 import { withProtectedRoute } from '../../helpers/withProtectedRoute';
@@ -11,26 +11,31 @@ import { UserData } from './UserDetails';
 import { UserRequests } from './UserRequests';
 import { ReservedWishes } from './ReservedWishes';
 
+// styled components
+import { StyledPaper } from '../../styles/Home.styled';
+
 const Profile = () => {
   const { _id } = useContext(AuthContext).user;
 
   return (
     <Container>
       <Grid container spacing={3}>
-        <Grid item lg={2}>
+        <Grid item lg={3}>
           <UserData />
         </Grid>
-        <Grid item lg={7}>
-          <Paper>
-            <h3>Games you played</h3>
+        <Grid item lg={6}>
+          <StyledPaper elevation={3}>
+            <p className="paper-title">Games you played</p>
             <GamesPlayedPreview userID={_id} />
-            <h3>Your wishlist</h3>
+          </StyledPaper>
+          <StyledPaper elevation={3}>
+            <p className="paper-title">Your wishlist</p>
             <WishlistPreview userID={_id} />
-          </Paper>
+          </StyledPaper>
         </Grid>
         <Grid item lg={3}>
-          <UserRequests />
           <ReservedWishes />
+          <UserRequests />
         </Grid>
       </Grid>
     </Container>

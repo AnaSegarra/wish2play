@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { StyledPaper } from '../styles/Home.styled';
 
 export const GameFormStyled = styled.form`
   display: flex;
@@ -9,6 +8,9 @@ export const GameFormStyled = styled.form`
   label,
   button {
     margin-top: 1em;
+  }
+  label {
+    margin-bottom: 0.5em;
   }
   input {
     margin: 0;
@@ -22,35 +24,9 @@ export const GameFormStyled = styled.form`
       margin-top: 1em;
     }
   }
-`;
-
-export const RequestContent = styled(StyledPaper)`
-  .paper-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .paper-content {
-    padding: 2em;
-  }
-  svg {
-    cursor: pointer;
-
-    &:hover {
-      color: ${({ theme }) => theme.main.tertiary};
-    }
-  }
-  .img-container {
-    text-align: center;
-  }
-  .no-img {
-    height: 200px;
-    width: 200px;
-    background-color: #eee;
+  .btn-container {
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin: 0 auto;
   }
 `;
 
@@ -62,4 +38,39 @@ export const ImgPlaceholder = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+`;
+
+export const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2em;
+  p {
+    width: 20%;
+  }
+  div {
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .first-row {
+    color: ${({ theme }) => theme.main.tertiary};
+    font-weight: 500;
+    padding-top: 1em;
+  }
+  .edit,
+  .delete {
+    cursor: pointer;
+  }
+  .edit {
+    margin-right: 1em;
+  }
+  .edit:hover,
+  .approved {
+    color: #33cc33;
+  }
+  .delete:hover,
+  .rejected {
+    color: #cc0000;
+  }
 `;

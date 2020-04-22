@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { fetchReservedWishes } from '../../services/wishesService';
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+// dependencies
+import React, { useEffect, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { ThemeContext } from 'styled-components';
+import { LoaderCircle } from 'styled-icons/boxicons-regular';
+import { BadgeCheck } from 'styled-icons/boxicons-solid';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  content: {
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-}));
+// local modules
+import { fetchReservedWishes } from '../../services/wishesService';
+
+// styled componentes
+import { StyledPaper } from '../../styles/Home.styled';
+import { shortenStr } from '../../helpers/listsHelpers';
+import { PanelRow } from '../../styles/Profile.styled';
 
 export const ReservedWishes = () => {
-  const classes = useStyles();
+  const theme = useContext(ThemeContext);
   const [reservedWishes, setReservedWishes] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
-
-  const handleChange = panel => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   useEffect(() => {
     (async () => {
@@ -46,37 +26,30 @@ export const ReservedWishes = () => {
     })();
   }, []);
 
-  if (isLoading) return <>Cargando</>;
-
   return (
-    <div>
-      {reservedWishes.length === 0 ? (
-        <p>You haven't reserved any wish</p>
+    <StyledPaper elevation={3}>
+      {isLoading ? (
+        <></>
+      ) : reservedWishes.length === 0 ? (
+        <p className="center">No wishes reserved yet</p>
       ) : (
         <>
-          <p>Your friend's wishes</p>
-          {reservedWishes.map((wish, i) => (
-            <ExpansionPanel
-              key={i}
-              expanded={expanded === `panel${i}`}
-              onChange={handleChange(`panel${i}`)}>
-              <ExpansionPanelSummary
-                expandIcon={<ExpandMore />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-                classes={{ content: classes.content }}>
-                <Typography className={classes.heading}>{wish.game.name}</Typography>
-                <Typography className={classes.secondaryHeading}>
-                  For {wish.owner.username}
-                </Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <p>Status: {wish.status}</p>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          ))}
+          <p className="paper-title">Your friend's wishes</p>
+          {reservedWishes.map((wish, i) => {
+            return (
+              <PanelRow key={i} theme={theme}>
+                <Link to={`/games/${wish.game._id}`}>{shortenStr(wish.game.name, 20)}</Link>
+                <p>{wish.owner.username}</p>
+                {wish.status === 'Fulfilled' ? (
+                  <BadgeCheck size="15" className="completed" />
+                ) : (
+                  <LoaderCircle size="15" className="pending" />
+                )}
+              </PanelRow>
+            );
+          })}
         </>
       )}
-    </div>
+    </StyledPaper>
   );
 };

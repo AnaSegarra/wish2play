@@ -1,10 +1,15 @@
+// dependencies
 import React, { useState } from 'react';
-import { Avatar, makeStyles, Menu, MenuItem } from '@material-ui/core';
-import { UsersContainer } from '../styles/Profile.styled';
 import { Link } from 'react-router-dom';
 import { RemoveUser } from 'styled-icons/entypo';
 import { AddUser } from 'styled-icons/entypo';
+import { Avatar, makeStyles, Menu, MenuItem } from '@material-ui/core';
+
+// local modules
 import { addFriend, removeFriend } from '../services/usersService';
+
+// styled components
+import { UsersContainer } from '../styles/Profile.styled';
 
 const useStyles = makeStyles(theme => ({
   small: {
@@ -55,9 +60,9 @@ export const User = ({ user, setUser, type }) => {
         </MenuItem>
       </Menu>
       {type === 'friends' ? (
-        <RemoveUser size="15" onClick={() => handleRemoveFriend(user._id)} />
+        <RemoveUser size="15" onClick={() => handleRemoveFriend(user._id)} className="remove-friend"/>
       ) : (
-        <AddUser size="15" onClick={() => handleNewFriend(user._id)} />
+        <AddUser size="15" onClick={() => handleNewFriend(user._id)} className="add-friend"/>
       )}
     </UsersContainer>
   );

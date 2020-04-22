@@ -7,8 +7,8 @@ import { AuthContext } from '../contexts/authContext';
 
 // protects privage pages according to user and role
 export const withProtectedRoute = (Component, restricted = false) => props => {
-  // console.log('props', restricted);
   const { user, isLoading } = useContext(AuthContext);
+
   if (user) {
     // redirect to profile if page is restricted and user is not admin
     if (restricted && !user.isAdmin) return <Redirect to={'/wish2play/profile'} />;

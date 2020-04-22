@@ -21,7 +21,7 @@ export const GamesCarousel = ({ sort }) => {
   }, []);
 
   return games.length === 0 ? (
-    <p>Loading...</p>
+    <></>
   ) : (
     <StyledPaper elevation={3}>
       <p className="paper-title">{sort === '-totalRating' ? 'Top rated' : 'Newest releases'}</p>
