@@ -9,6 +9,7 @@ import { lightTheme, darkTheme } from '../contexts/themes';
 
 // styled components
 import { GlobalStyle } from '../styles/Global';
+import { TokenContextProvider } from '../contexts/tokenContext';
 
 // makes available both theme and user to the whole app
 export const Layout = ({ children }) => {
@@ -25,10 +26,12 @@ export const Layout = ({ children }) => {
     <>
       <ThemeProvider theme={theme === lightTheme ? lightTheme : darkTheme}>
         <GlobalStyle theme={theme} />
-        <AuthContextProvider>
-          <Header toggleTheme={toggleTheme} />
-          <main>{children}</main>
-        </AuthContextProvider>
+        <TokenContextProvider>
+          <AuthContextProvider>
+            <Header toggleTheme={toggleTheme} />
+            <main>{children}</main>
+          </AuthContextProvider>
+        </TokenContextProvider>
       </ThemeProvider>
     </>
   );
