@@ -19,7 +19,7 @@ export const Soundtrack = ({ name }) => {
         }
       }
     })();
-  }, [token]);
+  }, []);
 
   if (notFound) return <p>Soundtrack not found</p>;
 
