@@ -9,6 +9,7 @@
     "seed-db": "node lib/seeds/seedDB.js"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.21.0",
@@ -24,8 +25,7 @@
     "multer": "^1.4.2",
     "multer-storage-cloudinary": "^2.2.1",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
-    "serve-favicon": "^2.5.0"
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

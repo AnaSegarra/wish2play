@@ -83,7 +83,6 @@ export const Filters = ({
             control={<Radio />}
             label="Highest rating to lowest"
           />
-          <FormControlLabel value="createdAt" control={<Radio />} label="Default order" />
         </RadioGroup>
       </FormControl>
     </FiltersContainer>

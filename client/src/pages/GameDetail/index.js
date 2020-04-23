@@ -7,7 +7,7 @@ import { fetchSingleGame } from '../../services/gamesService';
 import { GameContent } from './GameContent';
 import { GameReviews } from './GameReviews';
 import { NewReview } from './NewReview';
-import { BSO } from './GameBSO';
+import { Soundtrack } from './Soundtrack';
 
 export const Game = props => {
   const { id } = props.match.params;
@@ -22,12 +22,12 @@ export const Game = props => {
 
   return game ? (
     <Container>
-      <Grid container>
+      <Grid container spacing={3}>
         <Grid item xs={12} lg={9}>
           <GameContent {...game} setUpdatedGame={setGame} />
         </Grid>
         <Grid item xs={12} lg={3}>
-          <BSO name={game.name} />
+          <Soundtrack name={game.name} />
         </Grid>
       </Grid>
       <NewReview gameID={game._id} updateGame={setGame} reviews={game.reviews} />
