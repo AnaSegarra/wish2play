@@ -23,14 +23,15 @@ const useStyles = makeStyles(theme => ({
   },
   cover: {
     width: 300,
-    backgroundSize: 'contain'
+    backgroundSize: 'contain',
+    marginRight: '0.3em'
   },
   playIcon: {
     height: 38,
     width: 38
   },
-  root: ownTheme => ({
-    borderColor: ownTheme.main.secondary,
+  root: theme => ({
+    borderColor: theme.main.secondary,
     border: '0.1em solid',
     display: 'flex'
   })
@@ -44,8 +45,8 @@ export const Soundtrack = ({ name }) => {
   const [currentNumTrack, setCurrentNumTrack] = useState(0);
   const [playingTrack, setPlayingTrack] = useState({ isPlaying: false, song: '', audio: '' });
 
-  const ownTheme = useContext(ThemeContext);
-  const classes = useStyles(ownTheme);
+  const theme = useContext(ThemeContext);
+  const classes = useStyles(theme);
 
   useEffect(() => {
     (async () => {
@@ -57,11 +58,11 @@ export const Soundtrack = ({ name }) => {
           const tracksFormatted = filterTracks(response.tracks);
           setTracks(tracksFormatted);
 
-          console.log(tracksFormatted);
           // find img with specific width & set it to cover if found
           const retrievedCover = findCover(response.cover, 300);
           retrievedCover ? setCover(retrievedCover.url) : setCover('');
         } catch (error) {
+          console.log('no encontrado');
           setNotFound(true);
         }
       }
@@ -70,7 +71,7 @@ export const Soundtrack = ({ name }) => {
 
   const playSong = previewUrl => {
     let audio = new Audio(previewUrl);
-    console.log(previewUrl);
+    console.log('source', previewUrl);
     if (!playingTrack.isPlaying) {
       console.log('playing', currentNumTrack);
       audio.play();
@@ -80,11 +81,22 @@ export const Soundtrack = ({ name }) => {
         audio
       });
     } else {
-      console.log('stopping');
-      playingTrack.audio.pause();
-      setPlayingTrack({
-        isPlaying: false
-      });
+      if (playingTrack.song === previewUrl) {
+        console.log('stopping');
+        playingTrack.audio.pause();
+        setPlayingTrack({
+          isPlaying: false
+        });
+      } else {
+        console.log('cambiando de canción');
+        playingTrack.audio.pause();
+        audio.play();
+        setPlayingTrack({
+          isPlaying: true,
+          song: previewUrl,
+          audio
+        });
+      }
     }
   };
 
@@ -92,25 +104,29 @@ export const Soundtrack = ({ name }) => {
     if (currentNumTrack + 1 >= tracks.length) {
       console.log('the end, go back to number 0');
       setCurrentNumTrack(0);
+      playingTrack.isPlaying ? playSong(tracks[0].audio) : '';
     } else {
       console.log('changin to next song');
       setCurrentNumTrack(prev => prev + 1);
+      playingTrack.isPlaying ? playSong(tracks[currentNumTrack + 1].audio) : '';
     }
-    console.log('current track', currentNumTrack);
   };
 
   const previousSong = () => {
     if (currentNumTrack - 1 < 0) {
       console.log('go back to the end of the list');
       setCurrentNumTrack(tracks.length - 1);
+
+      playingTrack.isPlaying ? playSong(tracks[tracks.length - 1].audio) : '';
     } else {
       console.log('changin to previous song');
       setCurrentNumTrack(prev => prev - 1);
+
+      playingTrack.isPlaying ? playSong(tracks[currentNumTrack - 1].audio) : '';
     }
-    console.log('current track', currentNumTrack);
   };
 
-  if (notFound) return <p>Soundtrack not found</p>;
+  if (notFound) return <></>;
 
   return (
     <div>
