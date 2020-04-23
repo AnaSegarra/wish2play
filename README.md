@@ -100,7 +100,7 @@ Filtering is implemented via query parameters:
   - Two sliders with games played and wishlist respectively
   - Right side panel displays friend's wishes the user reserved and requests for games submitted by user
 - When logged in, user can mark games as played, add them to their wishlist and post reviews, which are editable and deletable
-- User can navigate to their games played and wishlist pages as well as the corresponding pages from other users
+- User can navigate to their played games and wishlist pages as well as the corresponding pages from other users
 - User can manage their own wishlist making public their wishes so that friends can reserve them and mark them as fulfilled once they have been completed
 - User can visit friend's wishlist and reserve their wishes
 - User can make a request to include a game in the platform
