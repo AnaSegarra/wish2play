@@ -1,7 +1,6 @@
 // dependencies
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from '@material-ui/core';
-import { ThemeContext } from 'styled-components';
 
 // local modules
 import { fetchRequests } from '../../services/requestsService';
@@ -11,9 +10,10 @@ import { Request } from '../../components/RequestRow';
 // styled components
 import { Row } from '../../styles/Admin.styled';
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 const RequestsPanel = () => {
-  const theme = useContext(ThemeContext);
+  const classes = usePaperStyles();
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -25,9 +25,9 @@ const RequestsPanel = () => {
 
   return (
     <Container>
-      <StyledPaper>
+      <StyledPaper elevation={3} className={classes.root}>
         <p className="paper-title">Requests from users</p>
-        <Row theme={theme}>
+        <Row>
           <p className="first-row">Status</p>
           <p className="first-row">Name</p>
           <p className="first-row">Requested by</p>

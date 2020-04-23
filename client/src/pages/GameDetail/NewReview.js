@@ -1,6 +1,5 @@
 // dependencies
 import React, { useContext, useState } from 'react';
-import { ThemeContext } from 'styled-components';
 import { Tooltip } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 
@@ -12,10 +11,11 @@ import { isIncluded } from '../../helpers/listsHelpers';
 // styled components
 import { ReviewsContainer, BtnSpan, Textarea } from '../../styles/GameDetail.styled';
 import { Button } from '../../styles/Form';
+import { usePaperStyles } from '../../styles/Global';
 
 export const NewReview = ({ gameID, updateGame, reviews }) => {
   const { user } = useContext(AuthContext);
-  const theme = useContext(ThemeContext);
+  const classes = usePaperStyles();
   const [review, setReview] = useState({ content: '', rating: 0 });
 
   const handleSubmit = async e => {
@@ -28,7 +28,7 @@ export const NewReview = ({ gameID, updateGame, reviews }) => {
   return (
     <>
       {user && !user.isAdmin && (
-        <ReviewsContainer theme={theme}>
+        <ReviewsContainer className={classes.root}>
           <p className="paper-title">Share your thoughts with other players</p>
           <form onSubmit={handleSubmit}>
             <Rating

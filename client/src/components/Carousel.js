@@ -9,9 +9,11 @@ import { fetchGames } from '../services/gamesService';
 
 // styled components
 import { StyledSlider, StyledPaper } from '../styles/Home.styled';
+import { usePaperStyles } from '../styles/Global';
 
 export const GamesCarousel = ({ sort }) => {
   const theme = useContext(ThemeContext);
+  const classes = usePaperStyles(theme);
   const [games, setGames] = useState([]);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export const GamesCarousel = ({ sort }) => {
   return games.length === 0 ? (
     <></>
   ) : (
-    <StyledPaper elevation={3}>
+    <StyledPaper elevation={3} className={classes.root}>
       <Link to="/games">
         <p className="paper-title">{sort === '-totalRating' ? 'Top rated' : 'Newest releases'}</p>
       </Link>

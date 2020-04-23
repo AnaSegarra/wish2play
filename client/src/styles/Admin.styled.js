@@ -15,7 +15,6 @@ export const GameFormStyled = styled.form`
   input {
     margin: 0;
   }
-
   .img-input {
     display: flex;
     flex-direction: column;
@@ -28,6 +27,15 @@ export const GameFormStyled = styled.form`
     display: flex;
     justify-content: center;
   }
+  .react-select__control {
+    border: 0.1em solid ${({ theme }) => theme.main.secondary};
+    background: ${({ theme }) => theme.main.background};
+    border-radius: 0.5em;
+  }
+  .react-select__menu {
+    background: ${({ theme }) => theme.main.background};
+    color: ${({ theme }) => theme.main.tertiary};
+  }
 `;
 
 export const ImgPlaceholder = styled.div`
@@ -38,6 +46,8 @@ export const ImgPlaceholder = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  color: #333;
+  border-radius: 1em;
 `;
 
 export const Row = styled.div`

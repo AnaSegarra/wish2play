@@ -34,7 +34,9 @@ const useStyles = makeStyles(theme => ({
     borderColor: theme.main.secondary,
     border: '0.1em solid',
     display: 'flex',
-    marginBottom: '2em'
+    marginBottom: '2em',
+    backgroundColor: theme.main.background,
+    color: theme.main.color
   })
 }));
 
@@ -125,9 +127,7 @@ export const Soundtrack = ({ name }) => {
               <Typography component="h5" variant="h5">
                 {tracks[currentNumTrack].songName}
               </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {tracks[currentNumTrack].artist}
-              </Typography>
+              <Typography variant="subtitle1">{tracks[currentNumTrack].artist}</Typography>
             </CardContent>
             <div className={classes.controls}>
               <IconButton aria-label="previous" onClick={() => previousSong()}>

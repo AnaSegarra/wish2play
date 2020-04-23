@@ -8,14 +8,14 @@ import { ThemeContext } from 'styled-components';
 import { StyledGridListTile } from '../styles/Profile.styled';
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  root: theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.main.background,
     margin: '2em 0'
-  },
+  }),
   gridList: {
     flexWrap: 'nowrap'
   },

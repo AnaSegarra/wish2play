@@ -159,6 +159,8 @@ export const GameForm = ({
           isMulti
           options={platformsAvailable}
           name="platforms"
+          classNamePrefix="react-select"
+          className="react-select-container"
           onChange={handlePlatforms}
           defaultValue={gameToEdit && formatOptions(newGame.platforms, 'platforms')}
         />
@@ -168,6 +170,8 @@ export const GameForm = ({
           isMulti
           options={genresAvailable}
           name="genres"
+          classNamePrefix="react-select"
+          className="react-select-container"
           onChange={handleGenres}
           defaultValue={gameToEdit && formatOptions(newGame.genres, 'genres')}
         />
@@ -176,12 +180,15 @@ export const GameForm = ({
           isClearable
           options={ESRBOptions}
           name="ESRB"
+          classNamePrefix="react-select"
+          className="react-select-container"
           onChange={selected =>
             selected
               ? setNewGame({ ...newGame, ESRB: selected.value })
               : setNewGame({ ...newGame, ESRB: '' })
           }
-          className="react-select__control"
+          classNamePrefix="react-select"
+          className="react-select-container"
           defaultValue={
             (gameToEdit && ESRBOptions.filter(({ value }) => value === gameToEdit.ESRB)) ||
             newGame.ESRB
