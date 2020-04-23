@@ -72,7 +72,7 @@ export const Soundtrack = ({ name }) => {
     let audio = new Audio(previewUrl);
     console.log(previewUrl);
     if (!playingTrack.isPlaying) {
-      console.log('playing');
+      console.log('playing', currentNumTrack);
       audio.play();
       setPlayingTrack({
         isPlaying: true,
@@ -86,6 +86,28 @@ export const Soundtrack = ({ name }) => {
         isPlaying: false
       });
     }
+  };
+
+  const nextSong = () => {
+    if (currentNumTrack + 1 >= tracks.length) {
+      console.log('the end, go back to number 0');
+      setCurrentNumTrack(0);
+    } else {
+      console.log('changin to next song');
+      setCurrentNumTrack(prev => prev + 1);
+    }
+    console.log('current track', currentNumTrack);
+  };
+
+  const previousSong = () => {
+    if (currentNumTrack - 1 < 0) {
+      console.log('go back to the end of the list');
+      setCurrentNumTrack(tracks.length - 1);
+    } else {
+      console.log('changin to previous song');
+      setCurrentNumTrack(prev => prev - 1);
+    }
+    console.log('current track', currentNumTrack);
   };
 
   if (notFound) return <p>Soundtrack not found</p>;
@@ -104,7 +126,7 @@ export const Soundtrack = ({ name }) => {
               </Typography>
             </CardContent>
             <div className={classes.controls}>
-              <IconButton aria-label="previous">
+              <IconButton aria-label="previous" onClick={() => previousSong()}>
                 <SkipPrevious />
               </IconButton>
               <IconButton
@@ -116,7 +138,7 @@ export const Soundtrack = ({ name }) => {
                   <Pause className={classes.playIcon} />
                 )}
               </IconButton>
-              <IconButton aria-label="next">
+              <IconButton aria-label="next" onClick={() => nextSong()}>
                 <SkipNext />
               </IconButton>
             </div>
