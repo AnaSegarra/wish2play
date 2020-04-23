@@ -4,7 +4,7 @@ const passport = require('passport');
 const uploader = require('../configs/cloudinary.config');
 const User = require('../models/User');
 const { hashPassword } = require('../utils/hashing');
-const { isValidPassword, isEmptyField } = require('../lib/validatorMW');
+const { isValidPassword, isValidUsername, isEmptyField } = require('../lib/validatorMW');
 const { isLoggedIn } = require('../lib/authMW');
 
 // GET route - retrieve logged user
@@ -14,6 +14,7 @@ router.get('/current-user', isLoggedIn(), (req, res, next) => res.json({ user: r
 router.post(
   '/signup',
   isEmptyField('username', 'password'),
+  isValidUsername(),
   isValidPassword(),
   async (req, res, next) => {
     const { username, password } = req.body;
@@ -88,7 +89,7 @@ router.post('/logout', (req, res, next) => {
 });
 
 // PUT route - edit user's profile
-router.put('/edit', isLoggedIn(), async (req, res, next) => {
+router.put('/edit', isLoggedIn(), isValidUsername(), async (req, res, next) => {
   const { id } = req.user;
   try {
     // prevents users from making themselves admin
@@ -112,7 +113,7 @@ router.put('/upload', uploader.single('image'), async (req, res, next) => {
   if (!file) {
     return res.status(400).json({ message: 'No file uploaded!' });
   }
-  console.log('aquí!!!', file);
+  console.log('user image uploaded', file);
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,

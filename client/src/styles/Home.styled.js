@@ -26,6 +26,9 @@ export const StyledPaper = styled(Paper)`
   p.center {
     text-align: center;
   }
+  div.fw {
+    max-width: fit-content;
+  }
 `;
 
 export const ModalOpener = styled.span`

@@ -11,6 +11,18 @@ const isValidPassword = () => (req, res, next) => {
   }
 };
 
+const isValidUsername = () => (req, res, next) => {
+  const { username } = req.body;
+  // check for username's length or whitespaces presence
+  if (!/\s/.test(username) && username.length < 18) {
+    return next();
+  } else {
+    return res.status(400).json({
+      message: "Username shouldn't be longer than 18 characters or contain whitespaces"
+    });
+  }
+};
+
 const isEmptyField = (...fields) => (req, res, next) => {
   const isEveryField = fields.every(field => req.body[field]);
   const itemFields = fields.join(', ').replace(/, ([^,]*)$/, ' and $1');
@@ -23,4 +35,4 @@ const isEmptyField = (...fields) => (req, res, next) => {
   }
 };
 
-module.exports = { isValidPassword, isEmptyField };
+module.exports = { isValidPassword, isValidUsername, isEmptyField };
