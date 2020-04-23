@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
     if (genres) filter.genres = { $in: genres };
     if (ESRB) filter.ESRB = ESRB;
 
-    const limit = Number(req.query.limit);
+    const limit = Number(req.query.limit) || 100;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
     const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
