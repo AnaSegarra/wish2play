@@ -1,7 +1,6 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
-const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
 const logger = require('morgan');
 const path = require('path');
@@ -40,16 +39,16 @@ app.use(cookieParser());
 app.use(
   session({
     secret: 'wish2play',
-    resave: true,
-    saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60 * 1000 },
+    store: new MongoStore({ mongooseConnection: mongoose.connection, ttl: 24 * 60 * 60 })
   })
 );
 
 require('./configs/passport')(app);
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // routes
 const index = require('./routes/index');
