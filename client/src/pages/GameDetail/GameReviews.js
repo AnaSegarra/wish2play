@@ -37,7 +37,7 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
       <Grid container spacing={3} style={{ padding: '2em' }}>
         {reviews.map(review => {
           return (
-            <Grid item lg={3} md={4} sm={6} xs={12} key={review._id}>
+            <Grid item lg={3} md={4} sm={6} xs={12} key={review._id} className="fw">
               <ScrollAnimation animateIn="fadeIn">
                 <Review>
                   <div className="stats">

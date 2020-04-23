@@ -169,6 +169,12 @@ export const Review = styled.div`
       color: #cc0000;
     }
   }
+  @media (max-width: 375px) {
+    .stats {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 `;
 
 export const BtnSpan = styled.span`

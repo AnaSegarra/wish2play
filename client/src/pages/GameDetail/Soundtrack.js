@@ -33,7 +33,8 @@ const useStyles = makeStyles(theme => ({
   root: theme => ({
     borderColor: theme.main.secondary,
     border: '0.1em solid',
-    display: 'flex'
+    display: 'flex',
+    marginBottom: '2em'
   })
 }));
 
@@ -50,9 +51,6 @@ export const Soundtrack = ({ name }) => {
 
   useEffect(() => {
     (async () => {
-      console.log('enter the useEffect');
-      console.log('with name', name);
-      console.log('with token', token);
       if (token && name) {
         try {
           const response = await fetchAlbumID(name, token);
