@@ -6,7 +6,7 @@ const isValidPassword = () => (req, res, next) => {
   } else {
     return res.status(400).json({
       message:
-        'A password must have at least four characters including a number, a lowercase letter and a uppercase letter'
+        'A password must have between four and eight characters including a number, a lowercase letter and a uppercase letter'
     });
   }
 };
