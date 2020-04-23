@@ -27,15 +27,20 @@ export const useStyles = makeStyles(theme => ({
     backgroundColor: theme.main.button,
     color: '#fffffe'
   }),
-  paragraph: {
+  paragraph: theme => ({
     margin: 0,
-    padding: '1em 2em 0'
-  },
+    padding: '1em 2em 0',
+    color: theme.main.tertiary
+  }),
   btn: theme => ({
-    color: theme.main.button,
+    color: theme.main.tertiary,
     '&:hover': {
-      backgroundColor: 'rgba(209, 209, 233, 0.5)'
+      backgroundColor: theme.main.secondary
     }
+  }),
+  paper: theme => ({
+    color: theme.main.color,
+    backgroundColor: theme.main.background
   })
 }));
 
@@ -65,7 +70,11 @@ export const Signup = () => {
       <p>
         Don't have an account yet? <ModalOpener onClick={handleOpen}>Sign up here!</ModalOpener>
       </p>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" theme={theme}>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+        PaperProps={{ classes: { root: classes.paper } }}>
         <DialogTitle id="form-dialog-title" className={classes.title}>
           Create your account
         </DialogTitle>

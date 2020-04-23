@@ -116,7 +116,6 @@ export const ReviewsContainer = styled(StyledPaper)`
   form {
     padding: 2em 2em 1em;
   }
-
   .txt-container {
     margin-right: 1.4em;
   }
@@ -130,8 +129,9 @@ export const Textarea = styled.textarea`
   outline: none;
   resize: none;
   color: ${({ theme }) => theme.input.color};
+  background: ${({ theme }) => theme.main.background};
+
   &:focus {
-    color: #6246ea;
     border: 0.1em solid ${({ theme }) => theme.input.focus};
     box-shadow: 0 0 0.2em 0.1em ${({ theme }) => theme.input.shadow};
   }

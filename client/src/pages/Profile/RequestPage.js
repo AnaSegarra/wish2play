@@ -9,11 +9,13 @@ import { GameForm } from '../../components/GameForm';
 
 // styled components
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 const Request = () => {
+  const classes = usePaperStyles();
   return (
     <Container>
-      <StyledPaper>
+      <StyledPaper elevation={3} className={classes.root}>
         <p className="paper-title">Request a game you want</p>
         <GameForm handleAction={makeRequest} user={true} />
       </StyledPaper>

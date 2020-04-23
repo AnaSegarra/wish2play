@@ -11,8 +11,10 @@ import { updateWish } from '../../services/wishesService';
 import { StyledPaper } from '../../styles/Home.styled';
 import { Card } from '../../styles/Games.styled';
 import { Button, CancelBtn } from '../../styles/Form';
+import { usePaperStyles } from '../../styles/Global';
 
 export const ListOwner = ({ wishlist, setWishlist }) => {
+  const classes = usePaperStyles();
   const handleUpdate = async (wishID, update) => {
     const updatedWish = await updateWish(wishID, update);
     const updatedWishlist = wishlist.filter(wish => wish._id !== updatedWish._id); // remove wish with previous status
@@ -33,7 +35,7 @@ export const ListOwner = ({ wishlist, setWishlist }) => {
         wishlist.map((wish, i) => {
           return (
             <Grid item lg={3} key={i}>
-              <StyledPaper elevation={3}>
+              <StyledPaper elevation={3} className={classes.root}>
                 <Card>
                   <Link to={`/games/${wish.game._id}`}>{wish.game.name}</Link>
                   <div>

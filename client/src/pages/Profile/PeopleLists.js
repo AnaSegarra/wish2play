@@ -9,7 +9,8 @@ import { AuthContext } from '../../contexts/authContext';
 
 // styled components
 import { Input } from '../../styles/Form';
-import {PeopleContainer} from '../../styles/Profile.styled'
+import { PeopleContainer } from '../../styles/Profile.styled';
+import { StyledPagination } from '../../styles/Games.styled';
 
 export const FriendsList = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -32,7 +33,7 @@ export const FriendsList = () => {
   };
 
   return (
-    <PeopleContainer >
+    <PeopleContainer>
       <p className="friends">Friends</p>
       {friends.length === 0 ? (
         <p>You don't have any friends yet</p>
@@ -42,7 +43,7 @@ export const FriendsList = () => {
         })
       )}
       {totalNumFriends > 0 && (
-        <Pagination
+        <StyledPagination
           count={Math.ceil(totalNumFriends / 4)}
           onChange={paginate}
           page={currentPage}
@@ -92,7 +93,7 @@ export const UsersList = () => {
           return <User key={user._id} user={user} setUser={setUser} />;
         })
       )}
-      <Pagination
+      <StyledPagination
         count={Math.ceil(totalNumUsers / 4)}
         onChange={paginate}
         page={currentPage}

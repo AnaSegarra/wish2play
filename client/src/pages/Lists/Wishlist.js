@@ -30,7 +30,7 @@ const Wishlist = () => {
   if (user._id === id) {
     return (
       <Container>
-        <h2>Your wishlist</h2>
+        <h2 className="page-title">Your wishlist</h2>
         <Grid container spacing={3}>
           <ListOwner wishlist={wishlist} setWishlist={setWishlist} />
         </Grid>
@@ -40,7 +40,7 @@ const Wishlist = () => {
 
   return (
     <Container>
-      {owner && <h2>{`${owner.username}'s wishlist`}</h2>}
+      {owner && <h2 className="page-title">{`${owner.username}'s wishlist`}</h2>}
       <Grid container spacing={3}>
         <ListFriend
           wishlist={wishlist}

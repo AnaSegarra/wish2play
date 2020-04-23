@@ -11,8 +11,10 @@ import { sortByName, isIncluded } from '../../helpers/listsHelpers';
 import { StyledPaper } from '../../styles/Home.styled';
 import { Card } from '../../styles/Games.styled';
 import { Button, CancelBtn } from '../../styles/Form';
+import { usePaperStyles } from '../../styles/Global';
 
 export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
+  const classes = usePaperStyles();
   const makeReserved = async wishID => {
     const response = await reserveFriendWish(wishID);
     setUser(response.userUpdated);
@@ -38,7 +40,7 @@ export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
         wishlist.map((wish, i) => {
           return wish.isPublic ? (
             <Grid item lg={3} key={i}>
-              <StyledPaper elevation={3}>
+              <StyledPaper elevation={3} className={classes.root}>
                 <Card>
                   <Link to={`/games/${wish.game._id}`}>{wish.game.name}</Link>
                   <div>

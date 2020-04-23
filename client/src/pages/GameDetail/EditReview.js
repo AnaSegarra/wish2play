@@ -24,7 +24,11 @@ export const EditReviewForm = ({ open, handleClose, gameID, review, updateGame }
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="form-dialog-title"
+      PaperProps={{ classes: { root: classes.paper } }}>
       <DialogTitle id="form-dialog-title" className={classes.title}>
         Edit your review
       </DialogTitle>

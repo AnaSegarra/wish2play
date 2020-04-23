@@ -13,9 +13,11 @@ import { ReservedWishes } from './ReservedWishes';
 
 // styled components
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 const Profile = () => {
   const { _id } = useContext(AuthContext).user;
+  const classes = usePaperStyles();
 
   return (
     <Container>
@@ -24,11 +26,11 @@ const Profile = () => {
           <UserData />
         </Grid>
         <Grid item lg={6} md={5} xs={12}>
-          <StyledPaper elevation={3}>
+          <StyledPaper elevation={3} className={classes.root}>
             <p className="paper-title">Games you played</p>
             <GamesPlayedPreview userID={_id} />
           </StyledPaper>
-          <StyledPaper elevation={3}>
+          <StyledPaper elevation={3} className={classes.root}>
             <p className="paper-title">Your wishlist</p>
             <WishlistPreview userID={_id} />
           </StyledPaper>
