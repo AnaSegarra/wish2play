@@ -12,12 +12,13 @@ export const getToken = async () => {
 export const fetchAlbumID = async (game, token) => {
   try {
     const { data } = await axios.get(`${process.env.API_URL}/spotify`, { params: { game, token } });
-    const albumID = data.albums.items[0].id;
+    const album = data.albums.items[0];
+    const albumID = album.id;
+    const images = album.images;
     const response = await axios.get(`${process.env.API_URL}/spotify/soundtrack`, {
       params: { albumID, token }
     });
-    const albumTracks = response.data.items;
-    return albumTracks;
+    return { tracks: response.data.items, cover: images };
   } catch (error) {
     throw new Error('Soundtrack not found');
   }
