@@ -50,6 +50,9 @@ export const Soundtrack = ({ name }) => {
 
   useEffect(() => {
     (async () => {
+      console.log('enter the useEffect');
+      console.log('with name', name);
+      console.log('with token', token);
       if (token && name) {
         try {
           const response = await fetchAlbumID(name, token);
@@ -62,18 +65,15 @@ export const Soundtrack = ({ name }) => {
           const retrievedCover = findCover(response.cover, 300);
           retrievedCover ? setCover(retrievedCover.url) : setCover('');
         } catch (error) {
-          console.log('no encontrado');
           setNotFound(true);
         }
       }
     })();
-  }, []);
+  }, [token, name]);
 
   const playSong = previewUrl => {
     let audio = new Audio(previewUrl);
-    console.log('source', previewUrl);
     if (!playingTrack.isPlaying) {
-      console.log('playing', currentNumTrack);
       audio.play();
       setPlayingTrack({
         isPlaying: true,
@@ -82,13 +82,11 @@ export const Soundtrack = ({ name }) => {
       });
     } else {
       if (playingTrack.song === previewUrl) {
-        console.log('stopping');
         playingTrack.audio.pause();
         setPlayingTrack({
           isPlaying: false
         });
       } else {
-        console.log('cambiando de canción');
         playingTrack.audio.pause();
         audio.play();
         setPlayingTrack({
@@ -102,11 +100,9 @@ export const Soundtrack = ({ name }) => {
 
   const nextSong = () => {
     if (currentNumTrack + 1 >= tracks.length) {
-      console.log('the end, go back to number 0');
       setCurrentNumTrack(0);
       playingTrack.isPlaying ? playSong(tracks[0].audio) : '';
     } else {
-      console.log('changin to next song');
       setCurrentNumTrack(prev => prev + 1);
       playingTrack.isPlaying ? playSong(tracks[currentNumTrack + 1].audio) : '';
     }
@@ -114,14 +110,10 @@ export const Soundtrack = ({ name }) => {
 
   const previousSong = () => {
     if (currentNumTrack - 1 < 0) {
-      console.log('go back to the end of the list');
       setCurrentNumTrack(tracks.length - 1);
-
       playingTrack.isPlaying ? playSong(tracks[tracks.length - 1].audio) : '';
     } else {
-      console.log('changin to previous song');
       setCurrentNumTrack(prev => prev - 1);
-
       playingTrack.isPlaying ? playSong(tracks[currentNumTrack - 1].audio) : '';
     }
   };
