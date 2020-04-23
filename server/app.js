@@ -40,7 +40,7 @@ app.use(
   session({
     secret: 'wish2play',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { maxAge: 60 * 1000 },
     store: new MongoStore({ mongooseConnection: mongoose.connection, ttl: 24 * 60 * 60 })
   })
