@@ -54,8 +54,6 @@ export const Soundtrack = ({ name }) => {
       if (token && name) {
         try {
           const response = await fetchAlbumID(name, token);
-          console.log('respuesta en el useEffect', response);
-
           const tracksFormatted = filterTracks(response.tracks);
           setTracks(tracksFormatted);
 

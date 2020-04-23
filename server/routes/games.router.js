@@ -92,7 +92,7 @@ router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (re
 // upload a game image
 router.post('/upload/:game', uploader.single('image'), async (req, res, next) => {
   const { file } = req;
-  console.log('aquí!!!', file);
+  console.log('game image uploaded', file);
   try {
     if (!file) {
       return res.status(400).json({ message: 'No file uploaded!' });
@@ -231,7 +231,6 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
     // delete those wishes
     await Wish.deleteMany({ _id: { $in: wishes } });
 
-    // console.log(`Game removed ${deletedGame}`);
     return res.status(202).json({ message: 'Game successfully deleted' });
   } catch (error) {
     console.log('Error deleting a game from db', error);

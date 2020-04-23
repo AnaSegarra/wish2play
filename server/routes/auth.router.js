@@ -113,7 +113,7 @@ router.put('/upload', uploader.single('image'), async (req, res, next) => {
   if (!file) {
     return res.status(400).json({ message: 'No file uploaded!' });
   }
-  console.log('aquí!!!', file);
+  console.log('user image uploaded', file);
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,

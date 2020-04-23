@@ -18,7 +18,7 @@ const isValidUsername = () => (req, res, next) => {
     return next();
   } else {
     return res.status(400).json({
-      message: "Usernames shouldn't be longer than 18 characters or contain whitespaces"
+      message: "Username shouldn't be longer than 18 characters or contain whitespaces"
     });
   }
 };
