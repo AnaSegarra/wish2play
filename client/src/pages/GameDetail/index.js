@@ -22,7 +22,7 @@ export const Game = props => {
 
   return game ? (
     <Container>
-      <Grid container>
+      <Grid container spacing={3}>
         <Grid item xs={12} lg={9}>
           <GameContent {...game} setUpdatedGame={setGame} />
         </Grid>

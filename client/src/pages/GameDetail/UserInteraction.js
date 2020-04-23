@@ -58,7 +58,7 @@ export const UserButtons = ({ gameID, setUpdatedGame }) => {
     <div theme={theme}>
       {isIncluded(gameID, user.gamesPlayed) ? (
         <button onClick={() => removeGame(gameID)}>
-          Played it!
+          Played!
           <Gamepad size="25" />
         </button>
       ) : (
