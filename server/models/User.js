@@ -4,7 +4,13 @@ const { ObjectId } = mongoose.Schema.Types;
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, unique: true, index: true, required: true },
+    username: {
+      type: String,
+      unique: true,
+      index: true,
+      required: true,
+      maxlength: 18
+    },
     password: { type: String, required: true },
     image: String,
     name: String,
