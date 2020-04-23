@@ -20,7 +20,7 @@ router.get('/', async (req, res, next) => {
     if (genres) filter.genres = { $in: genres };
     if (ESRB) filter.ESRB = ESRB;
 
-    const limit = Number(req.query.limit) || 9;
+    const limit = Number(req.query.limit) || 100;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
     const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
@@ -36,7 +36,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET route - retrieve all platforms and genres avaiable in db
+// GET route - retrieve all platforms and genres available in db
 router.get('/filters', async (req, res, next) => {
   try {
     const retrievedGames = await Game.find({}, { platforms: 1, genres: 1, _id: 0 });
@@ -92,7 +92,7 @@ router.post('/', checkUserRole(), isEmptyField('name', 'description'), async (re
 // upload a game image
 router.post('/upload/:game', uploader.single('image'), async (req, res, next) => {
   const { file } = req;
-  console.log('aquí!!!', file);
+  console.log('game image uploaded', file);
   try {
     if (!file) {
       return res.status(400).json({ message: 'No file uploaded!' });
@@ -231,7 +231,6 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
     // delete those wishes
     await Wish.deleteMany({ _id: { $in: wishes } });
 
-    // console.log(`Game removed ${deletedGame}`);
     return res.status(202).json({ message: 'Game successfully deleted' });
   } catch (error) {
     console.log('Error deleting a game from db', error);

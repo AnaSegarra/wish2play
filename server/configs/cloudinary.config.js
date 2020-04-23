@@ -19,7 +19,8 @@ const storage = cloudinaryStorage({
   },
   allowedFormats: ['jpg', 'png', 'jpeg'],
   filename: function (req, file, cb) {
-    console.log('el file', file, req.params);
+    console.log('image file', file);
+    console.log('for', req.params);
     if (req.params.game) {
       cb(null, file.originalname);
     } else {
