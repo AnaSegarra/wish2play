@@ -54,6 +54,9 @@ export const FiltersContainer = styled.div`
       width: 100%;
       margin-top: 1em;
     }
+    fieldset {
+      margin-top: 1em;
+    }
   }
 `;
 

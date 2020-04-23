@@ -12,6 +12,9 @@ export const StyledPaper = styled(Paper)`
       margin-bottom: 0.6em;
     }
   }
+  a {
+    text-decoration: none;
+  }
   p.paper-title {
     font-size: 1.25rem;
     font-weight: 500;

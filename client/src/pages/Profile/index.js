@@ -20,10 +20,10 @@ const Profile = () => {
   return (
     <Container>
       <Grid container spacing={3}>
-        <Grid item lg={3}>
+        <Grid item lg={3} md={4} xs={12}>
           <UserData />
         </Grid>
-        <Grid item lg={6}>
+        <Grid item lg={6} md={5} xs={12}>
           <StyledPaper elevation={3}>
             <p className="paper-title">Games you played</p>
             <GamesPlayedPreview userID={_id} />
@@ -33,7 +33,7 @@ const Profile = () => {
             <WishlistPreview userID={_id} />
           </StyledPaper>
         </Grid>
-        <Grid item lg={3}>
+        <Grid item lg={3} md={3} xs={12}>
           <ReservedWishes />
           <UserRequests />
         </Grid>
