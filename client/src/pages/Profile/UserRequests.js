@@ -6,13 +6,14 @@ import { LoaderCircle } from 'styled-icons/boxicons-regular';
 
 // local modules
 import { fetchRequests } from '../../services/requestsService';
-import { shortenStr } from '../../helpers/listsHelpers';
 
 // styled components
 import { StyledPaper } from '../../styles/Home.styled';
 import { PanelRow } from '../../styles/Profile.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 export const UserRequests = () => {
+  const classes = usePaperStyles();
   const [requests, setRequests] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +26,7 @@ export const UserRequests = () => {
   }, []);
 
   return (
-    <StyledPaper elevation={3}>
+    <StyledPaper elevation={3} className={classes.root}>
       {isLoading ? (
         <></>
       ) : requests.length === 0 ? (

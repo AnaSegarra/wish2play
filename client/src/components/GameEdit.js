@@ -26,7 +26,11 @@ export const GameEditForm = ({
   const classes = useStyles(theme);
 
   return (
-    <Dialog open={open} onClose={closeEditForm} aria-labelledby="form-dialog-title">
+    <Dialog
+      open={open}
+      onClose={closeEditForm}
+      aria-labelledby="form-dialog-title"
+      PaperProps={{ classes: { root: classes.paper } }}>
       <DialogTitle id="form-dialog-title" className={classes.title}>
         {request ? "User's request" : 'Edit game'}
       </DialogTitle>

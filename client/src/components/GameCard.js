@@ -17,7 +17,9 @@ export const useStyles = makeStyles(theme => ({
   }),
   root: theme => ({
     borderColor: theme.main.secondary,
-    border: '0.1em solid'
+    border: '0.1em solid',
+    backgroundColor: theme.main.background,
+    color: theme.main.color
   })
 }));
 

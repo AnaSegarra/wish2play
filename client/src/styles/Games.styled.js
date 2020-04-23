@@ -33,14 +33,18 @@ export const FiltersContainer = styled.div`
   }
   .react-select__control {
     border: 0.1em solid ${({ theme }) => theme.main.secondary};
+    background: ${({ theme }) => theme.main.background};
     border-radius: 0.5em;
+  }
+  .react-select__menu {
+    background: ${({ theme }) => theme.main.background};
+    color: ${({ theme }) => theme.main.tertiary};
   }
 
   fieldset {
     padding-left: 1em;
     border: 0.1em solid ${({ theme }) => theme.main.secondary};
     border-radius: 0.5em;
-    background-color: #fffffe;
     color: #7f7f7f;
   }
 
@@ -90,17 +94,21 @@ export const StyledPagination = styled(Pagination)`
   display: flex;
   justify-content: center;
   margin: 2em 0;
+  button {
+    color: ${({ theme }) => theme.main.color};
+  }
 `;
 
 export const EmptyList = styled.div`
   margin: 0 auto;
   font-size: 1.3rem;
+  color: ${({ theme }) => theme.main.color};
   div {
     border: 0.1em solid ${({ theme }) => theme.main.secondary};
     border-radius: 0.5em;
     padding: 1em;
     text-align: center;
-    background: #fffffe;
+    /* background: #fffffe; */
     box-shadow: ${({ theme }) => theme.nav.shadow};
   }
   a {

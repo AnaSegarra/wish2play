@@ -2,7 +2,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Grid } from '@material-ui/core';
-import { ThemeContext } from 'styled-components';
 
 // local modules
 import { fetchGamesPlayedList } from '../../services/usersService';
@@ -12,11 +11,12 @@ import { withProtectedRoute } from '../../helpers/withProtectedRoute';
 // styled components
 import { StyledPaper } from '../../styles/Home.styled';
 import { Card } from '../../styles/Games.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 const GamesPlayed = () => {
   const { id } = useParams();
+  const classes = usePaperStyles();
   const { user, isLoading } = useContext(AuthContext);
-  const theme = useContext(ThemeContext);
   const [playedList, setPlayedList] = useState([]);
   const [owner, setOwner] = useState();
 
@@ -32,7 +32,7 @@ const GamesPlayed = () => {
 
   return (
     <Container>
-      <h2>
+      <h2 className="page-title">
         {user && user.username === owner ? (
           "Games you've played"
         ) : owner ? (
@@ -46,8 +46,8 @@ const GamesPlayed = () => {
           playedList.map((game, i) => {
             return (
               <Grid item lg={3} key={i}>
-                <StyledPaper elevation={3}>
-                  <Card theme={theme}>
+                <StyledPaper elevation={3} className={classes.root}>
+                  <Card>
                     <Link to={`/games/${game._id}`}>{game.name}</Link>
                     <div>
                       <img src={game.image} />

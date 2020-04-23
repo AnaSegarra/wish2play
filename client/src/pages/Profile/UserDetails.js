@@ -2,7 +2,6 @@
 import React, { useState, useContext } from 'react';
 import { Tooltip } from '@material-ui/core';
 import { EditAlt } from '@styled-icons/boxicons-solid';
-import { ThemeContext } from 'styled-components';
 
 // local modules
 import { AuthContext } from '../../contexts/authContext';
@@ -11,10 +10,11 @@ import { FriendsList, UsersList } from './PeopleLists';
 
 // styled components
 import { UserDetailsContainer } from '../../styles/Profile.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 export const UserData = () => {
+  const classes = usePaperStyles();
   const { username, image, name, biography } = useContext(AuthContext).user;
-  const theme = useContext(ThemeContext);
   const [isEditing, setIsEditing] = useState(false);
   const [isChangingImg, setIsChangingImg] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null); // used to create img preview
@@ -27,7 +27,7 @@ export const UserData = () => {
   };
 
   return (
-    <UserDetailsContainer elevation={3} theme={theme}>
+    <UserDetailsContainer elevation={3} className={classes.root}>
       <Tooltip title="Change your avatar" arrow onClick={showImgForm}>
         <div className="img-container">
           <img

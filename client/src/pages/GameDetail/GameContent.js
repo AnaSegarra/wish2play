@@ -20,10 +20,13 @@ import { GameEditForm } from '../../components/GameEdit';
 import { Container, ImageContainer, Content } from '../../styles/GameDetail.styled';
 import { ButtonsContainer } from '../../styles/GameDetail.styled';
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 export const GameContent = props => {
   const theme = useContext(ThemeContext);
   const classes = useStyles(theme);
+  const paperClases = usePaperStyles();
+
   const { user } = useContext(AuthContext);
   const history = useHistory();
   const [open, setOpen] = useState(false);
@@ -56,8 +59,8 @@ export const GameContent = props => {
   };
 
   return (
-    <StyledPaper elevation={3}>
-      <ButtonsContainer theme={theme}>
+    <StyledPaper elevation={3} className={paperClases.root}>
+      <ButtonsContainer>
         <Link to="/games">
           <ArrowGoBack size="25" />
         </Link>
@@ -91,7 +94,7 @@ export const GameContent = props => {
           <img src={image} />
         </ImageContainer>
 
-        <Content theme={theme}>
+        <Content>
           <div>
             <p className="title">{name}</p>
             <p className="subtitle">by {company}</p>

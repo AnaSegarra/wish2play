@@ -1,7 +1,6 @@
 // dependencies
 import React, { useContext } from 'react';
 import { Grid, Container } from '@material-ui/core';
-import { ThemeContext } from 'styled-components';
 
 // local modules
 import { Signup } from './Signup';
@@ -11,10 +10,12 @@ import { AuthContext } from '../../contexts/authContext';
 
 // styled components
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 export const Home = () => {
-  const theme = useContext(ThemeContext);
+  const classes = usePaperStyles();
   const { user } = useContext(AuthContext);
+
   return (
     <Container>
       <Grid container spacing={3}>
@@ -24,7 +25,7 @@ export const Home = () => {
         </Grid>
         {!user && (
           <Grid item xs={12} lg={3}>
-            <StyledPaper theme={theme} elevation={3}>
+            <StyledPaper elevation={3} className={classes.root}>
               <p className="paper-title">Sign in to wish2play</p>
               <Login />
               <Signup />

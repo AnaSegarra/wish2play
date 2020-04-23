@@ -14,9 +14,11 @@ import { EditReviewForm } from './EditReview';
 // styled components
 import { Review } from '../../styles/GameDetail.styled';
 import { StyledPaper } from '../../styles/Home.styled';
+import { usePaperStyles } from '../../styles/Global';
 
 export const GameReviews = ({ reviews, gameID, updateGame }) => {
   const { user } = useContext(AuthContext);
+  const classes = usePaperStyles();
   const [open, setOpen] = useState(false);
   const [alert, setAlert] = useState(false);
 
@@ -32,7 +34,7 @@ export const GameReviews = ({ reviews, gameID, updateGame }) => {
   const closeAlert = () => setAlert(false);
 
   return (
-    <StyledPaper elevation={3}>
+    <StyledPaper elevation={3} className={classes.root}>
       <p className="paper-title">Players Reviews</p>
       <Grid container spacing={3} style={{ padding: '2em' }}>
         {reviews.map(review => {

@@ -4,7 +4,8 @@ export const lightTheme = {
     paragraph: '#2b2c34',
     button: '#7f5af0',
     secondary: '#d1d1e9',
-    tertiary: '#e45858'
+    tertiary: '#e45858',
+    color: '#000'
   },
   nav: {
     shadow: '0em 0.2em 0.2em #333',
@@ -32,7 +33,8 @@ export const darkTheme = {
     paragraph: '#94a1b2',
     button: '#2800a2',
     secondary: '#72757e',
-    tertiary: '#2cb67d'
+    tertiary: '#2cb67d',
+    color: '#fffffe'
   },
   nav: {
     shadow: '0em 0.2em 0.2em rgba(0,0,0,0.14)',
@@ -42,7 +44,7 @@ export const darkTheme = {
     background: 'rgb(114, 117, 126, 0.2)'
   },
   input: {
-    color: '#172c66',
+    color: '#fffffe',
     focus: '#1b009c',
     shadow: 'rgba(27, 0, 156, 0.5)'
   },

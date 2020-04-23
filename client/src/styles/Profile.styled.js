@@ -14,7 +14,7 @@ export const UserDetailsContainer = styled(StyledPaper)`
     margin-bottom: 0;
   }
   .username {
-    color: #333;
+    color: ${({ theme }) => theme.nav.hover};
     margin-top: 0.4em;
   }
   .bio {

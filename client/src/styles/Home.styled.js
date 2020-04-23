@@ -4,6 +4,7 @@ import { Slider } from 'infinite-react-carousel/lib';
 
 export const StyledPaper = styled(Paper)`
   border: 0.1em solid ${({ theme }) => theme.main.secondary};
+  background: ${({ theme }) => theme.main.background};
   overflow: hidden;
   margin-bottom: 2em;
   div.mb {
@@ -33,7 +34,7 @@ export const StyledPaper = styled(Paper)`
 
 export const ModalOpener = styled.span`
   cursor: pointer;
-  color: ${({ theme }) => theme.main.button};
+  color: ${({ theme }) => theme.main.paragraph};
   &:hover {
     text-decoration: underline;
   }
