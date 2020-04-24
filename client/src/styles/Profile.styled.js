@@ -30,7 +30,6 @@ export const UserDetailsContainer = styled(StyledPaper)`
     }
     .edit {
       color: #1a8a77;
-      cursor: pointer;
       &:hover {
         color: #33cc33;
       }
@@ -50,6 +49,15 @@ export const UserDetailsContainer = styled(StyledPaper)`
   button {
     font-size: 0.8rem;
   }
+  svg {
+    cursor: pointer;
+  }
+  .remove-friend {
+    color: #b33300;
+  }
+  .add-friend {
+    color: #1a8a77;
+  }
 `;
 
 export const PeopleContainer = styled.div`
@@ -58,9 +66,7 @@ export const PeopleContainer = styled.div`
   padding: 1em;
   border: 0.1em solid ${({ theme }) => theme.main.secondary};
   border-radius: 0.5em;
-  svg {
-    cursor: pointer;
-  }
+
   .friends {
     color: ${({ theme }) => theme.main.tertiary};
     font-weight: 500;
@@ -71,12 +77,6 @@ export const PeopleContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 1em;
-  }
-  .remove-friend {
-    color: #b33300;
-  }
-  .add-friend {
-    color: #1a8a77;
   }
 `;
 
@@ -90,6 +90,32 @@ export const UsersContainer = styled.div`
     &:hover {
       color: ${({ theme }) => theme.main.tertiary};
     }
+  }
+`;
+
+export const UserInteraction = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1em;
+  div {
+    display: inline-flex;
+    align-items: center;
+    border: 0.1em solid ${({ theme }) => theme.main.secondary};
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.2s, transform 0.3s;
+    &:hover {
+      background-color: rgb(206, 206, 206);
+      box-shadow: none;
+      transform: translate(0.1em, 0.1em);
+    }
+  }
+  p {
+    margin: 0;
+    margin-left: 1em;
   }
 `;
 

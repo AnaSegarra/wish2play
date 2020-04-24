@@ -140,13 +140,11 @@ router.delete(
       );
 
       // remove wish from user that reserved it
-      if (wish.status === 'Reserved') {
-        await User.findOneAndUpdate(
-          { reservedWishes: id },
-          { $pull: { reservedWishes: id } },
-          { new: true }
-        );
-      }
+      await User.findOneAndUpdate(
+        { reservedWishes: id },
+        { $pull: { reservedWishes: id } },
+        { new: true }
+      );
 
       await wish.delete();
 
