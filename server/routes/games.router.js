@@ -4,6 +4,7 @@ const Game = require('../models/Game');
 const Review = require('../models/Review');
 const User = require('../models/User');
 const Wish = require('../models/Wish');
+const Request = require('../models/Request');
 const { isEmptyField } = require('../lib/validatorMW');
 const { checkUserRole, hasPlayed, checkOwnership } = require('../lib/authMW');
 const calcAverage = require('../utils/avgCalculator');
@@ -227,6 +228,9 @@ router.delete('/:id', checkUserRole(), async (req, res, next) => {
       { reservedWishes: { $in: wishes } },
       { $pull: { reservedWishes: { $in: wishes } } }
     );
+
+    // remove request submitted for that game
+    await Request.findOneAndDelete({ 'content.name': deletedGame.name });
 
     // delete those wishes
     await Wish.deleteMany({ _id: { $in: wishes } });
