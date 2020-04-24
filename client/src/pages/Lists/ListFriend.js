@@ -33,12 +33,12 @@ export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
     setWishlist(newList);
   };
 
+  if (!owner) return <></>;
   return (
     <>
-      {owner &&
-        wishlist.length > 0 &&
+      {wishlist.length > 0 &&
         wishlist.map((wish, i) => {
-          return wish.isPublic ? (
+          return (
             <Grid item lg={3} key={i}>
               <StyledPaper elevation={3} className={classes.root}>
                 <Card>
@@ -76,8 +76,6 @@ export const ListFriend = ({ wishlist, setWishlist, owner, user, setUser }) => {
                 </Card>
               </StyledPaper>
             </Grid>
-          ) : (
-            <></>
           );
         })}
     </>
