@@ -27,7 +27,6 @@ const Profile = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchSingleUser(username);
-      // console.log('useEffect', response);
       setProfileOwner(response);
     })();
   }, [username]);

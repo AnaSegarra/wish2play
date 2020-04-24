@@ -10,7 +10,6 @@ import { UserInteraction } from '../../styles/Profile.styled';
 export const ProfileData = ({ username, name, image, biography, _id }) => {
   const classes = usePaperStyles();
   const { user, setUser } = useContext(AuthContext);
-  console.log('los amiguis', user.friends);
 
   const handleRemoveFriend = async userID => {
     const userUpdated = await removeFriend(userID);
