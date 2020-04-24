@@ -14,7 +14,7 @@ import { StyledPagination } from '../../styles/Games.styled';
 
 export const FriendsList = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [friends, setFriends] = useState('');
+  const [friends, setFriends] = useState();
   const [totalNumFriends, setTotalFriends] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -31,6 +31,8 @@ export const FriendsList = () => {
     setFriends(friends);
     setCurrentPage(page);
   };
+
+  if (!friends) return <></>;
 
   return (
     <PeopleContainer>
@@ -56,7 +58,7 @@ export const FriendsList = () => {
 
 export const UsersList = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState();
   const [search, setSearch] = useState('');
   const [totalNumUsers, setTotalUsers] = useState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,6 +85,9 @@ export const UsersList = () => {
     setUsers(users);
     setCurrentPage(page);
   };
+
+  if (!users) return <></>;
+
   return (
     <PeopleContainer>
       <Input type="text" onChange={handleSearch} value={search} placeholder="Find friends..." />

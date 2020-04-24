@@ -34,7 +34,7 @@ export const fetchSingleGame = async endpoint => {
 export const addGame = async game => {
   try {
     const { data } = await gamesService.post('/', game);
-    return data.message;
+    return data;
   } catch (error) {
     return error.response.data.message;
   }

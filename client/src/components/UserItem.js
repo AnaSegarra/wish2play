@@ -52,6 +52,9 @@ export const User = ({ user, setUser, type }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}>
         <MenuItem onClick={handleClose}>
+          <StyledLink to={`/wish2play/@${user.username}`}>Profile</StyledLink>
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
           <StyledLink to={`/wishlist/${user._id}`}>Wishlist</StyledLink>
         </MenuItem>
         <MenuItem onClick={handleClose}>

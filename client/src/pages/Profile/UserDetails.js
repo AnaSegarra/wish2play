@@ -12,7 +12,7 @@ import { FriendsList, UsersList } from './PeopleLists';
 import { UserDetailsContainer } from '../../styles/Profile.styled';
 import { usePaperStyles } from '../../styles/Global';
 
-export const UserData = () => {
+export const UserDetails = () => {
   const classes = usePaperStyles();
   const { username, image, name, biography } = useContext(AuthContext).user;
   const [isEditing, setIsEditing] = useState(false);

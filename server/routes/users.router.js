@@ -71,7 +71,7 @@ router.get('/:user_id/games-played', async (req, res, next) => {
   const { user_id } = req.params;
   try {
     const user = await User.findById(user_id).populate('gamesPlayed');
-    return res.status(200).json({
+    return res.json({
       message: 'Games played retrieved',
       gamesPlayed: user.gamesPlayed,
       user: user.username
@@ -79,6 +79,18 @@ router.get('/:user_id/games-played', async (req, res, next) => {
   } catch (error) {
     console.log('Error retrieving games played', error);
     return res.status(500).json({ message: 'Internal server error fetching played games' });
+  }
+});
+
+// GET route - retrieve single user
+router.get('/:username', async (req, res, next) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username }, { username: 1, image: 1, biography: 1, name: 1 });
+    return res.json({ message: 'User found', user });
+  } catch (error) {
+    console.log('Error retrieving single user', error);
+    return res.status(500).json({ message: 'Internal server error fetching a single user' });
   }
 });
 

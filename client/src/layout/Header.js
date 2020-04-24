@@ -62,7 +62,7 @@ export const Header = ({ toggleTheme }) => {
         </div>
       </Navbar>
       <SubBar user={user}>
-        <Link to={user && !user.isAdmin ? '/wish2play/profile' : '/admin'}>
+        <Link to={user && !user.isAdmin ? `/wish2play/@${user.username}` : '/admin'}>
           <span>{user && user.username}</span>
           {user && user.image ? (
             <Avatar alt={user.username} src={user.image} className={classes.small} />

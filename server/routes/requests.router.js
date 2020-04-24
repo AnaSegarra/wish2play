@@ -26,7 +26,8 @@ router.get('/', isLoggedIn(), async (req, res, next) => {
       .where('requestedBy')
       .equals(req.user.id)
       .sort({ createdAt: -1 })
-      .limit(6).select('-_id status content.name')
+      .limit(6)
+      .select('-_id status content.name');
 
     return res.json({
       message: `User's requests fetched successfully`,
@@ -53,11 +54,9 @@ router.post('/', isLoggedIn(), isEmptyField('name'), async (req, res, next) => {
     if (requestRegistered)
       return res.status(400).json({ message: `A request for ${name} is already being processed` });
 
-    // status 400 if the game was already requested and approved or is already in the db
-    const requestApproved = await Request.findOne({ 'content.name': name, status: 'Approved' });
+    // status 400 if the game is already in the db
     const gameInDb = await Game.findOne({ name });
-    if (requestApproved || gameInDb)
-      return res.status(400).json({ message: `${name} is already in the games list!` });
+    if (gameInDb) return res.status(400).json({ message: `${name} is already in the games list!` });
 
     // confirm request otherwise
     const newRequest = await Request.create({
