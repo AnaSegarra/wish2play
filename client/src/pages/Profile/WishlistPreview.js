@@ -16,11 +16,20 @@ export const WishlistPreview = ({ userID, isOwner }) => {
   useEffect(() => {
     (async () => {
       const response = await fetchWishlist(userID);
-      const wishlistMapped = response.wishlist.map(({ game }) => {
-        return { totalRating: game.totalRating, name: game.name, _id: game._id, image: game.image };
+      const wishlistMapped = response.wishlist.map(wish => {
+        return {
+          name: wish.game.name,
+          _id: wish.game._id,
+          image: wish.game.image,
+          isPublic: wish.isPublic
+        };
       });
-
-      setWishlist(wishlistMapped);
+      if (isOwner()) {
+        setWishlist(wishlistMapped);
+      } else {
+        const privateRemoved = wishlistMapped.filter(wish => wish.isPublic);
+        setWishlist(privateRemoved);
+      }
       setLoading(false);
     })();
   }, [userID]);

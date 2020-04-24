@@ -20,8 +20,14 @@ const Wishlist = () => {
   useEffect(() => {
     (async () => {
       const response = await fetchWishlist(id);
-      setWishlist(sortByName(response.wishlist));
-      setOwner(response.user);
+      if (user._id === id) {
+        setWishlist(sortByName(response.wishlist));
+        setOwner(response.user);
+      } else {
+        const privateRemoved = response.wishlist.filter(wish => wish.isPublic);
+        setWishlist(sortByName(privateRemoved));
+        setOwner(response.user);
+      }
     })();
   }, []);
 
