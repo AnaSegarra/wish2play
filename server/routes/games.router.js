@@ -17,13 +17,14 @@ router.get('/', async (req, res, next) => {
     const { name, platforms, genres, ESRB, sortBy, fields } = req.query;
     const filter = {};
     if (name) filter.name = { $regex: name, $options: 'i' };
-    if (platforms) filter.platforms = { $all: platforms };
+    if (platforms) filter.platforms = { $in: platforms };
     if (genres) filter.genres = { $in: genres };
     if (ESRB) filter.ESRB = ESRB;
 
     const limit = Number(req.query.limit) || 100;
     const page = Number(req.query.page) || 1;
     const skip = (page - 1) * limit;
+    // in case it's a checkbox & it's received as an array
     const sort = Array.isArray(sortBy) ? sortBy.join(' ') : sortBy;
 
     const numOfGames = await Game.findGames(filter);
