@@ -45,3 +45,8 @@ export const removeFriend = async user_id => {
   const { data } = await usersService.delete(`/friends/${user_id}`);
   return data.userUpdated;
 };
+
+export const fetchSingleUser = async username => {
+  const { data } = await usersService.get(`/${username}`);
+  return data.user;
+};

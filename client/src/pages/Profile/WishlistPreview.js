@@ -9,7 +9,7 @@ import { GamesGrid } from '../../components/GamesGrid';
 // styled components
 import { ListPlaceholder } from '../../styles/Profile.styled';
 
-export const WishlistPreview = ({ userID }) => {
+export const WishlistPreview = ({ userID, isOwner }) => {
   const [wishlist, setWishlist] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -23,15 +23,21 @@ export const WishlistPreview = ({ userID }) => {
       setWishlist(wishlistMapped);
       setLoading(false);
     })();
-  }, []);
+  }, [userID]);
   return (
     <>
       {wishlist.length > 0 ? (
         <GamesGrid gamesArr={wishlist.slice(0, 5)} type="wishlist" userID={userID} />
       ) : wishlist.length === 0 && !isLoading ? (
         <ListPlaceholder>
-          <p>Would you like start your own wishlist?</p>
-          <Link to="/games">Find some games</Link>
+          {isOwner() ? (
+            <>
+              <p>Would you like start your own wishlist?</p>
+              <Link to="/games">Find some games</Link>
+            </>
+          ) : (
+            <p>Wishlist is empty</p>
+          )}
         </ListPlaceholder>
       ) : (
         <></>

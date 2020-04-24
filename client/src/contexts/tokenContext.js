@@ -13,8 +13,8 @@ export const TokenContextProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
-        const token = await getToken();
-        setToken(token);
+        // const token = await getToken();
+        setToken(false);
       } catch (error) {
         setToken(false);
       } finally {

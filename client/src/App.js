@@ -22,7 +22,7 @@ const App = () => (
         <Route path="/games" exact component={GamesPage} />
         <Route path="/games/request" exact component={RequestPage} />
         <Route path="/games/:id" exact component={DetailPage} />
-        <Route path="/wish2play/profile" exact component={ProfilePage} />
+        <Route path="/wish2play/@:username" exact component={ProfilePage} />
         <Route path="/wishlist/:id" exact component={WishlistPage} />
         <Route path="/games-played/:id" exact component={GamesPlayedPage} />
         <Route path="/admin" exact component={AdminPage} />
