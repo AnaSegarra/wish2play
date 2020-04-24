@@ -95,7 +95,7 @@ export const GameForm = ({
         image: '',
         description: '',
         releaseYear: '',
-        ESRB: '',
+        ESRB: 'RP',
         platforms: [],
         genres: [],
         company: '',
