@@ -25,7 +25,7 @@ To run this project locally do the following after cloning the project:
 
 1. Navigate to server directory with `cd wish2play/server`
 2. Run `npm install` to install all the dependencies
-3. Change [.envExample](https://github.com/anasegarra/wish2play/blob/master/.envExample) file name to .env and paste the required environment variables in the corresponding field
+3. Change [.envExample](https://github.com/anasegarra/wish2play/blob/master/server/.envExample) file name to .env and paste the required environment variables in the corresponding field
 4. Run `npm run dev` to start the server side of the application
 
 ## API documentation
